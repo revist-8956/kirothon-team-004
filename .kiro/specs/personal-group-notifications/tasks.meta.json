@@ -345,6 +345,11 @@
         "executionId": "548d7e21-77c9-4300-be94-fffd568e3ba5",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794645823890
+      },
+      {
+        "executionId": "a8f757e8-2e15-4d4a-8c23-ac70961ff1b1",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794646807365
       }
     ],
     "4.1 디자인 토큰과 반응형 애플리케이션 셸을 구현한다": [
@@ -457,6 +462,11 @@
         "executionId": "548d7e21-77c9-4300-be94-fffd568e3ba5",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794645824106
+      },
+      {
+        "executionId": "a8f757e8-2e15-4d4a-8c23-ac70961ff1b1",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794646807439
       }
     ],
     "5.3 `/friends` 화면과 자동화 테스트를 구현한다": [
@@ -503,6 +513,11 @@
         "executionId": "548d7e21-77c9-4300-be94-fffd568e3ba5",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794645824160
+      },
+      {
+        "executionId": "a8f757e8-2e15-4d4a-8c23-ac70961ff1b1",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794646807489
       }
     ],
     "5.6 hash 기반 초대 링크 발급과 조회를 구현한다": [
@@ -532,6 +547,11 @@
         "executionId": "548d7e21-77c9-4300-be94-fffd568e3ba5",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794645824254
+      },
+      {
+        "executionId": "a8f757e8-2e15-4d4a-8c23-ac70961ff1b1",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794646807590
       }
     ],
     "5.8 그룹 목록·상세 query와 이메일 최소 공개 projection을 구현한다": [

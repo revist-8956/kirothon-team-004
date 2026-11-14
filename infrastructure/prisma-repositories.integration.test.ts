@@ -256,6 +256,7 @@ describe("group projections", () => {
   // Feature: personal-group-notifications, Property 8: 그룹별 이메일 공개의 최소 노출과 비간섭
   // Validates: Requirements 6.1, 6.2, 6.3, 6.4, 6.5, 6.6
   it("returns every member but exposes only PUBLIC emails, preserves other-group settings, and denies outsiders", async () => {
+    const repositories = createRepositories();
     const memberVisibilities = fc.array(fc.constantFrom<EmailVisibility>("PRIVATE", "PUBLIC"), {
       minLength: 1,
       maxLength: 8,
@@ -264,7 +265,6 @@ describe("group projections", () => {
 
     await fc.assert(
       fc.asyncProperty(memberVisibilities, visibility, visibility, async (initialVisibilities, nextVisibility, otherGroupVisibility) => {
-        const repositories = createRepositories();
         const viewer = await createUser(repositories, "조회자");
         const outsider = await createUser(repositories, "외부 사용자");
         const members = [viewer];
