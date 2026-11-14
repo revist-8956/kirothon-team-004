@@ -15,7 +15,7 @@ concurrency:
 env:
   AWS_REGION: ap-northeast-2
   EB_APPLICATION_NAME: kirothon-2026-eb
-  EB_ENVIRONMENT_NAME: kirothon-2026-eb-env
+  EB_ENVIRONMENT_NAME: Kirothon-2026-eb-env
   # 앱이 아직 없으므로 루트를 기본값으로 사용합니다. 하위 폴더에 만들면 변경하세요.
   APP_DIR: .
   NODE_VERSION: '26'
