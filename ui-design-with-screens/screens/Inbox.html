@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>받은 알림</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+body{margin:0}
+a{color:#17202B}a:hover{color:#5B6675}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #F3F5F7; color: #17202B; font-family: 'Noto Sans KR', system-ui, sans-serif; font-size: 15px; line-height: 1.45; letter-spacing: -0.01em">
+<header style="flex-shrink: 0; display: flex; align-items: flex-end; justify-content: space-between; padding: 28px 20px 12px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h1 style="margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.03em">받은 알림</h1>
+<span style="font-size: 14px; color: #5B6675">아직 확인하지 않은 알림 <span style="font-weight: 700; color: #1F5FE0">2건</span></span>
+</div>
+<a href="ComposePersonal.dc.html" style="height: 44px; padding: 0 16px; display: flex; align-items: center; border-radius: 22px; background: #1F5FE0; color: #FFFFFF; font-size: 14px; font-weight: 700; text-decoration: none">새 알림</a>
+</header>
+<main style="flex: 1; display: flex; flex-direction: column; gap: 12px; padding: 4px 16px 12px; overflow: hidden">
+<article style="display: flex; flex-direction: column; gap: 10px; padding: 20px; border-radius: 20px; background: #FFFFFF">
+<div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 8px"><h2 style="margin: 0; font-size: 17px; font-weight: 700">주간 회의 자료 제출</h2><span style="flex-shrink: 0; padding: 3px 10px; border-radius: 8px; background: #E9ECF0; color: #46505E; font-size: 12px; font-weight: 700">미확인</span></div>
+<span style="font-size: 13px; color: #5B6675">운영팀 · 민수 · 매주 3회차 · 11/16(월) 오전 9:00</span>
+<div style="display: flex; gap: 8px">
+<button type="button" style="flex: 1; height: 48px; display: flex; align-items: center; justify-content: center; gap: 6px; border: none; border-radius: 14px; background: #1F5FE0; color: #FFFFFF; font: inherit; font-weight: 700"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"></path></svg>확인</button>
+<a href="Status.dc.html" style="flex: 1; height: 48px; display: flex; align-items: center; justify-content: center; border-radius: 14px; background: #E6ECF5; color: #1F5FE0; font-weight: 700; text-decoration: none">응답 현황</a>
+</div>
+</article>
+<article style="display: flex; flex-direction: column; gap: 10px; padding: 20px; border-radius: 20px; background: #FFFFFF">
+<div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 8px"><h2 style="margin: 0; font-size: 17px; font-weight: 700">점심 메뉴 투표해 주세요</h2><span style="flex-shrink: 0; padding: 3px 10px; border-radius: 8px; background: #E9ECF0; color: #46505E; font-size: 12px; font-weight: 700">미확인</span></div>
+<span style="font-size: 13px; color: #5B6675">개인 · 태호 · 일회성 · 11/13(금) 오전 11:30</span>
+<button type="button" style="height: 48px; display: flex; align-items: center; justify-content: center; gap: 6px; border: none; border-radius: 14px; background: #1F5FE0; color: #FFFFFF; font: inherit; font-weight: 700"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"></path></svg>확인</button>
+<span style="font-size: 13px; color: #5B6675">개인 알림은 내 확인 여부만 볼 수 있어요.</span>
+</article>
+<article style="display: flex; flex-direction: column; gap: 10px; padding: 20px; border-radius: 20px; background: #FFFFFF">
+<div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 8px"><h2 style="margin: 0; font-size: 17px; font-weight: 500; color: #46505E">주간 회의 자료 제출</h2><span style="flex-shrink: 0; padding: 3px 10px; border-radius: 8px; background: #1F5FE0; color: #FFFFFF; font-size: 12px; font-weight: 700">확인</span></div>
+<span style="font-size: 13px; color: #5B6675">운영팀 · 민수 · 매주 2회차 · 11/9(월) 오전 9:00</span>
+<div style="display: flex; gap: 8px">
+<button type="button" disabled="{{ true }}" style="flex: 1; height: 48px; border: none; border-radius: 14px; background: #F3F5F7; color: #5B6675; font: inherit; font-size: 13px">11/9 오후 2:40 확인함</button>
+<a href="Status.dc.html" style="flex: 1; height: 48px; display: flex; align-items: center; justify-content: center; border-radius: 14px; background: #E6ECF5; color: #1F5FE0; font-weight: 700; text-decoration: none">응답 현황</a>
+</div>
+</article>
+<p style="margin: 0; padding: 14px 16px; border-radius: 14px; background: #E6ECF5; font-size: 13px; color: #46505E">‘확인’ 버튼을 눌러야 확인으로 바뀌어요. 반복 알림은 회차마다 따로 보여요.</p>
+</main>
+<nav aria-label="주요 메뉴" style="height: 60px; flex-shrink: 0; display: flex; background: #FFFFFF; border-top: 1px solid #E9ECF0">
+<a href="Inbox.dc.html" aria-current="page" style="flex: 1; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #1F5FE0; text-decoration: none">받은 알림</a>
+<a href="Status.dc.html" style="flex: 1; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #5B6675; text-decoration: none">보낸 알림</a>
+<a href="Friends.dc.html" style="flex: 1; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #5B6675; text-decoration: none">친구</a>
+<a href="Groups.dc.html" style="flex: 1; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #5B6675; text-decoration: none">그룹</a>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

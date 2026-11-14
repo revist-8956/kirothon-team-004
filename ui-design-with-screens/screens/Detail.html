@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>알림 상세와 확인</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+body{margin:0}
+a{color:#1F1F1F}a:hover{color:#5F5F5F}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #FFFFFF; color: #1F1F1F; font-family: 'Noto Sans KR', system-ui, sans-serif; font-size: 15px; line-height: 1.45">
+<header style="height: 56px; flex-shrink: 0; display: flex; align-items: center; gap: 4px; padding: 0 8px; border-bottom: 1px solid #1F1F1F">
+<a href="Inbox.dc.html" aria-label="받은 알림으로" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#1F1F1F" stroke-width="1.5"><path d="M13 4l-6 6 6 6"></path></svg></a>
+<h1 style="margin: 0; font-size: 18px; font-weight: 700">알림</h1>
+</header>
+<main style="flex: 1; display: flex; flex-direction: column; gap: 20px; padding: 20px 16px; overflow: hidden">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 13px; color: #5F5F5F">그룹 · 운영팀 · 보낸 사람 민수</span>
+<h2 style="margin: 0; font-size: 22px; font-weight: 700">주간 회의 자료 제출</h2>
+<span style="font-size: 13px; color: #5F5F5F">매주 반복 · 3회차 · 11월 16일(월) 오전 9:00</span>
+</div>
+<p style="margin: 0; padding: 16px; border: 1px solid #C8C8C8; border-radius: 8px; min-height: 140px">이번 주 회의 자료를 수요일까지 공유 폴더에 올려 주세요. 확인하셨으면 아래 버튼을 눌러 주세요.</p>
+<section style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px; border: 1px solid #1F1F1F; border-radius: 8px">
+<div style="display: flex; flex-direction: column"><span style="font-weight: 700">이번 회차 내 상태</span><span style="font-size: 13px; color: #5F5F5F">내용을 열람해도 ‘미확인’이 유지됩니다.</span></div>
+<span style="flex-shrink: 0; padding: 2px 10px; border: 1px solid #1F1F1F; border-radius: 12px; font-size: 12px; font-weight: 700">미확인</span>
+</section>
+<a href="Status.dc.html" style="display: flex; align-items: center; justify-content: space-between; min-height: 52px; padding: 0 12px; border: 1px solid #1F1F1F; border-radius: 8px; text-decoration: none">
+<span style="display: flex; flex-direction: column"><span style="font-weight: 700">응답 현황 보기</span><span style="font-size: 13px; color: #5F5F5F">그룹 발송: 구성원 모두 조회 가능</span></span>
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#1F1F1F" stroke-width="1.5"><path d="M7 4l6 6-6 6"></path></svg>
+</a>
+<p style="margin: 0; padding: 12px; border: 1px dashed #5F5F5F; border-radius: 8px; font-size: 13px; color: #5F5F5F">개인 발송 알림에서는 ‘응답 현황 보기’ 대신 본인의 확인 여부만 표시됩니다.</p>
+</main>
+<div style="display: flex; flex-direction: column; gap: 8px; padding: 0 16px 24px; flex-shrink: 0">
+<button type="button" style="height: 56px; border: 1px solid #1F1F1F; border-radius: 8px; background: #1F1F1F; color: #FFFFFF; font: inherit; font-size: 17px; font-weight: 700">확인</button>
+<p style="margin: 0; font-size: 13px; color: #5F5F5F; text-align: center">누르면 이번 회차의 내 상태가 ‘확인’으로 바뀌고 발신자에게 전달됩니다.</p>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>응답 현황</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+body{margin:0}
+a{color:#17202B}a:hover{color:#5B6675}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #F3F5F7; color: #17202B; font-family: 'Noto Sans KR', system-ui, sans-serif; font-size: 15px; line-height: 1.45; letter-spacing: -0.01em">
+<header style="flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; padding: 28px 20px 12px">
+<span style="font-size: 13px; color: #5B6675">응답 현황 · 운영팀 · 민수 · 매주</span>
+<h1 style="margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.03em">주간 회의 자료 제출</h1>
+</header>
+<main style="flex: 1; display: flex; flex-direction: column; gap: 12px; padding: 4px 16px 12px; overflow: hidden">
+<section style="display: flex; flex-direction: column; gap: 10px; padding: 20px; border-radius: 20px; background: #FFFFFF">
+<h2 style="margin: 0; font-size: 16px; font-weight: 700">발송 회차</h2>
+<div style="display: flex; gap: 8px">
+<button type="button" disabled="{{ true }}" style="flex: 1; height: 60px; padding: 0; border: none; border-radius: 14px; background: #F3F5F7; color: #5B6675; font: inherit; font-size: 13px">1회차 11/2<br>조회 불가</button>
+<button type="button" aria-pressed="true" style="flex: 1; height: 60px; padding: 0; border: none; border-radius: 14px; background: #1F5FE0; color: #FFFFFF; font: inherit; font-size: 13px; font-weight: 700">2회차 11/9<br>확인 2/3</button>
+<button type="button" aria-pressed="false" style="flex: 1; height: 60px; padding: 0; border: none; border-radius: 14px; background: #E6ECF5; color: #17202B; font: inherit; font-size: 13px">3회차 11/16<br>확인 0/3</button>
+</div>
+<p style="margin: 0; font-size: 13px; color: #5B6675">가입 전에 발송된 회차는 볼 수 없어요. (현우 시점 예시: 1회차 이후 가입)</p>
+</section>
+<section style="display: flex; flex-direction: column; padding: 20px 20px 8px; border-radius: 20px; background: #FFFFFF">
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px"><h2 style="margin: 0; font-size: 16px; font-weight: 700">3명 중 <span style="color: #1F5FE0">2명</span>이 확인했어요</h2><span style="font-size: 13px; color: #5B6675">2회차 · 11/9(월)</span></div>
+<div role="img" aria-label="수신자 3명 중 2명 확인" style="height: 8px; margin: 12px 0 8px; border-radius: 4px; background: #E9ECF0; overflow: hidden; display: flex"><span style="width: 66.6%; border-radius: 4px; background: #1F5FE0"></span></div>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 60px">
+<span style="display: flex; align-items: center; gap: 12px"><span aria-hidden="true" style="width: 40px; height: 40px; border-radius: 50%; background: #E6ECF5; color: #1F5FE0; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700">지</span><span style="display: flex; flex-direction: column"><span style="font-weight: 500">지수</span><span style="font-size: 13px; color: #5B6675">11/9 오전 10:12</span></span></span>
+<span style="flex-shrink: 0; padding: 3px 10px; border-radius: 8px; background: #1F5FE0; color: #FFFFFF; font-size: 12px; font-weight: 700">확인</span>
+</div>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 60px">
+<span style="display: flex; align-items: center; gap: 12px"><span aria-hidden="true" style="width: 40px; height: 40px; border-radius: 50%; background: #E6ECF5; color: #1F5FE0; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700">유</span><span style="font-weight: 500">유나</span></span>
+<span style="flex-shrink: 0; padding: 3px 10px; border-radius: 8px; background: #E9ECF0; color: #46505E; font-size: 12px; font-weight: 700">미확인</span>
+</div>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 60px">
+<span style="display: flex; align-items: center; gap: 12px"><span aria-hidden="true" style="width: 40px; height: 40px; border-radius: 50%; background: #E6ECF5; color: #1F5FE0; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700">현</span><span style="display: flex; flex-direction: column"><span style="font-weight: 500">현우 (나)</span><span style="font-size: 13px; color: #5B6675">11/9 오후 2:40</span></span></span>
+<span style="flex-shrink: 0; padding: 3px 10px; border-radius: 8px; background: #1F5FE0; color: #FFFFFF; font-size: 12px; font-weight: 700">확인</span>
+</div>
+</section>
+<p style="margin: 0; padding: 14px 16px; border-radius: 14px; background: #E6ECF5; font-size: 13px; color: #46505E">개인 발송은 발신자에게 모든 수신자가, 수신자에게는 본인만 보여요. 그룹을 탈퇴하면 이 화면은 ‘조회 권한 없음’으로 바뀌어요.</p>
+</main>
+<nav aria-label="주요 메뉴" style="height: 60px; flex-shrink: 0; display: flex; background: #FFFFFF; border-top: 1px solid #E9ECF0">
+<a href="Inbox.dc.html" style="flex: 1; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #5B6675; text-decoration: none">받은 알림</a>
+<a href="Status.dc.html" aria-current="page" style="flex: 1; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #1F5FE0; text-decoration: none">보낸 알림</a>
+<a href="Friends.dc.html" style="flex: 1; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #5B6675; text-decoration: none">친구</a>
+<a href="Groups.dc.html" style="flex: 1; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #5B6675; text-decoration: none">그룹</a>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

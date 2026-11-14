@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>발송 일정</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+body{margin:0}
+a{color:#17202B}a:hover{color:#5B6675}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #F3F5F7; color: #17202B; font-family: 'Noto Sans KR', system-ui, sans-serif; font-size: 15px; line-height: 1.45; letter-spacing: -0.01em">
+<header style="height: 56px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 20px 0 8px">
+<div style="display: flex; align-items: center; gap: 2px">
+<a href="ComposeGroup.dc.html" aria-label="이전 단계로" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="#17202B" stroke-width="1.8" stroke-linecap="round"><path d="M13 4l-6 6 6 6"></path></svg></a>
+<h1 style="margin: 0; font-size: 18px; font-weight: 700">언제 보낼까요?</h1>
+</div>
+<span style="font-size: 13px; font-weight: 700; color: #1F5FE0">2 / 2</span>
+</header>
+<main style="flex: 1; display: flex; flex-direction: column; gap: 12px; padding: 4px 16px 12px; overflow: hidden">
+<section style="display: flex; flex-direction: column; gap: 8px; padding: 20px; border-radius: 20px; background: #FFFFFF">
+<h2 style="margin: 0; font-size: 16px; font-weight: 700">발송 유형</h2>
+<div style="display: flex; gap: 4px; padding: 4px; border-radius: 14px; background: #E9ECF0">
+<button type="button" aria-pressed="false" style="flex: 1; height: 44px; border: none; border-radius: 10px; background: none; color: #46505E; font: inherit">일회성</button>
+<button type="button" aria-pressed="true" style="flex: 1; height: 44px; border: none; border-radius: 10px; background: #FFFFFF; box-shadow: 0 1px 3px rgba(23, 32, 43, 0.12); color: #17202B; font: inherit; font-weight: 700">반복</button>
+</div>
+</section>
+<section style="display: flex; flex-direction: column; gap: 8px; padding: 20px; border-radius: 20px; background: #FFFFFF">
+<h2 style="margin: 0; font-size: 16px; font-weight: 700">반복 주기</h2>
+<div style="display: flex; gap: 8px">
+<button type="button" aria-pressed="false" style="flex: 1; height: 48px; border: none; border-radius: 14px; background: #F3F5F7; color: #17202B; font: inherit">매일</button>
+<button type="button" aria-pressed="true" style="flex: 1; height: 48px; border: none; border-radius: 14px; background: #1F5FE0; color: #FFFFFF; font: inherit; font-weight: 700">매주</button>
+<button type="button" aria-pressed="false" style="flex: 1; height: 48px; border: none; border-radius: 14px; background: #F3F5F7; color: #17202B; font: inherit">매월</button>
+</div>
+<h3 style="margin: 8px 0 0; font-size: 13px; font-weight: 700; color: #46505E">요일</h3>
+<div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px">
+<button type="button" aria-pressed="false" style="height: 44px; padding: 0; border: none; border-radius: 50%; background: #F3F5F7; color: #17202B; font: inherit">월</button>
+<button type="button" aria-pressed="false" style="height: 44px; padding: 0; border: none; border-radius: 50%; background: #F3F5F7; color: #17202B; font: inherit">화</button>
+<button type="button" aria-pressed="false" style="height: 44px; padding: 0; border: none; border-radius: 50%; background: #F3F5F7; color: #17202B; font: inherit">수</button>
+<button type="button" aria-pressed="false" style="height: 44px; padding: 0; border: none; border-radius: 50%; background: #F3F5F7; color: #17202B; font: inherit">목</button>
+<button type="button" aria-pressed="false" style="height: 44px; padding: 0; border: none; border-radius: 50%; background: #F3F5F7; color: #17202B; font: inherit">금</button>
+<button type="button" aria-pressed="true" style="height: 44px; padding: 0; border: none; border-radius: 50%; background: #1F5FE0; color: #FFFFFF; font: inherit; font-weight: 700">토</button>
+<button type="button" aria-pressed="false" style="height: 44px; padding: 0; border: none; border-radius: 50%; background: #F3F5F7; color: #17202B; font: inherit">일</button>
+</div>
+<label for="send-time" style="margin-top: 8px; font-size: 13px; font-weight: 700; color: #46505E">발송 시각</label>
+<input id="send-time" type="text" placeholder="오전 9:00" style="height: 52px; box-sizing: border-box; padding: 0 14px; border: none; border-radius: 14px; font: inherit; background: #F3F5F7; color: #17202B">
+</section>
+<section style="display: flex; flex-direction: column; gap: 12px; padding: 16px 20px 20px; border-radius: 20px; background: #FFFFFF">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
+<div style="display: flex; flex-direction: column"><span id="skip-weekend-label" style="font-size: 16px; font-weight: 700">주말 제외</span><span style="font-size: 13px; color: #5B6675">토·일 회차는 다음 평일에 보내요.</span></div>
+<button type="button" role="switch" aria-checked="true" aria-labelledby="skip-weekend-label" style="width: 52px; height: 44px; flex-shrink: 0; padding: 0; border: none; background: none; display: flex; align-items: center"><span style="width: 52px; height: 32px; box-sizing: border-box; border-radius: 16px; background: #1F5FE0; display: flex; align-items: center; justify-content: flex-end; padding: 0 3px"><span style="width: 26px; height: 26px; border-radius: 50%; background: #FFFFFF"></span></span></button>
+</div>
+<p style="margin: 0; padding: 14px 16px; border-radius: 14px; background: #E6ECF5; font-size: 13px; color: #46505E">매주 토요일 회차는 다음 월요일에 보내요.<br><span style="font-weight: 700; color: #1F5FE0">다음 발송 11월 16일(월) 오전 9:00</span></p>
+</section>
+</main>
+<a href="Status.dc.html" style="margin: 0 16px 24px; height: 56px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border-radius: 16px; background: #1F5FE0; color: #FFFFFF; font-size: 17px; font-weight: 700; text-decoration: none">발송 예약하기</a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

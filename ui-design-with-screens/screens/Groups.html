@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>그룹 목록</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+body{margin:0}
+a{color:#17202B}a:hover{color:#5B6675}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #F3F5F7; color: #17202B; font-family: 'Noto Sans KR', system-ui, sans-serif; font-size: 15px; line-height: 1.45; letter-spacing: -0.01em">
+<header style="flex-shrink: 0; padding: 28px 20px 12px">
+<h1 style="margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.03em">그룹</h1>
+</header>
+<main style="flex: 1; display: flex; flex-direction: column; gap: 12px; padding: 4px 16px 12px; overflow: hidden">
+<section style="display: flex; flex-direction: column; gap: 10px; padding: 20px; border-radius: 20px; background: #FFFFFF">
+<label for="group-name" style="font-size: 16px; font-weight: 700">새 그룹 만들기</label>
+<div style="display: flex; gap: 8px">
+<input id="group-name" type="text" placeholder="그룹 이름" style="flex: 1; min-width: 0; height: 52px; box-sizing: border-box; padding: 0 14px; border: none; border-radius: 14px; font: inherit; background: #F3F5F7; color: #17202B">
+<button type="button" style="height: 52px; padding: 0 20px; border: none; border-radius: 14px; background: #1F5FE0; color: #FFFFFF; font: inherit; font-weight: 700">만들기</button>
+</div>
+<p style="margin: 0; font-size: 13px; color: #5B6675">만든 뒤 초대 링크로 구성원을 초대해요.</p>
+</section>
+<section style="display: flex; flex-direction: column; padding: 20px 20px 8px; border-radius: 20px; background: #FFFFFF">
+<h2 style="margin: 0 0 4px; font-size: 16px; font-weight: 700">내가 속한 그룹 <span style="color: #1F5FE0">2</span></h2>
+<a href="GroupDetail.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 72px; text-decoration: none">
+<span aria-hidden="true" style="width: 44px; height: 44px; border-radius: 16px; background: #E6ECF5; color: #1F5FE0; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700">운</span>
+<span style="flex: 1; display: flex; flex-direction: column"><span style="font-size: 16px; font-weight: 700">운영팀</span><span style="font-size: 13px; color: #5B6675">구성원 4명 · 최근 발송 11/9(월)</span></span>
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#5B6675" stroke-width="1.8" stroke-linecap="round"><path d="M7 4l6 6-6 6"></path></svg>
+</a>
+<a href="GroupDetail.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 72px; text-decoration: none">
+<span aria-hidden="true" style="width: 44px; height: 44px; border-radius: 16px; background: #E6ECF5; color: #1F5FE0; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700">기</span>
+<span style="flex: 1; display: flex; flex-direction: column"><span style="font-size: 16px; font-weight: 700">기획팀</span><span style="font-size: 13px; color: #5B6675">구성원 5명 · 최근 발송 11/12(목)</span></span>
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#5B6675" stroke-width="1.8" stroke-linecap="round"><path d="M7 4l6 6-6 6"></path></svg>
+</a>
+</section>
+<p style="margin: 0; padding: 14px 16px; border-radius: 14px; background: #E6ECF5; font-size: 13px; color: #46505E">내가 속한 그룹만 보여요. 속하지 않은 그룹에는 발송하거나 기록을 볼 수 없어요.</p>
+</main>
+<a href="ComposeGroup.dc.html" style="margin: 0 16px 16px; height: 56px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border-radius: 16px; background: #1F5FE0; color: #FFFFFF; font-size: 17px; font-weight: 700; text-decoration: none">새 알림 작성</a>
+<nav aria-label="주요 메뉴" style="height: 60px; flex-shrink: 0; display: flex; background: #FFFFFF; border-top: 1px solid #E9ECF0">
+<a href="Inbox.dc.html" style="flex: 1; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #5B6675; text-decoration: none">받은 알림</a>
+<a href="Status.dc.html" style="flex: 1; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #5B6675; text-decoration: none">보낸 알림</a>
+<a href="Friends.dc.html" style="flex: 1; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #5B6675; text-decoration: none">친구</a>
+<a href="Groups.dc.html" aria-current="page" style="flex: 1; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #1F5FE0; text-decoration: none">그룹</a>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>
