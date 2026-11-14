@@ -6,153 +6,153 @@
 
 ## Tasks
 
-- [ ] 1. 프로젝트와 자동 검증 기반 구축
-  - [ ] 1.1 Next.js App Router TypeScript 프로젝트를 저장소 루트에 초기화한다
+- [x] 1. 프로젝트와 자동 검증 기반 구축
+  - [x] 1.1 Next.js App Router TypeScript 프로젝트를 저장소 루트에 초기화한다
     - Node.js 26 호환 버전, TypeScript strict, ESLint, npm lockfile과 `dev`, `build`, `start`, `lint`, `typecheck`, `test`, `test:e2e` 스크립트를 구성한다.
     - 환경 파일, 빌드 결과, 테스트 산출물과 비밀값이 Git에 포함되지 않도록 프로젝트 설정을 작성한다.
     - _Requirements: 1.1, 1.13_
 
-  - [ ] 1.2 테스트 러너와 격리된 테스트 환경을 구성한다
+  - [x] 1.2 테스트 러너와 격리된 테스트 환경을 구성한다
     - Vitest, React Testing Library, user-event, axe, fast-check, Playwright를 단일 실행 모드로 구성한다.
     - PostgreSQL 통합 테스트 DB에 migration을 적용하고 테스트마다 데이터를 격리하는 helper를 작성한다.
     - _Requirements: 1.1, 2.8, 9.9, 10.13, 11.1_
 
-  - [ ] 1.3 공통 설정, 로깅, 오류 결과와 health route를 구현한다
+  - [x] 1.3 공통 설정, 로깅, 오류 결과와 health route를 구현한다
     - 환경 변수 Zod schema, Prisma singleton, request ID, 비밀값을 제거하는 JSON logger와 공통 `ActionResult` 오류 mapper를 구현한다.
     - `/api/health/live`와 DB 및 migration 호환성을 검사하는 `/api/health/ready`를 구현하고 민감한 오류 원문이 응답되지 않게 테스트한다.
     - _Requirements: 1.6, 1.13, 2.2, 3.8, 16.6_
 
-- [ ] 2. PostgreSQL 스키마와 데이터 접근 계층 구현
-  - [ ] 2.1 인증, 사용자, 친구, 그룹과 초대 스키마를 작성한다
+- [x] 2. PostgreSQL 스키마와 데이터 접근 계층 구현
+  - [x] 2.1 인증, 사용자, 친구, 그룹과 초대 스키마를 작성한다
     - Prisma에 Auth.js 모델, `User`, `Friend`, `Group`, 가입 이력을 보존하는 `Membership`, hash token만 저장하는 `Invite`를 정의한다.
     - 정규화 이메일 고유성, 자기 친구 금지, 활성 멤버십 partial unique index, 가입 시점 조회 index와 FK 정책을 SQL migration에 추가한다.
     - _Requirements: 1.2, 2.4, 2.8, 3.1, 3.2, 3.3, 4.5, 4.6, 5.3_
 
-  - [ ] 2.2 알림, 일정, 회차와 응답 스키마를 작성한다
+  - [x] 2.2 알림, 일정, 회차와 응답 스키마를 작성한다
     - `Notification`, `PersonalTarget`, `NotificationDraft`, `ScheduleClaim`, `Dispatch`, `DispatchRecipient` 모델과 enum을 정의한다.
     - 대상 종류 XOR, 일정 종류별 필수 필드, 비어 있지 않은 문장, claim·회차·수신자 중복 방지 제약과 조회 index를 SQL migration에 추가한다.
     - _Requirements: 7.3, 7.5, 8.2, 9.9, 10.1, 10.2, 11.1, 11.2, 11.3_
 
-  - [ ] 2.3 repository와 트랜잭션·잠금 primitive를 구현한다
+  - [x] 2.3 repository와 트랜잭션·잠금 primitive를 구현한다
     - 사용자, 친구, 그룹, 멤버십, 알림, draft, claim, 회차 repository를 application 계층이 사용할 typed interface로 구현한다.
     - 그룹별 transaction advisory lock, 조건부 갱신, DB `now()`와 transaction timestamp 접근을 parameter binding된 SQL로 캡슐화한다.
     - _Requirements: 5.3, 9.6, 9.9, 11.1, 13.3, 13.4_
 
-  - [ ] 2.4 스키마 제약과 migration 통합 테스트를 작성한다
+  - [x] 2.4 스키마 제약과 migration 통합 테스트를 작성한다
     - 빈 DB와 직전 schema에 migration을 적용하고 이메일·친구·활성 멤버십·대상 XOR·claim·회차·수신자 고유 제약을 실제 PostgreSQL에서 검증한다.
     - 잘못된 transaction이 일부 행만 남기지 않고 rollback되는지 검증한다.
     - _Requirements: 2.8, 4.7, 7.3, 9.9, 11.1, 11.5_
 
 - [ ] 3. 공통 도메인 검증과 인증 구현
-  - [ ] 3.1 닉네임, 이메일, 그룹 이름과 알림 문장 validator를 구현한다
+  - [x] 3.1 닉네임, 이메일, 그룹 이름과 알림 문장 validator를 구현한다
     - Unicode code point 기준 닉네임 길이, 기본 이메일 형식과 소문자 정규화, 공백 그룹 이름과 공백 알림 문장 거부를 순수 함수와 Zod schema로 구현한다.
     - _Requirements: 1.3, 1.4, 1.9, 1.10, 1.11, 2.1, 2.2, 2.3, 3.4, 7.5_
 
-  - [ ] 3.2 Property 1 닉네임 정규화와 상태 보존 속성 테스트를 작성한다
+  - [x] 3.2 Property 1 닉네임 정규화와 상태 보존 속성 테스트를 작성한다
     - Unicode·공백 문자열 generator로 유효 후보 저장과 무효 후보의 기존 닉네임 보존을 검증한다.
     - **Property 1: 닉네임 정규화와 상태 보존**
     - **Validates: Requirements 1.3, 1.4, 1.9, 1.10, 1.11**
 
-  - [ ] 3.3 로그인 복귀 경로 sanitizer를 구현한다
+  - [x] 3.3 로그인 복귀 경로 sanitizer를 구현한다
     - 동일 origin의 `/` 시작 내부 경로와 query만 허용하고 외부 URL, scheme-relative URL, 제어 문자와 잘못된 encoding을 `/inbox`로 대체한다.
     - _Requirements: 1.7, 1.8, 4.2_
 
-  - [ ] 3.4 Property 2 로그인 복귀 경로의 동일 출처 보장 속성 테스트를 작성한다
+  - [x] 3.4 Property 2 로그인 복귀 경로의 동일 출처 보장 속성 테스트를 작성한다
     - 임의 URL 문자열에 대해 결과가 허용된 내부 경로 또는 `/inbox`이고 외부 origin으로 이동하지 않음을 검증한다.
     - **Property 2: 로그인 복귀 경로의 동일 출처 보장**
     - **Validates: Requirements 1.7**
 
-  - [ ] 3.5 Property 3 이메일 형식과 정규화의 일관성 속성 테스트를 작성한다
+  - [x] 3.5 Property 3 이메일 형식과 정규화의 일관성 속성 테스트를 작성한다
     - 이메일 구조와 대소문자·주변 공백 변형 generator로 validator와 정규화 함수의 일관성을 검증한다.
     - **Property 3: 이메일 형식과 정규화의 일관성**
     - **Validates: Requirements 2.1, 2.2, 2.3**
 
-  - [ ] 3.6 Property 5 공백 그룹 이름 거부 속성 테스트를 작성한다
+  - [x] 3.6 Property 5 공백 그룹 이름 거부 속성 테스트를 작성한다
     - 다양한 Unicode 공백으로만 구성된 입력이 그룹과 멤버십을 생성하지 않음을 검증한다.
     - **Property 5: 공백 그룹 이름 거부**
     - **Validates: Requirements 3.4**
 
-  - [ ] 3.7 Auth.js Google 인증과 database session을 구현한다
+  - [x] 3.7 Auth.js Google 인증과 database session을 구현한다
     - Google provider만 등록하고 검증된 정규화 이메일로 신규 사용자를 만들며 기존 사용자는 재사용한다.
     - 신규 Google 이름을 닉네임 규칙으로 검사하고, OAuth 실패·취소 시 계정을 만들지 않으며 보안 cookie와 로그아웃 session 폐기를 구현한다.
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.12, 1.13_
 
-  - [ ] 3.8 보호 route, 로그인 화면과 프로필 설정 화면을 구현한다
+  - [x] 3.8 보호 route, 로그인 화면과 프로필 설정 화면을 구현한다
     - 모든 보호 layout, query, Server Action에서 `requireUser()`를 적용하고 안전한 `returnTo`로 로그인 전 경로를 복원한다.
     - `Main.html` 기준 `/login`과 `/profile/setup`을 구현하고 유효한 닉네임 저장 전 보호 기능 진입을 제한한다.
     - _Requirements: 1.7, 1.8, 1.9, 1.10, 1.11, 1.13, 4.2_
 
-  - [ ] 3.9 인증·프로필 통합 및 컴포넌트 테스트를 작성한다
+  - [-] 3.9 인증·프로필 통합 및 컴포넌트 테스트를 작성한다
     - 신규·기존 사용자 callback, 실패·취소, 보호 route, 초대 복귀, 닉네임 경계, 로그아웃과 비인증 데이터 차단을 자동 검증한다.
     - _Requirements: 1.1~1.13, 4.2_
 
-- [ ] 4. 디자인 시스템과 공통 화면 셸 구현
-  - [ ] 4.1 디자인 토큰과 반응형 애플리케이션 셸을 구현한다
+- [x] 4. 디자인 시스템과 공통 화면 셸 구현
+  - [x] 4.1 디자인 토큰과 반응형 애플리케이션 셸을 구현한다
     - UI 명세의 색상, 서체, 크기, radius, 간격을 CSS 변수로 만들고 390px 기준 단일 열, 최대 640px, `100dvh`, safe area와 고정 하단 영역을 구현한다.
     - 320px, 390×844, 768px 이상에서도 사용자 콘텐츠가 가려지거나 가로로 넘치지 않게 구성한다.
     - _Requirements: 2.9, 6.1, 12.4, 14.3, 17.2_
 
-  - [ ] 4.2 접근 가능한 공통 UI 컴포넌트를 구현한다
+  - [x] 4.2 접근 가능한 공통 UI 컴포넌트를 구현한다
     - 헤더, 카드, 버튼, 입력, textarea, segmented control, chip, checkbox, radio, switch, dialog, badge, avatar, progress, skeleton, 안내·빈·오류·권한 없음 상태를 구현한다.
     - visible label, `aria-describedby`, live region, focus trap, 44px 터치 영역, focus ring과 reduced motion을 적용한다.
     - _Requirements: 1.11, 2.10, 3.7, 5.1, 12.5, 14.4, 14.5, 16.5, 16.6, 17.5_
 
-  - [ ] 4.3 보호 화면 내비게이션과 route 상태 경계를 구현한다
+  - [x] 4.3 보호 화면 내비게이션과 route 상태 경계를 구현한다
     - `/inbox`, `/sent`, `/friends`, `/groups` 하단 탭과 작성·상세 화면의 헤더 및 닫기·뒤로가기를 화면 이동표대로 연결한다.
     - route별 `loading.tsx`, `error.tsx`, `not-found.tsx`를 공통 상태 컴포넌트에 연결한다.
     - _Requirements: 2.10, 3.9, 12.10, 16.6, 17.5_
 
-  - [ ] 4.4 공통 UI 컴포넌트 자동화 테스트를 작성한다
+  - [x] 4.4 공통 UI 컴포넌트 자동화 테스트를 작성한다
     - 키보드 조작, 접근 가능한 이름·상태, dialog 초점 복원, selector 화살표 이동, 200% 확대와 axe 위반 여부를 검증한다.
     - _Requirements: 5.1, 6.2, 12.5, 14.1, 16.2_
 
 - [ ] 5. 친구, 그룹, 초대와 멤버십 구현
-  - [ ] 5.1 친구 추가 command와 친구 목록 query를 구현한다
+  - [x] 5.1 친구 추가 command와 친구 목록 query를 구현한다
     - 이메일 형식·정규화, 가입 사용자 조회, 자기 자신·미가입·중복 거부와 단방향 저장을 transaction 및 unique 충돌 처리로 구현한다.
     - 목록에는 현재 사용자의 친구 닉네임과 이메일만 projection한다.
     - _Requirements: 2.1~2.9_
 
-  - [ ] 5.2 Property 4 친구 관계의 방향성과 고유성 속성 테스트를 작성한다
+  - [-] 5.2 Property 4 친구 관계의 방향성과 고유성 속성 테스트를 작성한다
     - 친구 추가 명령열 model로 자기 자신과 중복이 없고 무효 명령이 기존 집합을 보존하는지 검증한다.
     - **Property 4: 친구 관계의 방향성과 고유성**
     - **Validates: Requirements 2.2, 2.6, 2.7, 2.8**
 
-  - [ ] 5.3 `/friends` 화면과 자동화 테스트를 구현한다
+  - [x] 5.3 `/friends` 화면과 자동화 테스트를 구현한다
     - `Friends.html` 기준 추가 카드, 목록, 안내 상자, 새 알림 버튼과 친구가 없는 빈 상태 및 필드 오류·성공 feedback을 구현한다.
     - 목록 query가 빈 경우와 친구 추가 오류에서도 입력값과 초점이 유지되는지 컴포넌트 테스트한다.
     - _Requirements: 2.1, 2.2, 2.5, 2.6, 2.7, 2.9, 2.10_
 
-  - [ ] 5.4 그룹 생성, 초대 수락, 탈퇴와 공개 설정 command를 구현한다
+  - [x] 5.4 그룹 생성, 초대 수락, 탈퇴와 공개 설정 command를 구현한다
     - 그룹과 생성자 멤버십을 한 transaction으로 만들고 최초 가입·재가입은 새 이력과 `PRIVATE` 설정을 생성한다.
     - 활성 멤버의 재수락은 기존 가입 시각과 설정을 보존하고, 탈퇴는 확인된 요청에서 현재 멤버십을 조건부 종료하며 그룹 lock을 사용한다.
     - _Requirements: 3.1, 3.2, 3.3, 4.3, 4.4, 4.5, 4.6, 4.7, 5.1~5.4_
 
-  - [ ] 5.5 Property 6 멤버십 이력 상태기계 속성 테스트를 작성한다
+  - [-] 5.5 Property 6 멤버십 이력 상태기계 속성 테스트를 작성한다
     - 가입·공개 변경·탈퇴·재가입 command model로 활성 이력 수, 최신 가입 시각과 재가입 기본 공개값을 검증한다.
     - **Property 6: 멤버십 이력 상태기계**
     - **Validates: Requirements 4.3, 4.5, 4.6, 4.7, 5.4**
 
-  - [ ] 5.6 hash 기반 초대 링크 발급과 조회를 구현한다
+  - [x] 5.6 hash 기반 초대 링크 발급과 조회를 구현한다
     - 현재 구성원만 256-bit 이상 raw token을 발급하게 하고 DB에는 SHA-256 hash만 저장하며 raw token을 로그에서 제거한다.
     - 유효·잘못된 초대 조회, 이미 가입 상태와 로그인 후 원 초대 복귀에 필요한 projection을 구현한다.
     - _Requirements: 3.5, 3.6, 3.7, 3.8, 4.1, 4.2, 4.7, 4.8_
 
-  - [ ] 5.7 Property 7 초대 발급 권한 속성 테스트를 작성한다
+  - [-] 5.7 Property 7 초대 발급 권한 속성 테스트를 작성한다
     - 임의 사용자·그룹·멤버십 상태에서 현재 활성 멤버십이 있을 때만 발급 정책이 참인지 검증한다.
     - **Property 7: 초대 발급 권한**
     - **Validates: Requirements 3.8**
 
-  - [ ] 5.8 그룹 목록·상세 query와 이메일 최소 공개 projection을 구현한다
+  - [x] 5.8 그룹 목록·상세 query와 이메일 최소 공개 projection을 구현한다
     - 현재 소속 그룹만 구성원 수와 최근 발송일과 함께 반환하고, 그룹 상세는 요청자의 현재 멤버십을 검사한다.
     - 모든 닉네임을 표시하되 각 그룹 멤버십이 `PUBLIC`인 사용자 이메일만 select·반환하며 다른 그룹의 설정은 갱신하지 않는다.
     - _Requirements: 3.9, 6.1~6.6_
 
-  - [ ] 5.9 Property 8 그룹별 이메일 공개의 최소 노출과 비간섭 속성 테스트를 작성한다
+  - [-] 5.9 Property 8 그룹별 이메일 공개의 최소 노출과 비간섭 속성 테스트를 작성한다
     - 그룹별 멤버 projection과 설정 변경 model로 비공개 이메일 미노출, 다른 그룹 설정 보존, 외부 사용자 projection 거부를 검증한다.
     - **Property 8: 그룹별 이메일 공개의 최소 노출과 비간섭**
     - **Validates: Requirements 6.2, 6.3, 6.4, 6.5, 6.6**
 
-  - [ ] 5.10 그룹 목록·상세·초대·탈퇴 화면을 구현한다
+  - [x] 5.10 그룹 목록·상세·초대·탈퇴 화면을 구현한다
     - `Groups.html`, `GroupDetail.html`, `Invite.html` 기준 화면과 그룹 없음, 잘못된 초대, 이미 구성원, 복사 성공·실패, 권한 없음 상태를 구현한다.
     - 그룹 상세에 그룹별 이메일 switch, 구성원 목록, 탈퇴 확인 dialog와 이 그룹에 알림 보내기 동작을 연결한다.
     - _Requirements: 3.5~3.9, 4.1, 4.3~4.8, 5.1~5.4, 6.1~6.6_
@@ -162,7 +162,7 @@
     - _Requirements: 2.4~2.8, 3.1~3.8, 4.4~4.8, 5.2~5.4, 6.4~6.6_
 
 - [ ] 6. 알림 작성과 대상 검증 구현
-  - [ ] 6.1 작성 옵션 query와 만료 가능한 DB draft를 구현한다
+  - [x] 6.1 작성 옵션 query와 만료 가능한 DB draft를 구현한다
     - 개인 모드에는 현재 친구만, 그룹 모드에는 현재 멤버십 그룹만 반환한다.
     - 한 문장, 대상 mode와 검증된 최소 target ID를 소유자·30분 만료와 함께 저장하고 예약 성공 시 한 번만 소비되게 한다.
     - _Requirements: 7.1, 7.2, 8.1, 9.1, 9.2_

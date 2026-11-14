@@ -1,0 +1,251 @@
+.listPage,
+.detailPage {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding-top: var(--space-1);
+}
+
+.listPage {
+  padding-bottom: var(--space-5);
+}
+
+.createForm {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.cardLabel {
+  font-size: var(--font-size-section);
+  font-weight: var(--font-weight-bold);
+}
+
+.inlineControl {
+  display: flex;
+  min-width: 0;
+  gap: var(--space-3);
+}
+
+.input,
+.inviteUrl {
+  min-width: 0;
+  flex: 1 1 auto;
+  min-height: var(--size-input);
+  padding: 0 var(--space-6);
+  border: 0;
+  border-radius: var(--radius-control);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font: inherit;
+}
+
+.input::placeholder {
+  color: var(--color-text-sub);
+  opacity: 1;
+}
+
+.input[aria-invalid="true"] {
+  box-shadow: inset 0 0 0 2px var(--color-text-mid);
+}
+
+.inviteUrl {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  color: var(--color-text-mid);
+  font-size: var(--font-size-support);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.supportText,
+.fieldError {
+  margin: 0;
+  font-size: var(--font-size-support);
+}
+
+.supportText {
+  color: var(--color-text-sub);
+}
+
+.fieldError {
+  color: var(--color-text);
+  font-weight: var(--font-weight-bold);
+}
+
+.accentCount {
+  color: var(--color-accent);
+}
+
+.groupListCard,
+.memberCard {
+  gap: var(--space-1);
+  padding-bottom: var(--space-3);
+}
+
+.groupList,
+.memberList {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.groupRow,
+.memberRow {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+.groupRow {
+  min-height: 72px;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.memberRow {
+  min-height: 60px;
+}
+
+.rowContent {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+}
+
+.rowContent > :first-child {
+  font-size: var(--font-size-list);
+  font-weight: var(--font-weight-medium);
+  overflow-wrap: anywhere;
+}
+
+.groupRow .rowContent > :first-child {
+  font-size: var(--font-size-section);
+  font-weight: var(--font-weight-bold);
+}
+
+.rowContent > :not(:first-child) {
+  color: var(--color-text-sub);
+  font-size: var(--font-size-support);
+  overflow-wrap: anywhere;
+}
+
+.chevron {
+  flex: 0 0 auto;
+  color: var(--color-text-sub);
+  font-size: 28px;
+  font-weight: var(--font-weight-regular);
+  line-height: 1;
+}
+
+.visibilityCard {
+  padding-top: var(--space-7);
+  padding-bottom: var(--space-7);
+}
+
+.detailActions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: var(--space-3);
+  padding: 0 var(--space-7) var(--space-9);
+}
+
+.detailActions > * {
+  min-width: 0;
+}
+
+.invitePage {
+  display: flex;
+  min-height: 100%;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--space-9);
+  padding: 88px var(--space-9) var(--space-9);
+  background: var(--color-surface);
+}
+
+.invitePage > :first-child {
+  width: 72px;
+  height: 72px;
+  border-radius: 24px;
+  font-size: 24px;
+}
+
+.inviteIntro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.inviteIntro h1,
+.inviteIntro p,
+.inviteBenefits h2,
+.inviteBenefits ul,
+.inviteWarning {
+  margin: 0;
+}
+
+.inviteIntro h1 {
+  font-size: var(--font-size-invite-title);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-title);
+  line-height: var(--line-height-title);
+}
+
+.inviteIntro p {
+  color: var(--color-text-sub);
+  font-size: 1rem;
+}
+
+.inviteBenefits {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-8);
+  border-radius: var(--radius-card);
+  background: var(--color-bg);
+}
+
+.inviteBenefits h2 {
+  font-size: var(--font-size-section);
+}
+
+.inviteBenefits ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-left: 18px;
+  color: var(--color-text-mid);
+  font-size: 0.875rem;
+}
+
+.inviteWarning {
+  color: var(--color-text-sub);
+  font-size: var(--font-size-support);
+}
+
+.inviteActions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: var(--space-3);
+  margin-top: auto;
+}
+
+@media (max-width: 359px) {
+  .inlineControl {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .inlineControl > button {
+    width: 100%;
+  }
+}

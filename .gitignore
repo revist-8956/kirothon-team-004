@@ -10,6 +10,14 @@ dist/
 build/
 .next/
 out/
+.vercel/
+*.tsbuildinfo
+
+# 테스트 산출물
+coverage/
+playwright-report/
+blob-report/
+test-results/
 
 # 비밀 정보 — 절대 커밋하지 마세요
 .env
@@ -17,7 +25,16 @@ out/
 !.env.example
 *.pem
 *.key
+*.p12
+*.pfx
+*.crt
+*.cer
+*.jks
 
 # 기타
 .DS_Store
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*

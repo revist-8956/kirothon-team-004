@@ -1,0 +1,294 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum DeliveryMode {
+  PERSONAL
+  GROUP
+}
+
+enum ScheduleKind {
+  ONE_TIME
+  RECURRING
+}
+
+enum Recurrence {
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
+enum NotificationState {
+  ACTIVE
+  STOPPED
+}
+
+enum ClaimState {
+  SENT
+  SKIPPED
+}
+
+enum SkipReason {
+  SENDER_NOT_MEMBER
+  NO_RECIPIENTS
+}
+
+model Notification {
+  id           String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  senderId     String            @map("sender_id") @db.Uuid
+  sentence     String
+  mode         DeliveryMode
+  groupId      String?           @map("group_id") @db.Uuid
+  scheduleKind ScheduleKind      @map("schedule_kind")
+  oneTimeAt    DateTime?         @map("one_time_at") @db.Timestamptz(6)
+  recurrence   Recurrence?
+  startDate    DateTime?         @map("start_date") @db.Date
+  weekday      Int?
+  dayOfMonth   Int?              @map("day_of_month")
+  localTime    DateTime?         @map("local_time") @db.Time(0)
+  skipWeekend  Boolean           @default(false) @map("skip_weekend")
+  timezone     String            @default("Asia/Seoul")
+  state        NotificationState @default(ACTIVE)
+  stoppedAt    DateTime?         @map("stopped_at") @db.Timestamptz(6)
+  createdAt    DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  personalTargets PersonalTarget[]
+  scheduleClaims  ScheduleClaim[]
+  dispatches      Dispatch[]
+  sender          User             @relation("NotificationSender", fields: [senderId], references: [id], onDelete: Restrict, onUpdate: Cascade, map: "notification_sender_id_fkey")
+  group           Group?           @relation(fields: [groupId], references: [id], onDelete: Restrict, onUpdate: Cascade, map: "notification_group_id_fkey")
+
+  @@index([state, scheduleKind, oneTimeAt], map: "notification_due_one_time_idx")
+  @@index([state, recurrence, startDate], map: "notification_due_recurring_idx")
+  @@index([senderId, createdAt(sort: Desc)], map: "notification_sender_created_idx")
+  @@index([groupId], map: "notification_group_idx")
+  @@map("notification")
+}
+
+model PersonalTarget {
+  notificationId String   @map("notification_id") @db.Uuid
+  userId         String   @map("user_id") @db.Uuid
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  notification Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Cascade, map: "personal_target_user_id_fkey")
+
+  @@id([notificationId, userId])
+  @@index([userId], map: "personal_target_user_idx")
+  @@map("personal_target")
+}
+
+model NotificationDraft {
+  id         String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  ownerId    String       @map("owner_id") @db.Uuid
+  sentence   String
+  mode       DeliveryMode
+  targetJson Json         @map("target_json") @db.JsonB
+  expiresAt  DateTime     @map("expires_at") @db.Timestamptz(6)
+  consumedAt DateTime?    @map("consumed_at") @db.Timestamptz(6)
+  createdAt  DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "notification_draft_owner_id_fkey")
+
+  @@index([ownerId, expiresAt], map: "notification_draft_owner_expiry_idx")
+  @@index([expiresAt], map: "notification_draft_expiry_idx")
+  @@map("notification_draft")
+}
+
+model ScheduleClaim {
+  id             String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  notificationId String      @map("notification_id") @db.Uuid
+  effectiveDate  DateTime    @map("effective_date") @db.Date
+  sourceDates    DateTime[]  @map("source_dates") @db.Date
+  state          ClaimState
+  skipReason     SkipReason? @map("skip_reason")
+  createdAt      DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  notification Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+  dispatch     Dispatch?
+
+  @@unique([notificationId, effectiveDate], map: "schedule_claim_notification_effective_key")
+  @@index([state, effectiveDate], map: "schedule_claim_state_effective_idx")
+  @@map("schedule_claim")
+}
+
+model Dispatch {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  notificationId String   @map("notification_id") @db.Uuid
+  claimId        String   @unique(map: "dispatch_claim_key") @map("claim_id") @db.Uuid
+  sequence       Int
+  scheduledDate  DateTime @map("scheduled_date") @db.Date
+  effectiveDate  DateTime @map("effective_date") @db.Date
+  sentAt         DateTime @map("sent_at") @db.Timestamptz(6)
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  notification Notification        @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+  claim        ScheduleClaim       @relation(fields: [claimId], references: [id], onDelete: Restrict)
+  recipients   DispatchRecipient[]
+
+  @@unique([notificationId, effectiveDate], map: "dispatch_notification_effective_key")
+  @@unique([notificationId, sequence], map: "dispatch_notification_sequence_key")
+  @@index([notificationId, sentAt(sort: Desc)], map: "dispatch_notification_sent_idx")
+  @@map("dispatch")
+}
+
+model DispatchRecipient {
+  id                        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  dispatchId                String    @map("dispatch_id") @db.Uuid
+  recipientId               String    @map("recipient_id") @db.Uuid
+  recipientNicknameSnapshot String    @map("recipient_nickname_snapshot")
+  confirmedAt               DateTime? @map("confirmed_at") @db.Timestamptz(6)
+  createdAt                 DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  dispatch  Dispatch @relation(fields: [dispatchId], references: [id], onDelete: Cascade)
+  recipient User     @relation(fields: [recipientId], references: [id], onDelete: Restrict, onUpdate: Cascade, map: "dispatch_recipient_recipient_id_fkey")
+
+  @@unique([dispatchId, recipientId], map: "dispatch_recipient_dispatch_recipient_key")
+  @@index([recipientId, dispatchId], map: "dispatch_recipient_inbox_idx")
+  @@index([dispatchId, confirmedAt], map: "dispatch_recipient_confirmation_idx")
+  @@map("dispatch_recipient")
+}
+
+enum EmailVisibility {
+  PRIVATE
+  PUBLIC
+
+  @@map("email_visibility")
+}
+
+model User {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name             String?
+  email            String    @unique(map: "users_email_key")
+  emailNormalized  String    @unique(map: "users_email_normalized_key") @map("email_normalized")
+  emailVerified    DateTime? @map("email_verified") @db.Timestamptz(6)
+  image            String?
+  nickname         String
+  nicknameRequired Boolean   @default(false) @map("nickname_required")
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  accounts            Account[]
+  sessions            Session[]
+  friendshipsOwned    Friend[]     @relation("FriendOwner")
+  friendshipsReceived Friend[]     @relation("FriendTarget")
+  groupsCreated       Group[]      @relation("GroupCreator")
+  memberships         Membership[]
+  invitesIssued       Invite[]             @relation("InviteIssuer")
+  notificationsSent   Notification[]       @relation("NotificationSender")
+  personalTargets     PersonalTarget[]
+  notificationDrafts  NotificationDraft[]
+  dispatchRecipients  DispatchRecipient[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId            String  @map("user_id") @db.Uuid
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token String? @db.Text
+  access_token  String? @db.Text
+  expires_at    Int?
+  token_type    String?
+  scope         String?
+  id_token      String? @db.Text
+  session_state String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "accounts_user_id_fkey")
+
+  @@unique([provider, providerAccountId], map: "accounts_provider_provider_account_id_key")
+  @@index([userId], map: "accounts_user_id_idx")
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sessionToken String   @unique(map: "sessions_session_token_key") @map("session_token")
+  userId       String   @map("user_id") @db.Uuid
+  expires      DateTime @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "sessions_user_id_fkey")
+
+  @@index([expires], map: "sessions_expires_idx")
+  @@index([userId], map: "sessions_user_id_idx")
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime @db.Timestamptz(6)
+
+  @@id([identifier, token])
+  @@unique([token], map: "verification_tokens_token_key")
+  @@map("verification_tokens")
+}
+
+model Friend {
+  ownerId   String   @map("owner_id") @db.Uuid
+  friendId  String   @map("friend_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  owner  User @relation("FriendOwner", fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "friends_owner_id_fkey")
+  friend User @relation("FriendTarget", fields: [friendId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "friends_friend_id_fkey")
+
+  @@id([ownerId, friendId])
+  @@index([friendId], map: "friends_friend_id_idx")
+  @@map("friends")
+}
+
+model Group {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  createdById String   @map("created_by_id") @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  createdBy     User           @relation("GroupCreator", fields: [createdById], references: [id], onDelete: Restrict, onUpdate: Cascade, map: "groups_created_by_id_fkey")
+  memberships   Membership[]
+  invites       Invite[]
+  notifications Notification[]
+
+  @@index([createdById], map: "groups_created_by_id_idx")
+  @@map("groups")
+}
+
+model Membership {
+  id              String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  groupId         String          @map("group_id") @db.Uuid
+  userId          String          @map("user_id") @db.Uuid
+  joinedAt        DateTime        @default(now()) @map("joined_at") @db.Timestamptz(6)
+  leftAt          DateTime?       @map("left_at") @db.Timestamptz(6)
+  emailVisibility EmailVisibility @default(PRIVATE) @map("email_visibility")
+  createdAt       DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  group Group @relation(fields: [groupId], references: [id], onDelete: Restrict, onUpdate: Cascade, map: "memberships_group_id_fkey")
+  user  User  @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Cascade, map: "memberships_user_id_fkey")
+
+  @@index([groupId, userId, joinedAt(sort: Desc)], map: "memberships_group_user_joined_at_idx")
+  @@index([groupId, leftAt, joinedAt], map: "memberships_group_left_at_joined_at_idx")
+  @@index([userId, leftAt], map: "memberships_user_left_at_idx")
+  @@map("memberships")
+}
+
+model Invite {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  groupId    String   @map("group_id") @db.Uuid
+  issuedById String   @map("issued_by_id") @db.Uuid
+  tokenHash  String   @unique(map: "invites_token_hash_key") @map("token_hash") @db.Char(64)
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  group    Group @relation(fields: [groupId], references: [id], onDelete: Restrict, onUpdate: Cascade, map: "invites_group_id_fkey")
+  issuedBy User  @relation("InviteIssuer", fields: [issuedById], references: [id], onDelete: Restrict, onUpdate: Cascade, map: "invites_issued_by_id_fkey")
+
+  @@index([groupId], map: "invites_group_id_idx")
+  @@index([issuedById], map: "invites_issued_by_id_idx")
+  @@map("invites")
+}
