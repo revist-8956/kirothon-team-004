@@ -1,0 +1,118 @@
+name: Beanstalk 배포
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: beanstalk-kirothon-2026-eb-env
+  cancel-in-progress: false
+
+env:
+  AWS_REGION: ap-northeast-2
+  EB_APPLICATION_NAME: kirothon-2026-eb
+  EB_ENVIRONMENT_NAME: kirothon-2026-eb-env
+  # 앱이 아직 없으므로 루트를 기본값으로 사용합니다. 하위 폴더에 만들면 변경하세요.
+  APP_DIR: .
+  NODE_VERSION: '26'
+  NEXT_TELEMETRY_DISABLED: '1'
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: read
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 앱과 인증 설정 확인
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          test -f "$APP_DIR/package.json" || { echo '::error::APP_DIR에 앱의 package.json이 필요합니다.'; exit 1; }
+          test -f "$APP_DIR/package-lock.json" || { echo '::error::npm ci에 필요한 package-lock.json이 없습니다.'; exit 1; }
+          test -n "$AWS_ACCESS_KEY_ID" || { echo '::error::GitHub Actions Secret AWS_ACCESS_KEY_ID를 설정하세요.'; exit 1; }
+          test -n "$AWS_SECRET_ACCESS_KEY" || { echo '::error::GitHub Actions Secret AWS_SECRET_ACCESS_KEY를 설정하세요.'; exit 1; }
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: ${{ env.APP_DIR }}/package-lock.json
+
+      - name: 의존성 설치
+        working-directory: ${{ env.APP_DIR }}
+        run: npm ci
+
+      - name: 정적 검사와 테스트
+        working-directory: ${{ env.APP_DIR }}
+        run: |
+          npm run lint
+          ./node_modules/.bin/next typegen
+          ./node_modules/.bin/tsc --noEmit
+          npm test
+
+      - name: 프로덕션 빌드
+        working-directory: ${{ env.APP_DIR }}
+        run: npm run build
+
+      - name: 배포 번들 생성
+        run: |
+          test -f "$APP_DIR/.next/BUILD_ID" || { echo '::error::기본 Next.js 서버 빌드(.next)가 필요합니다.'; exit 1; }
+          bundle="$RUNNER_TEMP/eb-bundle"
+          mkdir -p "$bundle"
+          rsync -a "$APP_DIR/" "$bundle/" \
+            --exclude='.git/' --exclude='.github/' --exclude='.kiro/' \
+            --exclude='node_modules/' --exclude='.next/cache/' \
+            --exclude='.env*' --exclude='*.pem' --exclude='*.key' \
+            --exclude='*.log' --exclude='coverage/'
+          # 서버 의존성은 Beanstalk에서 설치합니다. 기존 Procfile은 존중합니다.
+          if [ ! -f "$bundle/Procfile" ]; then
+            printf '%s\n' 'web: ./node_modules/.bin/next start -H 0.0.0.0 -p ${PORT:-8080}' > "$bundle/Procfile"
+          fi
+          cd "$bundle"
+          zip -qr "$RUNNER_TEMP/deploy.zip" .
+
+      - name: AWS IAM 사용자 인증
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: 기존 환경과 Node.js 플랫폼 확인
+        run: |
+          aws sts get-caller-identity
+          stack=$(aws elasticbeanstalk describe-environments \
+            --application-name "$EB_APPLICATION_NAME" \
+            --environment-names "$EB_ENVIRONMENT_NAME" \
+            --query 'Environments[0].SolutionStackName' --output text)
+          case "$stack" in
+            *'running Node.js 26') ;;
+            *) echo '::error::대상 환경이 없거나 Node.js 26 플랫폼이 아닙니다.'; exit 1 ;;
+          esac
+
+      - name: 기존 Beanstalk 환경에 배포
+        uses: aws-actions/aws-elasticbeanstalk-deploy@v1
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          application-name: ${{ env.EB_APPLICATION_NAME }}
+          environment-name: ${{ env.EB_ENVIRONMENT_NAME }}
+          version-label: gha-${{ github.run_id }}-${{ github.run_attempt }}-${{ github.sha }}
+          deployment-package-path: ${{ runner.temp }}/deploy.zip
+          create-application-if-not-exists: 'false'
+          create-environment-if-not-exists: 'false'
+          create-s3-bucket-if-not-exists: 'false'
+          wait-for-deployment: 'true'
+          wait-for-environment-recovery: 'true'
+          deployment-timeout: '900'
