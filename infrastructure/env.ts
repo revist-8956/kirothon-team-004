@@ -1,5 +1,16 @@
 import { z } from "zod";
 
+import { EnvironmentConfigurationError } from "./environment-error";
+
+export { EnvironmentConfigurationError } from "./environment-error";
+export {
+  getSupabasePublicEnvironment,
+  isServerOnlySupabaseKey,
+  parseSupabasePublicEnvironment,
+  supabasePublicEnvironmentSchema,
+  type SupabasePublicEnvironment,
+} from "./supabase/public-environment";
+
 const booleanFromString = z
   .enum(["true", "false"])
   .default("true")
@@ -31,14 +42,100 @@ const httpsUrl = z.url().refine((value) => new URL(value).protocol === "https:",
   message: "must use HTTPS",
 });
 
+const nodeEnvironment = z.enum(["development", "test", "production"]).default("development");
+
+const postgresUrl = z
+  .url()
+  .refine((value) => ["postgres:", "postgresql:"].includes(new URL(value).protocol), {
+    message: "must be a PostgreSQL URL",
+  });
+
+/** Supabase Supavisor transaction-mode pooler port. */
+const SUPABASE_TRANSACTION_POOLER_PORT = "6543";
+
+function validateRuntimeDatabaseUrl(value: string, context: z.RefinementCtx): void {
+  const url = new URL(value);
+  // Prisma must disable prepared statements behind a transaction-mode pooler.
+  if (
+    url.port === SUPABASE_TRANSACTION_POOLER_PORT &&
+    url.searchParams.get("pgbouncer") !== "true"
+  ) {
+    context.addIssue({
+      code: "custom",
+      path: ["DATABASE_URL"],
+      message: "must set pgbouncer=true when using the transaction pooler port",
+    });
+  }
+}
+
+/**
+ * Server-only runtime connection. The application uses the pooled
+ * `DATABASE_URL` and never needs the direct migration connection.
+ */
+export const runtimeDatabaseEnvironmentSchema = z
+  .object({
+    NODE_ENV: nodeEnvironment,
+    DATABASE_URL: postgresUrl,
+  })
+  .superRefine((environment, context) => {
+    validateRuntimeDatabaseUrl(environment.DATABASE_URL, context);
+  });
+
+/**
+ * Server-only migration connection. Prisma Migrate resolves both datasource
+ * variables, but schema changes are applied through the direct `DIRECT_URL`.
+ */
+export const migrationDatabaseEnvironmentSchema = z
+  .object({
+    NODE_ENV: nodeEnvironment,
+    DATABASE_URL: postgresUrl,
+    DIRECT_URL: postgresUrl,
+  })
+  .superRefine((environment, context) => {
+    validateRuntimeDatabaseUrl(environment.DATABASE_URL, context);
+
+    const directUrl = new URL(environment.DIRECT_URL);
+    if (
+      directUrl.port === SUPABASE_TRANSACTION_POOLER_PORT ||
+      directUrl.searchParams.get("pgbouncer") === "true"
+    ) {
+      context.addIssue({
+        code: "custom",
+        path: ["DIRECT_URL"],
+        message: "must be a direct (non transaction-pooled) connection for migrations",
+      });
+    }
+  });
+
+export type RuntimeDatabaseEnvironment = z.infer<typeof runtimeDatabaseEnvironmentSchema>;
+export type MigrationDatabaseEnvironment = z.infer<typeof migrationDatabaseEnvironmentSchema>;
+
+type EnvironmentSource = Readonly<Record<string, string | undefined>>;
+
+export function parseRuntimeDatabaseEnvironment(
+  source: EnvironmentSource,
+): RuntimeDatabaseEnvironment {
+  const result = runtimeDatabaseEnvironmentSchema.safeParse(source);
+  if (!result.success) {
+    throw new EnvironmentConfigurationError(result.error);
+  }
+  return result.data;
+}
+
+export function parseMigrationDatabaseEnvironment(
+  source: EnvironmentSource,
+): MigrationDatabaseEnvironment {
+  const result = migrationDatabaseEnvironmentSchema.safeParse(source);
+  if (!result.success) {
+    throw new EnvironmentConfigurationError(result.error);
+  }
+  return result.data;
+}
+
 export const environmentSchema = z
   .object({
-    NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
-    DATABASE_URL: z
-      .url()
-      .refine((value) => ["postgres:", "postgresql:"].includes(new URL(value).protocol), {
-        message: "must be a PostgreSQL URL",
-      }),
+    NODE_ENV: nodeEnvironment,
+    DATABASE_URL: postgresUrl,
     AUTH_SECRET: z.string().min(32),
     AUTH_GOOGLE_ID: z.string().min(1),
     AUTH_GOOGLE_SECRET: z.string().min(1),
@@ -84,19 +181,6 @@ export const environmentSchema = z
   });
 
 export type Environment = z.infer<typeof environmentSchema>;
-
-export class EnvironmentConfigurationError extends Error {
-  readonly issues: ReadonlyArray<{ path: string; message: string }>;
-
-  constructor(error: z.ZodError) {
-    super("애플리케이션 환경 설정이 올바르지 않습니다.");
-    this.name = "EnvironmentConfigurationError";
-    this.issues = error.issues.map((issue) => ({
-      path: issue.path.join("."),
-      message: issue.message,
-    }));
-  }
-}
 
 export function parseEnvironment(source: NodeJS.ProcessEnv): Environment {
   const result = environmentSchema.safeParse(source);

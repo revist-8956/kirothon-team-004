@@ -7,6 +7,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { addFriend, getFriends, type FriendListItem } from "./friends";
 import { PrismaRepositoryUnitOfWork } from "../infrastructure/prisma-repositories";
 import { registerIsolatedPostgres } from "../tests/database/postgres-test-database";
+import { createSupabaseProfileUser } from "../tests/database/supabase-auth-schema";
 
 const fixture = registerIsolatedPostgres();
 const clients: PrismaClient[] = [];
@@ -22,14 +23,7 @@ async function createUser(
   email: string,
   nickname: string,
 ) {
-  return repositories.transaction((transaction) =>
-    transaction.users.create({
-      email,
-      emailNormalized: email.toLowerCase(),
-      nickname,
-      nicknameRequired: false,
-    }),
-  );
+  return createSupabaseProfileUser(fixture.current.pool, repositories, { email, nickname });
 }
 
 afterEach(async () => {

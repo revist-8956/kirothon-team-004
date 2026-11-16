@@ -1,6 +1,27 @@
 import { describe, expect, it } from "vitest";
 
-import { EnvironmentConfigurationError, parseEnvironment } from "./env";
+import {
+  EnvironmentConfigurationError,
+  parseEnvironment,
+  parseMigrationDatabaseEnvironment,
+  parseRuntimeDatabaseEnvironment,
+} from "./env";
+
+const pooledDatabaseUrl =
+  "postgresql://app.ref:pooled-password@pooler.example.com:6543/postgres?pgbouncer=true";
+const directDatabaseUrl = "postgresql://app:direct-password@db.example.com:5432/postgres";
+
+function issuesOf(run: () => unknown): ReadonlyArray<{ path: string; message: string }> {
+  try {
+    run();
+  } catch (error) {
+    if (error instanceof EnvironmentConfigurationError) {
+      return error.issues;
+    }
+    throw error;
+  }
+  return [];
+}
 
 const validEnvironment: NodeJS.ProcessEnv = {
   NODE_ENV: "production",
@@ -52,5 +73,58 @@ describe("parseEnvironment", () => {
     expect(() =>
       parseEnvironment({ ...validEnvironment, SCHEDULER_BATCH_SIZE: "501" }),
     ).toThrow(EnvironmentConfigurationError);
+  });
+});
+
+describe("parseRuntimeDatabaseEnvironment", () => {
+  it("accepts the pooled runtime URL without requiring the direct migration URL", () => {
+    expect(
+      parseRuntimeDatabaseEnvironment({ NODE_ENV: "production", DATABASE_URL: pooledDatabaseUrl }),
+    ).toEqual({ NODE_ENV: "production", DATABASE_URL: pooledDatabaseUrl });
+  });
+
+  it("requires pgbouncer=true on the transaction pooler port and never echoes the URL", () => {
+    const withoutFlag = pooledDatabaseUrl.replace("?pgbouncer=true", "");
+    const issues = issuesOf(() => parseRuntimeDatabaseEnvironment({ DATABASE_URL: withoutFlag }));
+
+    expect(issues.map((issue) => issue.path)).toEqual(["DATABASE_URL"]);
+    expect(JSON.stringify(issues)).not.toContain("pooled-password");
+  });
+
+  it("rejects non-PostgreSQL URLs", () => {
+    expect(
+      issuesOf(() => parseRuntimeDatabaseEnvironment({ DATABASE_URL: "mysql://db.example.com/app" })),
+    ).toEqual([expect.objectContaining({ path: "DATABASE_URL" })]);
+  });
+});
+
+describe("parseMigrationDatabaseEnvironment", () => {
+  it("accepts a pooled runtime URL with a separate direct migration URL", () => {
+    expect(
+      parseMigrationDatabaseEnvironment({
+        DATABASE_URL: pooledDatabaseUrl,
+        DIRECT_URL: directDatabaseUrl,
+      }),
+    ).toMatchObject({ DATABASE_URL: pooledDatabaseUrl, DIRECT_URL: directDatabaseUrl });
+  });
+
+  it("requires DIRECT_URL", () => {
+    expect(
+      issuesOf(() => parseMigrationDatabaseEnvironment({ DATABASE_URL: pooledDatabaseUrl })).map(
+        (issue) => issue.path,
+      ),
+    ).toEqual(["DIRECT_URL"]);
+  });
+
+  it("rejects a transaction-pooled DIRECT_URL without exposing either connection string", () => {
+    const issues = issuesOf(() =>
+      parseMigrationDatabaseEnvironment({
+        DATABASE_URL: pooledDatabaseUrl,
+        DIRECT_URL: pooledDatabaseUrl,
+      }),
+    );
+
+    expect(issues.map((issue) => issue.path)).toEqual(["DIRECT_URL"]);
+    expect(JSON.stringify(issues)).not.toContain("password");
   });
 });

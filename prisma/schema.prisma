@@ -4,7 +4,10 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  // Runtime: pooled connection (Supabase pooler, pgbouncer=true on port 6543).
+  url       = env("DATABASE_URL")
+  // Prisma Migrate: direct connection used only for schema migrations.
+  directUrl = env("DIRECT_URL")
 }
 
 enum DeliveryMode {
@@ -161,75 +164,33 @@ enum EmailVisibility {
   @@map("email_visibility")
 }
 
+/// Application profile of one Supabase Auth principal.
+///
+/// `id` equals `auth.users.id`. The `auth` schema is owned by Supabase and is
+/// intentionally absent from this Prisma schema, so Prisma never creates or
+/// alters it. The `users.id -> auth.users.id` foreign key, the profile-creation
+/// trigger on `auth.users`, and its `app_private` helper functions are managed
+/// only by the SQL migration `20261114120000_supabase_auth_user_profiles`.
 model User {
-  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name             String?
-  email            String    @unique(map: "users_email_key")
-  emailNormalized  String    @unique(map: "users_email_normalized_key") @map("email_normalized")
-  emailVerified    DateTime? @map("email_verified") @db.Timestamptz(6)
-  image            String?
+  id               String   @id @db.Uuid
+  email            String   @unique(map: "users_email_key")
+  emailNormalized  String   @unique(map: "users_email_normalized_key") @map("email_normalized")
   nickname         String
-  nicknameRequired Boolean   @default(false) @map("nickname_required")
-  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt        DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  nicknameRequired Boolean  @default(false) @map("nickname_required")
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  accounts            Account[]
-  sessions            Session[]
-  friendshipsOwned    Friend[]     @relation("FriendOwner")
-  friendshipsReceived Friend[]     @relation("FriendTarget")
-  groupsCreated       Group[]      @relation("GroupCreator")
+  friendshipsOwned    Friend[]            @relation("FriendOwner")
+  friendshipsReceived Friend[]            @relation("FriendTarget")
+  groupsCreated       Group[]             @relation("GroupCreator")
   memberships         Membership[]
-  invitesIssued       Invite[]             @relation("InviteIssuer")
-  notificationsSent   Notification[]       @relation("NotificationSender")
+  invitesIssued       Invite[]            @relation("InviteIssuer")
+  notificationsSent   Notification[]      @relation("NotificationSender")
   personalTargets     PersonalTarget[]
   notificationDrafts  NotificationDraft[]
   dispatchRecipients  DispatchRecipient[]
 
   @@map("users")
-}
-
-model Account {
-  id                String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId            String  @map("user_id") @db.Uuid
-  type              String
-  provider          String
-  providerAccountId String  @map("provider_account_id")
-  refresh_token String? @db.Text
-  access_token  String? @db.Text
-  expires_at    Int?
-  token_type    String?
-  scope         String?
-  id_token      String? @db.Text
-  session_state String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "accounts_user_id_fkey")
-
-  @@unique([provider, providerAccountId], map: "accounts_provider_provider_account_id_key")
-  @@index([userId], map: "accounts_user_id_idx")
-  @@map("accounts")
-}
-
-model Session {
-  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  sessionToken String   @unique(map: "sessions_session_token_key") @map("session_token")
-  userId       String   @map("user_id") @db.Uuid
-  expires      DateTime @db.Timestamptz(6)
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "sessions_user_id_fkey")
-
-  @@index([expires], map: "sessions_expires_idx")
-  @@index([userId], map: "sessions_user_id_idx")
-  @@map("sessions")
-}
-
-model VerificationToken {
-  identifier String
-  token      String
-  expires    DateTime @db.Timestamptz(6)
-
-  @@id([identifier, token])
-  @@unique([token], map: "verification_tokens_token_key")
-  @@map("verification_tokens")
 }
 
 model Friend {

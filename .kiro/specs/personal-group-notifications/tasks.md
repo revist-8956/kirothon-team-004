@@ -43,7 +43,7 @@
     - 잘못된 transaction이 일부 행만 남기지 않고 rollback되는지 검증한다.
     - _Requirements: 2.8, 4.7, 7.3, 9.9, 11.1, 11.5_
 
-- [ ] 3. 공통 도메인 검증과 인증 구현
+- [x] 3. 공통 도메인 검증과 인증 구현
   - [x] 3.1 닉네임, 이메일, 그룹 이름과 알림 문장 validator를 구현한다
     - Unicode code point 기준 닉네임 길이, 기본 이메일 형식과 소문자 정규화, 공백 그룹 이름과 공백 알림 문장 거부를 순수 함수와 Zod schema로 구현한다.
     - _Requirements: 1.3, 1.4, 1.9, 1.10, 1.11, 2.1, 2.2, 2.3, 3.4, 7.5_
@@ -82,7 +82,7 @@
     - `Main.html` 기준 `/login`과 `/profile/setup`을 구현하고 유효한 닉네임 저장 전 보호 기능 진입을 제한한다.
     - _Requirements: 1.7, 1.8, 1.9, 1.10, 1.11, 1.13, 4.2_
 
-  - [ ] 3.9 인증·프로필 통합 및 컴포넌트 테스트를 작성한다
+  - [x] 3.9 인증·프로필 통합 및 컴포넌트 테스트를 작성한다
     - 신규·기존 사용자 callback, 실패·취소, 보호 route, 초대 복귀, 닉네임 경계, 로그아웃과 비인증 데이터 차단을 자동 검증한다.
     - _Requirements: 1.1~1.13, 4.2_
 
@@ -106,13 +106,13 @@
     - 키보드 조작, 접근 가능한 이름·상태, dialog 초점 복원, selector 화살표 이동, 200% 확대와 axe 위반 여부를 검증한다.
     - _Requirements: 5.1, 6.2, 12.5, 14.1, 16.2_
 
-- [ ] 5. 친구, 그룹, 초대와 멤버십 구현
+- [x] 5. 친구, 그룹, 초대와 멤버십 구현
   - [x] 5.1 친구 추가 command와 친구 목록 query를 구현한다
     - 이메일 형식·정규화, 가입 사용자 조회, 자기 자신·미가입·중복 거부와 단방향 저장을 transaction 및 unique 충돌 처리로 구현한다.
     - 목록에는 현재 사용자의 친구 닉네임과 이메일만 projection한다.
     - _Requirements: 2.1~2.9_
 
-  - [ ] 5.2 Property 4 친구 관계의 방향성과 고유성 속성 테스트를 작성한다
+  - [x] 5.2 Property 4 친구 관계의 방향성과 고유성 속성 테스트를 작성한다
     - 친구 추가 명령열 model로 자기 자신과 중복이 없고 무효 명령이 기존 집합을 보존하는지 검증한다.
     - **Property 4: 친구 관계의 방향성과 고유성**
     - **Validates: Requirements 2.2, 2.6, 2.7, 2.8**
@@ -127,7 +127,7 @@
     - 활성 멤버의 재수락은 기존 가입 시각과 설정을 보존하고, 탈퇴는 확인된 요청에서 현재 멤버십을 조건부 종료하며 그룹 lock을 사용한다.
     - _Requirements: 3.1, 3.2, 3.3, 4.3, 4.4, 4.5, 4.6, 4.7, 5.1~5.4_
 
-  - [ ] 5.5 Property 6 멤버십 이력 상태기계 속성 테스트를 작성한다
+  - [x] 5.5 Property 6 멤버십 이력 상태기계 속성 테스트를 작성한다
     - 가입·공개 변경·탈퇴·재가입 command model로 활성 이력 수, 최신 가입 시각과 재가입 기본 공개값을 검증한다.
     - **Property 6: 멤버십 이력 상태기계**
     - **Validates: Requirements 4.3, 4.5, 4.6, 4.7, 5.4**
@@ -137,7 +137,7 @@
     - 유효·잘못된 초대 조회, 이미 가입 상태와 로그인 후 원 초대 복귀에 필요한 projection을 구현한다.
     - _Requirements: 3.5, 3.6, 3.7, 3.8, 4.1, 4.2, 4.7, 4.8_
 
-  - [ ] 5.7 Property 7 초대 발급 권한 속성 테스트를 작성한다
+  - [x] 5.7 Property 7 초대 발급 권한 속성 테스트를 작성한다
     - 임의 사용자·그룹·멤버십 상태에서 현재 활성 멤버십이 있을 때만 발급 정책이 참인지 검증한다.
     - **Property 7: 초대 발급 권한**
     - **Validates: Requirements 3.8**
@@ -147,7 +147,7 @@
     - 모든 닉네임을 표시하되 각 그룹 멤버십이 `PUBLIC`인 사용자 이메일만 select·반환하며 다른 그룹의 설정은 갱신하지 않는다.
     - _Requirements: 3.9, 6.1~6.6_
 
-  - [ ] 5.9 Property 8 그룹별 이메일 공개의 최소 노출과 비간섭 속성 테스트를 작성한다
+  - [x] 5.9 Property 8 그룹별 이메일 공개의 최소 노출과 비간섭 속성 테스트를 작성한다
     - 그룹별 멤버 projection과 설정 변경 model로 비공개 이메일 미노출, 다른 그룹 설정 보존, 외부 사용자 projection 거부를 검증한다.
     - **Property 8: 그룹별 이메일 공개의 최소 노출과 비간섭**
     - **Validates: Requirements 6.2, 6.3, 6.4, 6.5, 6.6**
@@ -157,72 +157,72 @@
     - 그룹 상세에 그룹별 이메일 switch, 구성원 목록, 탈퇴 확인 dialog와 이 그룹에 알림 보내기 동작을 연결한다.
     - _Requirements: 3.5~3.9, 4.1, 4.3~4.8, 5.1~5.4, 6.1~6.6_
 
-  - [ ] 5.11 친구·그룹·초대·탈퇴 PostgreSQL 통합 테스트를 작성한다
+  - [x] 5.11 친구·그룹·초대·탈퇴 PostgreSQL 통합 테스트를 작성한다
     - 생성 transaction, 동시 초대 수락, 탈퇴·재가입, 그룹별 공개 설정 row 범위와 외부 사용자의 직접 URL 거부를 실제 DB에서 검증한다.
     - _Requirements: 2.4~2.8, 3.1~3.8, 4.4~4.8, 5.2~5.4, 6.4~6.6_
 
-- [ ] 6. 알림 작성과 대상 검증 구현
+- [x] 6. 알림 작성과 대상 검증 구현
   - [x] 6.1 작성 옵션 query와 만료 가능한 DB draft를 구현한다
     - 개인 모드에는 현재 친구만, 그룹 모드에는 현재 멤버십 그룹만 반환한다.
     - 한 문장, 대상 mode와 검증된 최소 target ID를 소유자·30분 만료와 함께 저장하고 예약 성공 시 한 번만 소비되게 한다.
     - _Requirements: 7.1, 7.2, 8.1, 9.1, 9.2_
 
-  - [ ] 6.2 Property 9 알림 대상의 배타성과 문장 유효성 속성 테스트를 작성한다
+  - [x] 6.2 Property 9 알림 대상의 배타성과 문장 유효성 속성 테스트를 작성한다
     - 임의 문장과 개인·그룹 대상 조합에서 trim 후 문장이 있고 대상 종류가 정확히 하나일 때만 저장 가능한지 검증한다.
     - **Property 9: 알림 대상의 배타성과 문장 유효성**
     - **Validates: Requirements 7.3, 7.4, 7.5**
 
-  - [ ] 6.3 개인 대상 validator와 고정 대상 저장을 구현한다
+  - [x] 6.3 개인 대상 validator와 고정 대상 저장을 구현한다
     - 한 명 이상의 중복 없는 요청 대상이 발신자의 친구 집합 부분집합인지 서버에서 재검증하고 `PersonalTarget`으로 저장한다.
     - 비어 있거나 친구가 아닌 대상이 있으면 알림·draft 소비·회차 생성을 모두 막는다.
     - _Requirements: 8.1~8.4_
 
-  - [ ] 6.4 Property 10 개인 대상 선택과 스냅샷 속성 테스트를 작성한다
+  - [x] 6.4 Property 10 개인 대상 선택과 스냅샷 속성 테스트를 작성한다
     - 친구 집합과 요청 집합 generator로 유효 부분집합의 수신자 동일성 및 무효 입력의 비생성을 검증한다.
     - **Property 10: 개인 대상 선택과 스냅샷**
     - **Validates: Requirements 8.1, 8.2, 8.3, 8.4**
 
-  - [ ] 6.5 그룹 대상 validator와 등록 권한을 구현한다
+  - [x] 6.5 그룹 대상 validator와 등록 권한을 구현한다
     - 그룹을 정확히 하나만 허용하고 알림 등록 시 발신자의 현재 활성 멤버십을 query 조건과 command 양쪽에서 검사한다.
     - _Requirements: 9.1~9.5_
 
-  - [ ] 6.6 Property 11 그룹 대상 선택과 등록 권한 속성 테스트를 작성한다
+  - [x] 6.6 Property 11 그룹 대상 선택과 등록 권한 속성 테스트를 작성한다
     - 임의 멤버십과 그룹 입력에서 선택 가능 그룹 집합, 단일 그룹 제약과 등록 허용 조건을 검증한다.
     - **Property 11: 그룹 대상 선택과 등록 권한**
     - **Validates: Requirements 9.1, 9.2, 9.3, 9.4, 9.5**
 
-  - [ ] 6.7 개인·그룹 알림 작성 화면과 컴포넌트 테스트를 구현한다
+  - [x] 6.7 개인·그룹 알림 작성 화면과 컴포넌트 테스트를 구현한다
     - `ComposePersonal.html`과 `ComposeGroup.html` 기준 한 문장 입력, mode radio group, 친구 checkbox, 그룹 radio와 수신 예정 미리보기를 구현한다.
     - 그룹 상세에서 진입한 그룹 초기 선택, 빈 옵션, 검증 실패 시 입력 보존과 다음 단계 이동을 자동 검증한다.
     - _Requirements: 7.1~7.5, 8.1, 8.3, 8.4, 9.1~9.6_
 
 - [ ] 7. Asia/Seoul 일정 계산과 예약 구현
-  - [ ] 7.1 Luxon 기반 순수 일정 계산기를 구현한다
+  - [x] 7.1 Luxon 기반 순수 일정 계산기를 구현한다
     - 일회성, DAILY, WEEKLY, MONTHLY 예정일과 월말 보정, 주말 다음 평일 이동, effective date별 합치기와 UTC instant 변환을 구현한다.
     - 시스템 timezone에 의존하지 않는 `calculateDueSlots` 및 다음 발송 미리보기 interface를 제공한다.
     - _Requirements: 10.1~10.13_
 
-  - [ ] 7.2 Property 13 반복 예정일 생성 속성 테스트를 작성한다
+  - [x] 7.2 Property 13 반복 예정일 생성 속성 테스트를 작성한다
     - 윤년·월말·연말을 포함한 날짜 generator로 DAILY 간격, WEEKLY 요일·간격과 MONTHLY 월말 보정을 검증한다.
     - **Property 13: 반복 예정일 생성**
     - **Validates: Requirements 10.3, 10.4, 10.5, 10.6**
 
-  - [ ] 7.3 Property 14 주말 이동의 첫 평일 규칙 속성 테스트를 작성한다
+  - [x] 7.3 Property 14 주말 이동의 첫 평일 규칙 속성 테스트를 작성한다
     - 임의 예정일과 옵션에 대해 발송일이 예정일 또는 이후의 가장 이른 월요일~금요일인지 검증한다.
     - **Property 14: 주말 이동의 첫 평일 규칙**
     - **Validates: Requirements 10.8, 10.9, 10.10, 10.12**
 
-  - [ ] 7.4 Property 15 같은 발송일의 회차 합치기 속성 테스트를 작성한다
+  - [x] 7.4 Property 15 같은 발송일의 회차 합치기 속성 테스트를 작성한다
     - 예정일 목록 generator로 effective date별 슬롯이 하나이고 모든 source date가 손실·중복 없이 보존되는지 검증한다.
     - **Property 15: 같은 발송일의 회차 합치기**
     - **Validates: Requirements 10.11**
 
-  - [ ] 7.5 Property 16 Asia/Seoul 시각 왕복 속성 테스트를 작성한다
+  - [x] 7.5 Property 16 Asia/Seoul 시각 왕복 속성 테스트를 작성한다
     - 유효한 KST 날짜·시각을 UTC instant로 변환한 뒤 복원한 값과 다른 process timezone에서의 결과가 같은지 검증한다.
     - **Property 16: Asia/Seoul 시각 왕복**
     - **Validates: Requirements 10.13**
 
-  - [ ] 7.6 발송 일정 화면과 자동화 테스트를 구현한다
+  - [x] 7.6 발송 일정 화면과 자동화 테스트를 구현한다
     - `Schedule.html` 기준 일회성 날짜·시각, 반복 시작일·주기별 필드, 주말 제외 switch와 다음 발송 미리보기를 구현한다.
     - DAILY·WEEKLY·MONTHLY의 조건부 입력, 과거 시각, 잘못된 일자·요일과 만료·타인 draft 오류를 검증한다.
     - _Requirements: 10.1~10.13_
@@ -416,36 +416,76 @@
     - lint, typecheck, 단위·속성·통합·E2E·axe·visual regression과 production build를 단일 비대화식 명령으로 실행하고 실패 시 종료하도록 구성한다.
     - _Requirements: 1.1~1.13, 2.1~2.10, 3.1~3.9, 4.1~4.8, 5.1~5.4, 6.1~6.6, 7.1~7.5, 8.1~8.4, 9.1~9.9, 10.1~10.15, 11.1~11.5, 12.1~12.11, 13.1~13.6, 14.1~14.7, 15.1~15.3, 16.1~16.9, 17.1~17.5_
 
+- [ ] 14. Supabase Auth·PostgreSQL 인증 경계 전환
+  - [x] 14.1 Supabase SSR 인증 클라이언트와 환경 설정 경계를 구현한다
+    - `@supabase/ssr` 기반 browser client, Server Component/Action/Route Handler용 server client, cookie 갱신 middleware를 분리하고 브라우저에는 URL과 publishable key만 노출한다.
+    - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, 런타임 pooled `DATABASE_URL`, migration 전용 direct `DIRECT_URL`을 별도 Zod schema로 검증한다. `DATABASE_URL`과 `DIRECT_URL`은 서버 전용으로 유지하고 값·연결 문자열을 로그나 클라이언트 번들에 넣지 않는다.
+    - _Requirements: 1.1, 1.6, 1.7, 1.12, 1.13_
+
+  - [x] 14.2 Auth.js 사용자·세션 스키마를 Supabase `auth.users` 기반 앱 프로필과 도메인 FK로 전환한다
+    - Prisma의 Auth.js `Account`, `Session`, `VerificationToken` 모델과 adapter 의존을 제거하고, 앱 프로필의 식별자를 `auth.users.id`에 연결한다. 친구·멤버십·알림·회차 등 모든 사용자 FK와 repository projection을 새 프로필 식별자로 전환한다.
+    - SQL migration으로 `auth.users` 신규 사용자에 대한 앱 프로필 생성과 Google metadata 기반 초기 닉네임 후보를 처리한다. 이미 배포된 Auth.js 데이터가 있으면 정규화 이메일로 대응되는 `auth.users`를 검증·매핑하고, 매핑 불가 행은 삭제하지 않고 migration을 실패 또는 격리 보고하게 한다.
+    - 데이터 정합성을 확인한 뒤에만 legacy Auth.js 세션·provider 테이블과 코드 참조를 제거하며 OAuth access/refresh token을 앱 도메인 테이블로 복사하지 않는다.
+    - _Requirements: 1.1~1.6, 1.9~1.13, 2.3, 2.8, 3.1, 4.4, 5.3, 8.2, 9.6, 11.1_
+
+  - [x] 14.3 RLS와 Prisma 서버 권한 모델을 명시적으로 구성한다
+    - 앱 도메인 테이블은 browser/PostgREST 직접 접근을 허용하지 않는 기본 거부 RLS 및 최소 grant로 구성하고, 브라우저 Supabase client는 인증 세션 처리 외 도메인 데이터를 직접 조회·변경하지 않게 한다.
+    - 서버 전용 pooled Prisma 연결이 RLS를 우회하는 private database role로 동작하는 경우, 사용자별 권한 판단의 유일한 정책 집행점은 `requireUser()`와 query/command의 자원별 조건임을 코드와 migration 주석으로 고정한다. RLS 정책만으로 IDOR 방어를 위임하지 않는다.
+    - migration·runtime·anon/authenticated 역할별 접근 테스트를 추가하여 runtime role만 필요한 테이블 권한을 가지며 anon/authenticated 역할은 사용자 데이터에 접근할 수 없음을 검증한다.
+    - _Requirements: 1.13, 2.9, 3.8, 6.6, 8.3, 9.5, 13.5, 13.6, 15.3, 16.6_
+
+  - [x] 14.4 Supabase Google OAuth callback, 로그아웃과 안전한 복귀 경로를 구현한다
+    - 로그인 시작은 Google provider의 Supabase OAuth 요청으로 바꾸고, callback route에서 authorization code를 서버 cookie session으로 교환한 성공 후에만 앱 프로필을 준비한다. 실패·취소에는 앱 프로필과 도메인 데이터를 만들지 않고 일반 오류를 표시한다.
+    - Google 및 Supabase에 등록할 callback/redirect origin을 배포 origin으로 제한한다. `returnTo`는 OAuth 요청 전 server cookie 또는 서명된 단기 상태로 보관하고 기존 sanitizer로 내부 `/` 경로와 query만 복원하며 외부 URL, scheme-relative URL, 제어 문자는 `/inbox`로 대체한다.
+    - server-side logout으로 Supabase 세션을 종료하고 cookie를 제거하며, browser/session 갱신 경계가 보호 route와 Server Action에서 같은 인증 결과를 사용하게 한다.
+    - _Requirements: 1.1, 1.5~1.8, 1.12, 1.13, 4.1, 4.2_
+
+  - [ ] 14.5 인증·인가 의존 코드를 Supabase 세션 주체로 재연결한다
+    - `requireUser()`, protected layout, middleware, Server Action, query service와 health-safe auth error mapper에서 Auth.js session/API를 제거하고 검증된 Supabase 세션 사용자 ID와 앱 프로필을 사용하게 한다.
+    - 닉네임 설정 전 보호 기능 제한, 그룹 현재 멤버십, 개인/그룹 알림·응답 현황·확인 권한이 Supabase 인증 식별자에서 시작하되 기존 도메인 권한 predicate를 계속 서버에서 재검증하게 한다.
+    - _Requirements: 1.7~1.13, 3.8, 4.2, 5.1~5.4, 6.6, 8.3, 9.5, 13.5, 13.6, 15.3, 16.1~16.9_
+
+  - [ ] 14.6 Supabase 세션 모델의 인증·권한 회귀 테스트를 작성한다
+    - Supabase SSR cookie session을 이용해 신규·기존 Google 사용자 프로필, OAuth callback 실패/취소, logout, 보호 경로 복귀, 닉네임 설정 전 차단을 자동 검증한다. 실제 Google 창은 열지 않고 Supabase auth client/callback 경계를 격리한다.
+    - Supabase 세션 사용자와 다른 사용자 ID를 주입한 친구·그룹·draft·알림·회차 요청, 탈퇴 후 그룹 조회, 개인 수신자의 최소 projection을 통합/E2E로 검증한다. browser client에 DB URL, direct URL 또는 service role key가 포함되지 않는지도 검사한다.
+    - _Requirements: 1.1~1.13, 2.3~2.9, 3.8, 4.2, 6.6, 8.3, 9.5, 13.5, 13.6, 15.1~15.3, 16.1~16.9_
+
+  - [ ] 14.7 Supabase 환경별 migration·CI·Elastic Beanstalk 배포 설정을 갱신한다
+    - migration job은 `DIRECT_URL`만 사용하고 애플리케이션 runtime은 pooled `DATABASE_URL`만 사용하도록 Prisma 설정과 GitHub Actions 환경 변수 계약을 분리한다. 공개 URL/publishable key와 서버 비밀값의 누락·형식 오류를 배포 전 검증한다.
+    - Supabase dashboard와 Google Cloud Console에 등록할 개발·배포 callback URL 및 allowed redirect URL 목록을 배포 설정 문서/검증 상수로 관리하고, production build와 `/api/health/ready`가 OAuth secret·DB URL을 응답이나 로그로 노출하지 않음을 확인한다.
+    - _Requirements: 1.1, 1.6, 1.7, 1.12, 1.13, 10.1, 11.1, 16.6_
+
 ## Notes
 
 - 모든 테스트 하위 작업은 필수이며 선택 작업으로 표시하지 않았다.
 - 각 속성 기반 테스트는 `design.md`의 Correctness Property 번호와 요구사항 절을 직접 참조한다.
 - Google OAuth 자체는 E2E에서 자동화하지 않고 production에 포함되지 않는 인증 fixture로 대체하며, callback 계약은 통합 테스트로 검증한다.
 - 배포 관련 작업은 migration, CI/CD, health check와 smoke 검사 구성을 코드로 작성하는 범위이며 실제 환경 배포 실행은 포함하지 않는다.
+- **전환 가정:** Supabase Auth가 Google OAuth와 세션 cookie를 소유한다. `auth.users`는 인증 주체이고 앱 프로필 및 친구·그룹·알림 도메인 데이터는 별도 앱 스키마에 둔다. browser Supabase client는 인증에만 사용하며 앱 도메인 데이터는 Next.js 서버와 Prisma를 통해서만 접근한다.
+- **RLS 가정:** 앱 도메인 테이블에는 browser/PostgREST 직접 접근을 막는 기본 거부 RLS와 최소 권한 grant를 적용한다. 서버 전용 Prisma runtime role의 RLS 우회는 허용하되, 사용자별 인가의 최종 책임은 계속 server-side `requireUser()` 및 repository/query predicate에 둔다.
+- **설계 정합화 필요:** 현 `design.md`의 Auth.js Google Provider, PostgreSQL Adapter, database session, Auth.js 모델 설명은 이 전환과 충돌한다. Task 14를 실행하기 전에 또는 함께 design.md를 Supabase SSR·`auth.users`·RLS 결정에 맞게 후속 갱신해야 한다. 이 요청의 범위에 따라 design.md와 requirements.md는 변경하지 않았다.
 
 ## Task Dependency Graph
 
 ```json
 {
   "waves": [
-    { "id": 0, "tasks": ["1.1"] },
-    { "id": 1, "tasks": ["1.2", "1.3", "4.1"] },
-    { "id": 2, "tasks": ["2.1", "2.2", "3.1", "3.3", "4.2"] },
-    { "id": 3, "tasks": ["2.3", "3.2", "3.4", "3.5", "3.6", "3.7", "4.3"] },
-    { "id": 4, "tasks": ["2.4", "3.8", "4.4", "5.1", "5.4", "5.6", "5.8"] },
-    { "id": 5, "tasks": ["3.9", "5.2", "5.3", "5.5", "5.7", "5.9", "5.10", "6.1"] },
-    { "id": 6, "tasks": ["5.11", "6.2", "6.3", "6.5", "7.1"] },
-    { "id": 7, "tasks": ["6.4", "6.6", "6.7", "7.2", "7.3", "7.4", "7.5", "7.6"] },
-    { "id": 8, "tasks": ["7.7"] },
-    { "id": 9, "tasks": ["7.8", "8.1", "8.2"] },
-    { "id": 10, "tasks": ["8.3", "8.4", "8.5", "8.7"] },
-    { "id": 11, "tasks": ["8.6", "8.8", "9.1", "9.3", "10.1", "10.5"] },
-    { "id": 12, "tasks": ["9.2", "9.4", "9.5", "9.6", "10.2", "10.3", "10.4", "10.6"] },
-    { "id": 13, "tasks": ["9.7", "10.7", "12.1", "12.2"] },
-    { "id": 14, "tasks": ["10.8", "11.1", "12.3"] },
-    { "id": 15, "tasks": ["11.2", "11.3", "12.4", "13.1"] },
-    { "id": 16, "tasks": ["13.2", "13.3", "13.4"] },
-    { "id": 17, "tasks": ["13.5"] }
+    { "id": 0, "tasks": ["6.4", "6.6", "7.2", "7.3", "7.4", "7.5", "7.6", "14.1"] },
+    { "id": 1, "tasks": ["14.2"] },
+    { "id": 2, "tasks": ["14.3"] },
+    { "id": 3, "tasks": ["14.4"] },
+    { "id": 4, "tasks": ["14.5", "14.7"] },
+    { "id": 5, "tasks": ["7.7", "14.6"] },
+    { "id": 6, "tasks": ["7.8", "8.1"] },
+    { "id": 7, "tasks": ["8.2"] },
+    { "id": 8, "tasks": ["8.3", "8.4", "8.5", "8.7"] },
+    { "id": 9, "tasks": ["8.6", "8.8", "9.1", "9.3", "10.1", "10.5"] },
+    { "id": 10, "tasks": ["9.2", "9.4", "9.5", "9.6", "10.2", "10.3", "10.4", "10.6"] },
+    { "id": 11, "tasks": ["9.7", "10.7", "12.1", "12.2"] },
+    { "id": 12, "tasks": ["10.8", "11.1", "12.3"] },
+    { "id": 13, "tasks": ["11.2", "11.3", "12.4", "13.1"] },
+    { "id": 14, "tasks": ["13.2", "13.3", "13.4"] },
+    { "id": 15, "tasks": ["13.5"] }
   ]
 }
 ```

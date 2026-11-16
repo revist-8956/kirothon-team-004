@@ -9,6 +9,9 @@ import {
 import { Pool } from "pg";
 import { afterAll, afterEach, beforeAll, beforeEach } from "vitest";
 
+import { supabaseDataApiRolesStubSql } from "./supabase-api-roles";
+import { SUPABASE_AUTH_SCHEMA_STUB_SQL } from "./supabase-auth-schema";
+
 const DEFAULT_MIGRATION_DIRECTORY = resolve(process.cwd(), "prisma/migrations");
 const DATABASE_PREFIX = "kiro_test_";
 
@@ -21,11 +24,23 @@ export interface IsolatedPostgresDatabase {
   readonly name: string;
   readonly url: string;
   readonly pool: Pool;
+  reset(): Promise<void>;
   dispose(): Promise<void>;
 }
 
 export interface IsolatedPostgresOptions {
   readonly migrationDirectories?: readonly string[];
+  /**
+   * Creates the minimal Supabase-owned `auth.users` stand-in before migrations
+   * run. Defaults to true; disable it to verify migration behavior without it.
+   */
+  readonly supabaseAuthSchema?: boolean;
+  /**
+   * Creates the Supabase Data API roles (`anon`, `authenticated`,
+   * `service_role`) with Supabase's default `public` grants before migrations
+   * run. Defaults to true.
+   */
+  readonly supabaseDataApiRoles?: boolean;
 }
 
 export interface IsolatedPostgresFixture {
@@ -164,6 +179,13 @@ export async function createIsolatedPostgresDatabase(
   const pool = new Pool({ connectionString: url, max: 4 });
 
   try {
+    if (options.supabaseAuthSchema ?? true) {
+      await pool.query(SUPABASE_AUTH_SCHEMA_STUB_SQL);
+    }
+    if (options.supabaseDataApiRoles ?? true) {
+      const migrationRole = await pool.query<{ role: string }>("SELECT current_user AS role");
+      await pool.query(supabaseDataApiRolesStubSql(migrationRole.rows[0]!.role));
+    }
     await applySqlMigrations(
       pool,
       options.migrationDirectories ?? [DEFAULT_MIGRATION_DIRECTORY],
@@ -180,6 +202,9 @@ export async function createIsolatedPostgresDatabase(
     name,
     url,
     pool,
+    reset() {
+      return resetDatabaseData(pool);
+    },
     async dispose() {
       if (disposed) {
         return;
@@ -190,6 +215,28 @@ export async function createIsolatedPostgresDatabase(
       await dropDatabase(server.adminUrl, name);
     },
   };
+}
+
+async function resetDatabaseData(pool: Pool): Promise<void> {
+  const tables = await pool.query<{ tablename: string }>(`
+    SELECT tablename
+    FROM pg_tables
+    WHERE schemaname = current_schema()
+      AND tablename <> '_integration_test_migrations'
+    ORDER BY tablename ASC
+  `);
+
+  const tableNames = tables.rows.map(({ tablename }) => quoteIdentifier(tablename));
+  const authUsers = await pool.query<{ relation: string | null }>(
+    "SELECT to_regclass('auth.users')::text AS relation",
+  );
+  if (authUsers.rows[0]?.relation) {
+    tableNames.push("auth.users");
+  }
+  if (tableNames.length === 0) {
+    return;
+  }
+  await pool.query(`TRUNCATE TABLE ${tableNames.join(", ")} RESTART IDENTITY CASCADE`);
 }
 
 async function dropDatabase(adminUrl: string, name: string): Promise<void> {

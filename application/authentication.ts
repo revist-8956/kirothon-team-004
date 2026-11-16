@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
 
-import { auth } from "@/auth";
 import { DEFAULT_RETURN_TO, sanitizeReturnTo } from "@/domain/return-to";
 import { prisma } from "@/infrastructure/db";
+import { createSupabaseServerComponentClient } from "@/infrastructure/supabase/server-client";
 
 export type AuthenticatedUser = {
   readonly id: string;
@@ -16,13 +16,21 @@ type RequireUserOptions = {
 };
 
 /**
- * Returns the signed-in application user when the database session is valid.
+ * Returns the signed-in application user when the Supabase session is valid.
  * It is the required authentication boundary for protected layouts, queries,
  * and server actions.
+ *
+ * `auth.getUser()` verifies the access token with the Supabase Auth server, so
+ * a forged or revoked cookie never yields a user ID. The cookies were already
+ * refreshed by `proxy.ts` for both page renders and Server Action requests, so
+ * every caller reads the same session without writing cookies here. A session
+ * without an application profile is treated as signed out; signing in again
+ * prepares the profile in the OAuth callback.
  */
 export async function getOptionalUser(): Promise<AuthenticatedUser | null> {
-  const session = await auth();
-  const userId = session?.user?.id;
+  const supabase = await createSupabaseServerComponentClient();
+  const { data, error } = await supabase.auth.getUser();
+  const userId = error ? undefined : data.user?.id;
 
   if (!userId) {
     return null;
@@ -39,7 +47,7 @@ export async function getOptionalUser(): Promise<AuthenticatedUser | null> {
 }
 
 /**
- * Requires an active database session and a completed nickname before a user
+ * Requires an active Supabase session and a completed nickname before a user
  * can enter protected application functionality.
  */
 export async function requireUser(

@@ -29,9 +29,36 @@
       "lastRunTimestamp": 1794645967153
     },
     "5.9 Property 8 그룹별 이메일 공개의 최소 노출과 비간섭 속성 테스트를 작성한다": {
-      "status": "failed",
-      "failingExample": "Property failed after 100 tests\n{ seed: -367924413, path: \"99:0:0:0\", endOnFailure: true }\nCounterexample: [[\"PRIVATE\"],\"PRIVATE\",\"PRIVATE\"]\nShrunk 3 time(s)\nHint: Enable verbose mode in order to have the list of all failing values encountered during the run\n\nCaused by: PrismaClientInitializationError: Too many database connections opened: FATAL: sorry, too many clients already",
-      "lastRunTimestamp": 1794646013859
+      "status": "passed",
+      "lastRunTimestamp": 1794647497303
+    },
+    "6.2 Property 9 알림 대상의 배타성과 문장 유효성 속성 테스트를 작성한다": {
+      "status": "passed",
+      "lastRunTimestamp": 1794647875770
+    },
+    "6.4 Property 10 개인 대상 선택과 스냅샷 속성 테스트를 작성한다": {
+      "status": "passed",
+      "lastRunTimestamp": 1794651546933
+    },
+    "7.3 Property 14 주말 이동의 첫 평일 규칙 속성 테스트를 작성한다": {
+      "status": "passed",
+      "lastRunTimestamp": 1794652067649
+    },
+    "6.6 Property 11 그룹 대상 선택과 등록 권한 속성 테스트를 작성한다": {
+      "status": "passed",
+      "lastRunTimestamp": 1794651546685
+    },
+    "7.2 Property 13 반복 예정일 생성 속성 테스트를 작성한다": {
+      "status": "passed",
+      "lastRunTimestamp": 1794651511562
+    },
+    "7.4 Property 15 같은 발송일의 회차 합치기 속성 테스트를 작성한다": {
+      "status": "passed",
+      "lastRunTimestamp": 1794649920412
+    },
+    "7.5 Property 16 Asia/Seoul 시각 왕복 속성 테스트를 작성한다": {
+      "status": "passed",
+      "lastRunTimestamp": 1794652158242
     }
   },
   "executionHistory": {
@@ -350,6 +377,16 @@
         "executionId": "a8f757e8-2e15-4d4a-8c23-ac70961ff1b1",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794646807365
+      },
+      {
+        "executionId": "9032085c-67fd-4a75-896c-dba955715f99",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794647064567
+      },
+      {
+        "executionId": "9032085c-67fd-4a75-896c-dba955715f99",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794647265595
       }
     ],
     "4.1 디자인 토큰과 반응형 애플리케이션 셸을 구현한다": [
@@ -467,6 +504,11 @@
         "executionId": "a8f757e8-2e15-4d4a-8c23-ac70961ff1b1",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794646807439
+      },
+      {
+        "executionId": "9032085c-67fd-4a75-896c-dba955715f99",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794647064365
       }
     ],
     "5.3 `/friends` 화면과 자동화 테스트를 구현한다": [
@@ -518,6 +560,11 @@
         "executionId": "a8f757e8-2e15-4d4a-8c23-ac70961ff1b1",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794646807489
+      },
+      {
+        "executionId": "9032085c-67fd-4a75-896c-dba955715f99",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794647064438
       }
     ],
     "5.6 hash 기반 초대 링크 발급과 조회를 구현한다": [
@@ -552,6 +599,11 @@
         "executionId": "a8f757e8-2e15-4d4a-8c23-ac70961ff1b1",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794646807590
+      },
+      {
+        "executionId": "9032085c-67fd-4a75-896c-dba955715f99",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794647064517
       }
     ],
     "5.8 그룹 목록·상세 query와 이메일 최소 공개 projection을 구현한다": [
@@ -581,6 +633,16 @@
         "executionId": "548d7e21-77c9-4300-be94-fffd568e3ba5",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794645824318
+      },
+      {
+        "executionId": "9032085c-67fd-4a75-896c-dba955715f99",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794647266045
+      },
+      {
+        "executionId": "9032085c-67fd-4a75-896c-dba955715f99",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794647523455
       }
     ],
     "5.10 그룹 목록·상세·초대·탈퇴 화면을 구현한다": [
@@ -605,6 +667,16 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643216544
+      },
+      {
+        "executionId": "9032085c-67fd-4a75-896c-dba955715f99",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794647789279
+      },
+      {
+        "executionId": "9032085c-67fd-4a75-896c-dba955715f99",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794647930840
       }
     ],
     "6.1 작성 옵션 query와 만료 가능한 DB draft를 구현한다": [
@@ -629,6 +701,16 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643216589
+      },
+      {
+        "executionId": "9032085c-67fd-4a75-896c-dba955715f99",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794647789518
+      },
+      {
+        "executionId": "9032085c-67fd-4a75-896c-dba955715f99",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794647930993
       }
     ],
     "6.3 개인 대상 validator와 고정 대상 저장을 구현한다": [
@@ -636,6 +718,16 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643216612
+      },
+      {
+        "executionId": "9032085c-67fd-4a75-896c-dba955715f99",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794647528699
+      },
+      {
+        "executionId": "9032085c-67fd-4a75-896c-dba955715f99",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794647778461
       }
     ],
     "6.4 Property 10 개인 대상 선택과 스냅샷 속성 테스트를 작성한다": [
@@ -643,6 +735,41 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643216636
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649699663
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649711783
+      },
+      {
+        "executionId": "6fd6083f-4b86-487c-8e74-6732a37f4b28",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794650893810
+      },
+      {
+        "executionId": "f8843716-32be-4bdf-8a4c-5ff53db6701f",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794651017440
+      },
+      {
+        "executionId": "16e2d414-3d29-4f71-8dc8-2d07bac104fa",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794651287264
+      },
+      {
+        "executionId": "d214c648-fddd-46b0-8724-0dc735213cd2",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794651381038
+      },
+      {
+        "executionId": "0c48ddec-737c-4ac2-9775-29e3b3316eaf",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794651805775
       }
     ],
     "6.5 그룹 대상 validator와 등록 권한을 구현한다": [
@@ -650,6 +777,16 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643216660
+      },
+      {
+        "executionId": "9032085c-67fd-4a75-896c-dba955715f99",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794647528827
+      },
+      {
+        "executionId": "9032085c-67fd-4a75-896c-dba955715f99",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794647778645
       }
     ],
     "6.6 Property 11 그룹 대상 선택과 등록 권한 속성 테스트를 작성한다": [
@@ -657,6 +794,41 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643216685
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649699715
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649711933
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649980896
+      },
+      {
+        "executionId": "f8843716-32be-4bdf-8a4c-5ff53db6701f",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794651017492
+      },
+      {
+        "executionId": "16e2d414-3d29-4f71-8dc8-2d07bac104fa",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794651287339
+      },
+      {
+        "executionId": "d214c648-fddd-46b0-8724-0dc735213cd2",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794651381570
+      },
+      {
+        "executionId": "0c48ddec-737c-4ac2-9775-29e3b3316eaf",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794651806922
       }
     ],
     "6.7 개인·그룹 알림 작성 화면과 컴포넌트 테스트를 구현한다": [
@@ -664,6 +836,16 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643216705
+      },
+      {
+        "executionId": "50398e5a-b18e-4f3a-877d-f625596e9af2",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794647968171
+      },
+      {
+        "executionId": "bfcdca28-d6a0-477d-bb80-cb66267923ef",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794648453721
       }
     ],
     "7.1 Luxon 기반 순수 일정 계산기를 구현한다": [
@@ -671,6 +853,16 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643216732
+      },
+      {
+        "executionId": "9032085c-67fd-4a75-896c-dba955715f99",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794647528875
+      },
+      {
+        "executionId": "9032085c-67fd-4a75-896c-dba955715f99",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794647778705
       }
     ],
     "7.2 Property 13 반복 예정일 생성 속성 테스트를 작성한다": [
@@ -678,6 +870,41 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643216762
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649699763
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649712005
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649981016
+      },
+      {
+        "executionId": "f8843716-32be-4bdf-8a4c-5ff53db6701f",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794651017579
+      },
+      {
+        "executionId": "16e2d414-3d29-4f71-8dc8-2d07bac104fa",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794651287404
+      },
+      {
+        "executionId": "d214c648-fddd-46b0-8724-0dc735213cd2",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794651382352
+      },
+      {
+        "executionId": "0c48ddec-737c-4ac2-9775-29e3b3316eaf",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794651808237
       }
     ],
     "7.3 Property 14 주말 이동의 첫 평일 규칙 속성 테스트를 작성한다": [
@@ -685,6 +912,41 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643216789
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649699805
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649712118
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649981082
+      },
+      {
+        "executionId": "f8843716-32be-4bdf-8a4c-5ff53db6701f",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794651017628
+      },
+      {
+        "executionId": "16e2d414-3d29-4f71-8dc8-2d07bac104fa",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794651287478
+      },
+      {
+        "executionId": "e7fde020-7c7e-4dca-a0e4-ec694c93ef5e",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794651980752
+      },
+      {
+        "executionId": "e7fde020-7c7e-4dca-a0e4-ec694c93ef5e",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794652184078
       }
     ],
     "7.4 Property 15 같은 발송일의 회차 합치기 속성 테스트를 작성한다": [
@@ -692,6 +954,21 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643216816
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649699879
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649712313
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649981148
       }
     ],
     "7.5 Property 16 Asia/Seoul 시각 왕복 속성 테스트를 작성한다": [
@@ -699,6 +976,31 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643216839
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649699926
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649712500
+      },
+      {
+        "executionId": "6fd6083f-4b86-487c-8e74-6732a37f4b28",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794650893914
+      },
+      {
+        "executionId": "e7fde020-7c7e-4dca-a0e4-ec694c93ef5e",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794651981289
+      },
+      {
+        "executionId": "e7fde020-7c7e-4dca-a0e4-ec694c93ef5e",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794652184729
       }
     ],
     "7.6 발송 일정 화면과 자동화 테스트를 구현한다": [
@@ -706,6 +1008,41 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643216864
+      },
+      {
+        "executionId": "50398e5a-b18e-4f3a-877d-f625596e9af2",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794647968256
+      },
+      {
+        "executionId": "80a35fae-7b62-4ae5-abae-5fb8a66f2ae4",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794649033872
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649699963
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649712549
+      },
+      {
+        "executionId": "6fd6083f-4b86-487c-8e74-6732a37f4b28",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794650893966
+      },
+      {
+        "executionId": "d214c648-fddd-46b0-8724-0dc735213cd2",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794651380012
+      },
+      {
+        "executionId": "0c48ddec-737c-4ac2-9775-29e3b3316eaf",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794651805657
       }
     ],
     "7.7 알림 예약 command와 draft 단일 소비를 구현한다": [
@@ -713,6 +1050,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643216895
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649699996
       }
     ],
     "7.8 예약 transaction과 일정 예시 통합 테스트를 작성한다": [
@@ -720,6 +1062,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643216921
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649700035
       }
     ],
     "8.1 만기 슬롯 claim과 회차 생성 transaction을 구현한다": [
@@ -727,6 +1074,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643216953
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649700072
       }
     ],
     "8.2 개인·그룹 회차 수신자 snapshot 정책을 구현한다": [
@@ -734,6 +1086,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643216980
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649700106
       }
     ],
     "8.3 Property 12 그룹 회차 수신자 집합 속성 테스트를 작성한다": [
@@ -741,6 +1098,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217008
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649700145
       }
     ],
     "8.4 Property 18 회차 초기화와 스냅샷 독립성 속성 테스트를 작성한다": [
@@ -748,6 +1110,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217037
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649700181
       }
     ],
     "8.5 production poller와 catch-up 진입점을 구현한다": [
@@ -755,6 +1122,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217061
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649700237
       }
     ],
     "8.6 claim·회차 동시성 PostgreSQL 통합 테스트를 작성한다": [
@@ -762,6 +1134,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217088
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649700287
       }
     ],
     "8.7 반복 알림 중지 command를 구현한다": [
@@ -769,6 +1146,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217172
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649700335
       }
     ],
     "8.8 Property 17 반복 중지 경계와 과거 보존 속성 테스트를 작성한다": [
@@ -776,6 +1158,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217196
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649700372
       }
     ],
     "9.1 받은 알림 query를 구현한다": [
@@ -783,6 +1170,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217219
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649700413
       }
     ],
     "9.2 Property 19 외부 사용자의 받은 그룹 카드 제외 속성 테스트를 작성한다": [
@@ -790,6 +1182,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217245
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649700455
       }
     ],
     "9.3 멱등적인 확인 command를 구현한다": [
@@ -797,6 +1194,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217269
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649700489
       }
     ],
     "9.4 Property 20 확인의 명시성 및 멱등성 속성 테스트를 작성한다": [
@@ -804,6 +1206,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217294
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649700527
       }
     ],
     "9.5 Property 21 무권한 확인의 원자적 비변경 속성 테스트를 작성한다": [
@@ -811,6 +1218,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217316
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649700562
       }
     ],
     "9.6 `/inbox` 회차별 카드 화면을 구현한다": [
@@ -818,6 +1230,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217339
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649700602
       }
     ],
     "9.7 받은 목록·확인 컴포넌트 및 DB 통합 테스트를 작성한다": [
@@ -825,6 +1242,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217369
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649700637
       }
     ],
     "10.1 역할별 응답 현황 query를 구현한다": [
@@ -832,6 +1254,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217397
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649700706
       }
     ],
     "10.2 Property 22 응답 집계 정확성 속성 테스트를 작성한다": [
@@ -839,6 +1266,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217428
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649700739
       }
     ],
     "10.3 Property 23 개인 응답 현황의 역할별 최소 projection 속성 테스트를 작성한다": [
@@ -846,6 +1278,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217470
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649700772
       }
     ],
     "10.4 Property 24 그룹 회차 조회 권한의 필요충분 조건 속성 테스트를 작성한다": [
@@ -853,6 +1290,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217496
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649700812
       }
     ],
     "10.5 보낸 알림 query를 구현한다": [
@@ -860,6 +1302,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217522
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649700848
       }
     ],
     "10.6 Property 25 보낸 그룹 알림 목록의 현재 멤버십 필터 속성 테스트를 작성한다": [
@@ -867,6 +1314,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217553
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649700880
       }
     ],
     "10.7 응답 현황과 확정된 보낸 알림 목록 화면을 구현한다": [
@@ -874,6 +1326,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217577
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649700913
       }
     ],
     "10.8 응답 현황·보낸 목록 query 및 컴포넌트 통합 테스트를 작성한다": [
@@ -881,6 +1338,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217600
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649700953
       }
     ],
     "11.1 모든 주요 화면의 빈·로딩·오류·권한 없음 상태를 연결한다": [
@@ -888,6 +1350,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217623
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649700988
       }
     ],
     "11.2 화면별 접근성·반응형 컴포넌트 테스트를 작성한다": [
@@ -895,6 +1362,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217649
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649701022
       }
     ],
     "11.3 확정 시안 기반 visual regression 테스트를 작성한다": [
@@ -902,6 +1374,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217675
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649701060
       }
     ],
     "12.1 Server Action과 route의 공통 보안 경계를 구현한다": [
@@ -909,6 +1386,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217698
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649701088
       }
     ],
     "12.2 스케줄러와 상태 변경 관측 코드를 구현한다": [
@@ -916,6 +1398,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217722
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649701121
       }
     ],
     "12.3 보안 회귀 및 오류 비노출 통합 테스트를 작성한다": [
@@ -923,6 +1410,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217747
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649701167
       }
     ],
     "12.4 migration·CI·Elastic Beanstalk 배포 준비 구성을 작성한다": [
@@ -930,6 +1422,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217773
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649701213
       }
     ],
     "13.1 production과 분리된 인증 fixture와 데모 seed를 구현한다": [
@@ -937,6 +1434,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217796
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649701248
       }
     ],
     "13.2 인증·친구·개인 알림 E2E 테스트를 작성한다": [
@@ -944,6 +1446,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217820
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649701280
       }
     ],
     "13.3 그룹·초대·이메일 공개·탈퇴 E2E 테스트를 작성한다": [
@@ -951,6 +1458,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217846
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649701314
       }
     ],
     "13.4 반복 일정·동시성·회차 독립성 E2E 및 통합 시나리오를 작성한다": [
@@ -958,6 +1470,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217877
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649701347
       }
     ],
     "13.5 요구사항 추적 자동 검사와 최종 품질 게이트를 구현한다": [
@@ -965,6 +1482,11 @@
         "executionId": "d9ff1a39-9582-4ae1-9367-4337020437ec",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794643217900
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649701386
       }
     ],
     "1. 프로젝트와 자동 검증 기반 구축": [
@@ -986,6 +1508,161 @@
         "executionId": "548d7e21-77c9-4300-be94-fffd568e3ba5",
         "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
         "timestamp": 1794645396384
+      }
+    ],
+    "3. 공통 도메인 검증과 인증 구현": [
+      {
+        "executionId": "9032085c-67fd-4a75-896c-dba955715f99",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794647265897
+      }
+    ],
+    "5. 친구, 그룹, 초대와 멤버십 구현": [
+      {
+        "executionId": "9032085c-67fd-4a75-896c-dba955715f99",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794647930901
+      }
+    ],
+    "14.1 Supabase SSR 인증 클라이언트와 환경 설정 경계를 구현한다": [
+      {
+        "executionId": "80a35fae-7b62-4ae5-abae-5fb8a66f2ae4",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794649033951
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649699553
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649701464
+      },
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649712783
+      },
+      {
+        "executionId": "14bb3c42-ae60-4b13-8219-32de5fcafbf4",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794650857363
+      },
+      {
+        "executionId": "6fd6083f-4b86-487c-8e74-6732a37f4b28",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794650894079
+      },
+      {
+        "executionId": "f8843716-32be-4bdf-8a4c-5ff53db6701f",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794651017270
+      },
+      {
+        "executionId": "d214c648-fddd-46b0-8724-0dc735213cd2",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794651379925
+      },
+      {
+        "executionId": "e7fde020-7c7e-4dca-a0e4-ec694c93ef5e",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794651980669
+      },
+      {
+        "executionId": "e7fde020-7c7e-4dca-a0e4-ec694c93ef5e",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794652183450
+      }
+    ],
+    "14.2 Auth.js 사용자·세션 스키마를 Supabase `auth.users` 기반 앱 프로필과 도메인 FK로 전환한다": [
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649701498
+      },
+      {
+        "executionId": "e7fde020-7c7e-4dca-a0e4-ec694c93ef5e",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794652195395
+      },
+      {
+        "executionId": "e7fde020-7c7e-4dca-a0e4-ec694c93ef5e",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794653470263
+      }
+    ],
+    "14.3 RLS와 Prisma 서버 권한 모델을 명시적으로 구성한다": [
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649701530
+      },
+      {
+        "executionId": "e7fde020-7c7e-4dca-a0e4-ec694c93ef5e",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794653476820
+      },
+      {
+        "executionId": "e7fde020-7c7e-4dca-a0e4-ec694c93ef5e",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794654046982
+      }
+    ],
+    "14.4 Supabase Google OAuth callback, 로그아웃과 안전한 복귀 경로를 구현한다": [
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649701566
+      },
+      {
+        "executionId": "e7fde020-7c7e-4dca-a0e4-ec694c93ef5e",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794654053397
+      },
+      {
+        "executionId": "e7fde020-7c7e-4dca-a0e4-ec694c93ef5e",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794654811826
+      }
+    ],
+    "14.5 인증·인가 의존 코드를 Supabase 세션 주체로 재연결한다": [
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649701598
+      },
+      {
+        "executionId": "e7fde020-7c7e-4dca-a0e4-ec694c93ef5e",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794654825163
+      }
+    ],
+    "14.6 Supabase 세션 모델의 인증·권한 회귀 테스트를 작성한다": [
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649701632
+      }
+    ],
+    "14.7 Supabase 환경별 migration·CI·Elastic Beanstalk 배포 설정을 갱신한다": [
+      {
+        "executionId": "a69b675f-b3c4-484f-896b-b18cf12cd994",
+        "chatSessionId": "sess_52185ee1-66d7-43cc-a5a1-d21e0eae119a",
+        "timestamp": 1794649701666
+      },
+      {
+        "executionId": "e7fde020-7c7e-4dca-a0e4-ec694c93ef5e",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794654825284
+      }
+    ],
+    "6. 알림 작성과 대상 검증 구현": [
+      {
+        "executionId": "0c48ddec-737c-4ac2-9775-29e3b3316eaf",
+        "chatSessionId": "sess_d7e4719c-8880-40b4-8758-9f3b5973b84d",
+        "timestamp": 1794651806982
       }
     ]
   }

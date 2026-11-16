@@ -9,8 +9,8 @@ import type {
   CreateInviteInput,
   CreateMembershipInput,
   CreateNotificationInput,
-  CreateUserInput,
   DispatchesRepository,
+  EnsureUserProfileInput,
   DispatchRecipientRecord,
   DispatchRecord,
   FriendListItemRecord,
@@ -49,8 +49,10 @@ export class PrismaUsersRepository implements UsersRepository {
     return this.database.user.findUnique({ where: { emailNormalized } });
   }
 
-  create(input: CreateUserInput): Promise<UserRecord> {
-    return this.database.user.create({ data: input });
+  async ensureProfile(input: EnsureUserProfileInput): Promise<UserRecord | null> {
+    // ON CONFLICT DO NOTHING: the Supabase trigger may already have created it.
+    await this.database.user.createMany({ data: [input], skipDuplicates: true });
+    return this.findById(input.id);
   }
 
   async updateNickname(

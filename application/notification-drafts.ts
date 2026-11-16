@@ -13,6 +13,26 @@ const DRAFT_TTL_MILLISECONDS = 30 * 60 * 1000;
 const RECIPIENTS_ERROR_MESSAGE = "수신 대상을 한 명 이상 선택해 주세요.";
 const NON_FRIEND_RECIPIENT_ERROR_MESSAGE = "친구가 아닌 사용자는 선택할 수 없어요.";
 const GROUP_ACCESS_ERROR_MESSAGE = "선택한 그룹에 알림을 보낼 권한이 없어요.";
+const GROUP_SELECTION_ERROR_MESSAGE = "유효한 그룹을 선택해 주세요.";
+const MULTIPLE_GROUPS_ERROR_MESSAGE = "그룹은 하나만 지정할 수 있어요.";
+
+/**
+ * A group notification has one scalar group target. The array check protects
+ * the command boundary from repeated form fields or crafted JSON input.
+ */
+const singleGroupIdSchema = z
+  .unknown()
+  .superRefine((value, context) => {
+    if (Array.isArray(value)) {
+      context.addIssue({ code: "custom", message: MULTIPLE_GROUPS_ERROR_MESSAGE });
+      return;
+    }
+
+    if (!z.string().uuid().safeParse(value).success) {
+      context.addIssue({ code: "custom", message: GROUP_SELECTION_ERROR_MESSAGE });
+    }
+  })
+  .transform((value) => value as string);
 
 const personalDraftSchema = z
   .object({
@@ -26,7 +46,7 @@ const groupDraftSchema = z
   .object({
     sentence: notificationSentenceSchema,
     mode: z.literal("GROUP"),
-    groupId: z.string().uuid(),
+    groupId: singleGroupIdSchema,
   })
   .strict();
 
@@ -86,8 +106,14 @@ export async function createNotificationDraft(
 ): Promise<NotificationDraftRecord> {
   const parsed = createNotificationDraftSchema.safeParse(input);
   if (!parsed.success) {
+    const fieldErrors = parsed.error.flatten().fieldErrors;
+    const groupTargetError =
+      "groupId" in fieldErrors
+        ? fieldErrors.groupId?.find((message) => message === MULTIPLE_GROUPS_ERROR_MESSAGE)
+        : undefined;
     throw new ApplicationError("VALIDATION_ERROR", {
-      fieldErrors: parsed.error.flatten().fieldErrors,
+      ...(groupTargetError ? { message: groupTargetError } : {}),
+      fieldErrors,
     });
   }
 

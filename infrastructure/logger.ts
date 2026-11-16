@@ -73,6 +73,7 @@ function normalizeLogLevel(value: string | undefined): LogLevel {
 function collectKnownSecrets(): string[] {
   return [
     process.env.DATABASE_URL,
+    process.env.DIRECT_URL,
     process.env.AUTH_SECRET,
     process.env.AUTH_GOOGLE_SECRET,
   ].filter((value): value is string => Boolean(value));

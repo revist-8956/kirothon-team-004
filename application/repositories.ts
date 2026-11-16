@@ -152,14 +152,16 @@ export interface DispatchRecipientRecord {
   readonly createdAt: Date;
 }
 
-export interface CreateUserInput {
+/**
+ * Initial application profile for one Supabase Auth principal. `id` is the
+ * `auth.users.id` of that principal; profiles never receive another identifier.
+ */
+export interface EnsureUserProfileInput {
+  readonly id: string;
   readonly email: string;
   readonly emailNormalized: string;
   readonly nickname: string;
   readonly nicknameRequired: boolean;
-  readonly name?: string | null;
-  readonly image?: string | null;
-  readonly emailVerified?: Date | null;
 }
 
 export interface CreateGroupInput {
@@ -230,7 +232,13 @@ export interface CreateDispatchRecipientInput {
 export interface UsersRepository {
   findById(id: string): Promise<UserRecord | null>;
   findByNormalizedEmail(emailNormalized: string): Promise<UserRecord | null>;
-  create(input: CreateUserInput): Promise<UserRecord>;
+  /**
+   * Creates the profile for an existing `auth.users` row unless one already
+   * exists, and returns the stored profile. An existing profile is never
+   * overwritten. Returns null when the normalized email already belongs to a
+   * different profile.
+   */
+  ensureProfile(input: EnsureUserProfileInput): Promise<UserRecord | null>;
   updateNickname(id: string, nickname: string, nicknameRequired: boolean): Promise<UserRecord | null>;
 }
 

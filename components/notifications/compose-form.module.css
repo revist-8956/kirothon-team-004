@@ -1,0 +1,100 @@
+.composeForm {
+  display: flex;
+  min-height: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding-bottom: var(--bottom-offset-action);
+}
+
+.errorSummary {
+  margin: 0;
+  padding: var(--space-6) var(--space-7);
+  border-radius: var(--radius-control);
+  background: var(--color-neutral-button);
+  color: var(--color-text);
+  font-size: var(--font-size-support);
+  font-weight: var(--font-weight-bold);
+  overflow-wrap: anywhere;
+}
+
+.recipientIntro,
+.choiceCard {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.recipientIntro h2,
+.recipientIntro p,
+.choiceCard legend,
+.supportText,
+.fieldError,
+.recipientPreview strong,
+.recipientPreview span {
+  margin: 0;
+}
+
+.recipientIntro h2,
+.choiceCard legend {
+  padding: 0;
+  font-size: var(--font-size-section);
+  font-weight: var(--font-weight-bold);
+}
+
+.recipientIntro p,
+.supportText {
+  color: var(--color-text-sub);
+  font-size: var(--font-size-support);
+}
+
+.choiceCard {
+  padding: var(--space-8);
+  border: 0;
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+}
+
+.choiceList {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.accentCount {
+  color: var(--color-accent);
+}
+
+.fieldError {
+  color: var(--color-text);
+  font-size: var(--font-size-support);
+  font-weight: var(--font-weight-bold);
+}
+
+.recipientPreview {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+  padding: var(--space-6) var(--space-7);
+  border-radius: var(--radius-control);
+  background: var(--color-accent-soft);
+}
+
+.recipientPreview strong {
+  color: var(--color-accent);
+  font-size: var(--font-size-base);
+  overflow-wrap: anywhere;
+}
+
+.recipientPreview span {
+  color: var(--color-text-mid);
+  font-size: var(--font-size-support);
+  overflow-wrap: anywhere;
+}
+
+.composeForm :global(.app-bottom__actions) > button {
+  width: 100%;
+}

@@ -9,6 +9,7 @@ import { getGroupDetail, getGroups } from "../application/group-queries";
 import { getInvite, hashInviteToken, issueInvite } from "../application/invites";
 import { PrismaRepositoryUnitOfWork } from "./prisma-repositories";
 import { registerIsolatedPostgres } from "../tests/database/postgres-test-database";
+import { createSupabaseProfileUser } from "../tests/database/supabase-auth-schema";
 
 const fixture = registerIsolatedPostgres();
 const clients: PrismaClient[] = [];
@@ -22,14 +23,10 @@ function createRepositories(): PrismaRepositoryUnitOfWork {
 }
 
 async function createUser(repositories: PrismaRepositoryUnitOfWork, nickname: string) {
-  return repositories.transaction((transaction) =>
-    transaction.users.create({
-      email: `${randomUUID()}@example.test`,
-      emailNormalized: `${randomUUID()}@example.test`,
-      nickname,
-      nicknameRequired: false,
-    }),
-  );
+  return createSupabaseProfileUser(fixture.current.pool, repositories, {
+    email: `${randomUUID()}@example.test`,
+    nickname,
+  });
 }
 
 function deferred() {
@@ -265,6 +262,14 @@ describe("group projections", () => {
 
     await fc.assert(
       fc.asyncProperty(memberVisibilities, visibility, visibility, async (initialVisibilities, nextVisibility, otherGroupVisibility) => {
+        // Reuse one Prisma client for all generated cases; reset only the
+        // isolated test database after each case so cases cannot interfere.
+        try {
+        const existingUsers = await fixture.current.pool.query<{ count: string }>(
+          'SELECT count(*) FROM "users"',
+        );
+        expect(existingUsers.rows[0]?.count).toBe("0");
+
         const viewer = await createUser(repositories, "조회자");
         const outsider = await createUser(repositories, "외부 사용자");
         const members = [viewer];
@@ -335,6 +340,9 @@ describe("group projections", () => {
         );
         expect(otherMembership?.emailVisibility).toBe(otherGroupVisibility);
         await expect(getGroupDetail(group.id, outsider.id, repositories)).resolves.toBeNull();
+        } finally {
+          await fixture.current.reset();
+        }
       }),
       { numRuns: 100 },
     );
