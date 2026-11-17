@@ -1,24 +1,34 @@
-import { ComposeHeader } from "@/components/navigation";
-
+import { scheduleNotificationAction } from "@/app/actions/notifications";
+import { ComposeHeader, appRoutes } from "@/components/navigation";
+import { ButtonLink, StatePanel } from "@/components/ui";
 import { ScheduleForm } from "./schedule-form";
 
 type ScheduleRouteProps = {
-  searchParams: Promise<{ draft?: string | string[] }>;
+  searchParams: Promise<{ draftId?: string | string[] }>;
 };
 
 /**
- * Second notification-compose step. The draft ID is retained in the client
- * form and handed to the reservation command when Task 7.7 wires it in.
+ * Second notification-compose step. The compose step sends `?draftId=`; the
+ * reservation action re-checks the draft owner, expiry and permissions.
  */
 export default async function ScheduleRoute({ searchParams }: ScheduleRouteProps) {
-  const { draft } = await searchParams;
-  const draftId = typeof draft === "string" ? draft : undefined;
+  const { draftId: draftIdValue } = await searchParams;
+  const draftId = typeof draftIdValue === "string" && draftIdValue ? draftIdValue : undefined;
 
   return (
     <>
       <ComposeHeader step="2 / 2" />
       <main className="app-content">
-        <ScheduleForm draftId={draftId} />
+        {draftId ? (
+          <ScheduleForm draftId={draftId} onSchedule={scheduleNotificationAction} />
+        ) : (
+          <StatePanel
+            kind="unavailable"
+            title="알림 작성 정보가 없어요"
+            description="알림 문장과 받는 사람을 먼저 정해 주세요."
+            action={<ButtonLink href={appRoutes.composePersonal}>알림 작성하기</ButtonLink>}
+          />
+        )}
       </main>
     </>
   );

@@ -11,8 +11,8 @@ import { notificationSentenceSchema } from "../domain/content";
 
 const DRAFT_TTL_MILLISECONDS = 30 * 60 * 1000;
 const RECIPIENTS_ERROR_MESSAGE = "수신 대상을 한 명 이상 선택해 주세요.";
-const NON_FRIEND_RECIPIENT_ERROR_MESSAGE = "친구가 아닌 사용자는 선택할 수 없어요.";
-const GROUP_ACCESS_ERROR_MESSAGE = "선택한 그룹에 알림을 보낼 권한이 없어요.";
+export const NON_FRIEND_RECIPIENT_ERROR_MESSAGE = "친구가 아닌 사용자는 선택할 수 없어요.";
+export const GROUP_ACCESS_ERROR_MESSAGE = "선택한 그룹에 알림을 보낼 권한이 없어요.";
 const GROUP_SELECTION_ERROR_MESSAGE = "유효한 그룹을 선택해 주세요.";
 const MULTIPLE_GROUPS_ERROR_MESSAGE = "그룹은 하나만 지정할 수 있어요.";
 

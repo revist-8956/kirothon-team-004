@@ -196,7 +196,7 @@
     - 그룹 상세에서 진입한 그룹 초기 선택, 빈 옵션, 검증 실패 시 입력 보존과 다음 단계 이동을 자동 검증한다.
     - _Requirements: 7.1~7.5, 8.1, 8.3, 8.4, 9.1~9.6_
 
-- [ ] 7. Asia/Seoul 일정 계산과 예약 구현
+- [x] 7. Asia/Seoul 일정 계산과 예약 구현
   - [x] 7.1 Luxon 기반 순수 일정 계산기를 구현한다
     - 일회성, DAILY, WEEKLY, MONTHLY 예정일과 월말 보정, 주말 다음 평일 이동, effective date별 합치기와 UTC instant 변환을 구현한다.
     - 시스템 timezone에 의존하지 않는 `calculateDueSlots` 및 다음 발송 미리보기 interface를 제공한다.
@@ -227,12 +227,12 @@
     - DAILY·WEEKLY·MONTHLY의 조건부 입력, 과거 시각, 잘못된 일자·요일과 만료·타인 draft 오류를 검증한다.
     - _Requirements: 10.1~10.13_
 
-  - [ ] 7.7 알림 예약 command와 draft 단일 소비를 구현한다
+  - [x] 7.7 알림 예약 command와 draft 단일 소비를 구현한다
     - 예약 시 일정, draft 소유자와 개인·그룹 권한을 다시 검사하고 `Notification`과 `PersonalTarget`을 한 transaction에서 생성한다.
     - 중복 제출이 같은 draft로 알림을 두 번 만들지 않게 하고 성공 후 보낸 알림 또는 응답 현황 route로 연결한다.
     - _Requirements: 7.3~7.5, 8.2~8.4, 9.2~9.5, 10.1~10.13_
 
-  - [ ] 7.8 예약 transaction과 일정 예시 통합 테스트를 작성한다
+  - [x] 7.8 예약 transaction과 일정 예시 통합 테스트를 작성한다
     - 일회성·세 반복 유형, 월말, 토·일 이동, draft 만료·중복 소비와 권한 재검증을 실제 DB에 대해 검증한다.
     - _Requirements: 7.3~7.5, 8.2~8.4, 9.3, 9.5, 10.1~10.13_
 
