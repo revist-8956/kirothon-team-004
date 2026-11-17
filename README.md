@@ -35,15 +35,15 @@
 ## 2. 핵심 기능
 | 기능 | 해결하는 불편 | 코드 위치 |
 |---|---|---|
-| Google 로그인 | 별도 가입 절차 없이 바로 시작해요 | |
-| 이메일로 친구 추가 | 개인 알림을 보낼 대상을 관리해요 | |
-| 그룹 생성과 초대 링크 | 친구가 아닌 사람도 링크 수락만으로 그룹에 모여요 | |
-| 개인 발송 / 그룹 발송 (둘 중 하나만 선택) | 알림마다 받는 대상이 분명해요 | |
-| 반복 알림 (매일·매주·매월, 주말 제외) | 정기 알림을 매번 다시 쓰지 않아도 되고, 주말 회차는 다음 평일로 옮겨져요 | |
-| 회차별 받은 알림 카드와 '확인' 버튼 | 읽기만 한 것과 실제 확인한 것을 구분해요 | |
-| 회차별 응답 현황 | 이번 회차에서 누가 아직 확인하지 않았는지 봐요 | |
-| 가입 시점 기반 조회 권한 | 가입 전 기록과 탈퇴 후 기록이 노출되지 않아요 | |
-| 그룹별 이메일 공개 설정 | 기본은 닉네임만 보이고, 공개를 고른 그룹에서만 이메일이 보여요 | |
+| Google 로그인 | 별도 가입 절차 없이 바로 시작해요 | `application/google-sign-in.ts`, `app/auth/callback/route.ts`, `application/authentication.ts` |
+| 이메일로 친구 추가 | 개인 알림을 보낼 대상을 관리해요 | `application/friends.ts`, `app/friends/` |
+| 그룹 생성과 초대 링크 | 친구가 아닌 사람도 링크 수락만으로 그룹에 모여요 | `application/group-memberships.ts`, `application/invites.ts`, `app/groups/`, `app/invite/[token]/` |
+| 개인 발송 / 그룹 발송 (둘 중 하나만 선택) | 알림마다 받는 대상이 분명해요 | `application/notification-drafts.ts`, `application/notification-reservations.ts`, `app/notifications/new/` |
+| 반복 알림 (매일·매주·매월, 주말 제외) | 정기 알림을 매번 다시 쓰지 않아도 되고, 주말 회차는 다음 평일로 옮겨져요 | `domain/schedule.ts`, `application/dispatch-scheduler.ts`, `infrastructure/scheduler/`, `instrumentation.ts` |
+| 회차별 받은 알림 카드와 '확인' 버튼 | 읽기만 한 것과 실제 확인한 것을 구분해요 | `application/inbox.ts`, `app/inbox/page.tsx`, `components/inbox/` |
+| 회차별 응답 현황 | 이번 회차에서 누가 아직 확인하지 않았는지 봐요 | `application/notification-status.ts`, `app/notifications/[notificationId]/status/`, `app/sent/`, `components/status/` |
+| 가입 시점 기반 조회 권한 | 가입 전 기록과 탈퇴 후 기록이 노출되지 않아요 | `application/notification-status.ts`, `application/inbox.ts`, `infrastructure/prisma-repositories.ts` |
+| 그룹별 이메일 공개 설정 | 기본은 닉네임만 보이고, 공개를 고른 그룹에서만 이메일이 보여요 | `application/group-memberships.ts`, `application/group-queries.ts`, `components/groups/` |
 
 ## 3. 사용 시나리오
 1. 엄마가 '우리 가족' 그룹을 만들고 초대 링크를 가족 채팅방에 공유해요. 아빠와 딸이 링크를 열고 수락해서 구성원이 돼요.
