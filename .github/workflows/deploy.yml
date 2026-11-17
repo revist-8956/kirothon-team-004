@@ -102,6 +102,42 @@ jobs:
             *) echo '::error::대상 환경이 없거나 Node.js 26 플랫폼이 아닙니다.'; exit 1 ;;
           esac
 
+      # 앱이 실행 중에 읽는 변수가 Beanstalk 환경 속성에 있는지 이름만 확인합니다.
+      # 값은 조회하거나 출력하지 않습니다. 목록은 infrastructure/runtime-environment.ts와 같아야 합니다.
+      - name: 런타임 환경 변수 이름 확인
+        run: |
+          if ! names=$(aws elasticbeanstalk describe-configuration-settings \
+            --application-name "$EB_APPLICATION_NAME" \
+            --environment-name "$EB_ENVIRONMENT_NAME" \
+            --query "ConfigurationSettings[0].OptionSettings[?Namespace=='aws:elasticbeanstalk:application:environment'].OptionName" \
+            --output text 2>/dev/null); then
+            echo '::warning::Beanstalk 환경 속성을 조회할 권한이 없어 변수 확인을 건너뜁니다. 형식 오류는 서버 시작 시 검사합니다.'
+            exit 0
+          fi
+          missing=""
+          for name in DATABASE_URL APP_BASE_URL NEXT_PUBLIC_SUPABASE_URL; do
+            printf '%s\n' $names | grep -qx "$name" || missing="$missing $name"
+          done
+          if ! printf '%s\n' $names | grep -qxE 'NEXT_PUBLIC_SUPABASE_(PUBLISHABLE|ANON)_KEY'; then
+            missing="$missing NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY"
+          fi
+          if [ -n "$missing" ]; then
+            echo "::error::Beanstalk 환경 속성에 필요한 변수가 없습니다:$missing"
+            exit 1
+          fi
+      # migration은 DIRECT_URL(직접 연결)만 사용합니다. 런타임의 pooled DATABASE_URL은 쓰지 않습니다.
+      # GitHub Actions Secret DIRECT_URL을 등록하면 배포 전에 실행됩니다. 없으면 경고 후 건너뜁니다.
+      - name: 데이터베이스 migration
+        working-directory: ${{ env.APP_DIR }}
+        env:
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+        run: |
+          if [ -z "$DIRECT_URL" ]; then
+            echo '::warning::Secret DIRECT_URL이 없어 migration을 건너뜁니다. 스키마가 최신인지 직접 확인하세요.'
+            exit 0
+          fi
+          # Prisma schema가 DATABASE_URL도 요구하므로 같은 직접 연결 값을 이 단계에서만 넘깁니다.
+          DATABASE_URL="$DIRECT_URL" ./node_modules/.bin/prisma migrate deploy
       - name: 기존 Beanstalk 환경에 배포
         uses: aws-actions/aws-elasticbeanstalk-deploy@v1
         with:

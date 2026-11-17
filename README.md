@@ -70,37 +70,50 @@
 ## 6. 설치와 실행
 ### 준비물
 - Node.js 26 (배포 환경과 같은 버전)
-- PostgreSQL 데이터베이스
-- Google OAuth 클라이언트 ID와 Secret
-  - Google Cloud Console에서 승인된 리디렉션 URI에 `http://localhost:3000/api/auth/callback/google`을 추가해요.
+- Supabase 프로젝트 (로그인은 Supabase Auth, 데이터는 Supabase PostgreSQL)
+  - migration이 Supabase의 `auth.users` 테이블을 참조하므로 일반 PostgreSQL에는 적용되지 않아요.
+- Google OAuth 클라이언트 (Client ID와 Secret은 Supabase 대시보드의 Google provider에 넣어요)
+- 리디렉션 URL 등록 위치와 값은 [`docs/deployment.md`](docs/deployment.md) 4절에 있어요. 로컬 개발에는 Supabase Redirect URLs에 `http://localhost:3000/auth/callback`을 추가해요.
 
 ### 환경 변수
 레포 루트에 `.env.local` 파일을 만들고 아래 값을 채워요. 이 파일은 커밋하지 않아요.
 
 ```bash
-DATABASE_URL="postgresql://USER:PASSWORD@localhost:5432/haetnyang"
-AUTH_SECRET="임의의 긴 문자열"        # npx auth secret 으로 생성할 수 있어요
-AUTH_GOOGLE_ID="Google OAuth 클라이언트 ID"
-AUTH_GOOGLE_SECRET="Google OAuth 클라이언트 Secret"
-AUTH_URL="http://localhost:3000"
+# 앱 런타임: Supabase Transaction pooler (포트 6543)
+DATABASE_URL="postgresql://postgres.<project-ref>:<password>@<region>.pooler.supabase.com:6543/postgres?pgbouncer=true"
+# migration 전용: 포트 5432 연결 (직접 연결 또는 Session pooler)
+DIRECT_URL="postgresql://postgres.<project-ref>:<password>@<region>.pooler.supabase.com:5432/postgres"
+APP_BASE_URL="http://localhost:3000"
+NEXT_PUBLIC_SUPABASE_URL="https://<project-ref>.supabase.co"
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY="sb_publishable_..."
 ```
+
+`sb_secret_…`나 `service_role` 키는 넣지 않아요. 배포 환경에 넣는 변수는 [`docs/deployment.md`](docs/deployment.md)에 정리했어요.
 
 ### 실행
 ```bash
 # 1. 의존성 설치
 npm ci
 
-# 2. 데이터베이스 스키마 적용
-npx prisma migrate deploy
+# 2. 데이터베이스 스키마 적용 (Prisma CLI는 .env.local을 자동으로 읽지 않아요)
+set -a && . ./.env.local && set +a && npx prisma migrate deploy
 
 # 3. 개발 서버 실행 (http://localhost:3000)
 npm run dev
 ```
 
-프로덕션 모드로 실행하려면 `npm run build` 후 `npm start`를 실행해요.
+프로덕션 모드로 실행하려면 `npm run build` 후 `npm start`를 실행해요. 프로덕션 모드에서는 시작할 때 환경 변수를 검사하고, 발송 스케줄러가 30초마다 예약된 회차를 보내요.
 
 ## 7. 테스트
-자동 테스트는 없어요. 동작은 위 Demo 링크의 시연으로 확인할 수 있어요.
+```bash
+npm run lint                 # 정적 검사
+npm run typecheck            # 타입 검사
+npm run test:unit            # 단위·속성·컴포넌트 테스트
+npm run test:integration     # PostgreSQL 통합 테스트 (Docker 필요, Testcontainers가 DB를 띄워요)
+npm test                     # 위 두 테스트를 함께 실행
+```
+
+통합 테스트는 실제 PostgreSQL에서 예약, 발송 회차 생성, 동시 발송 중복 방지, 확인 응답, 그룹 가입 시점 기반 조회 권한을 검증해요.
 
 ---
 

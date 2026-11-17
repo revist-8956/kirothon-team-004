@@ -450,7 +450,7 @@
     - Supabase 세션 사용자와 다른 사용자 ID를 주입한 친구·그룹·draft·알림·회차 요청, 탈퇴 후 그룹 조회, 개인 수신자의 최소 projection을 통합/E2E로 검증한다. browser client에 DB URL, direct URL 또는 service role key가 포함되지 않는지도 검사한다.
     - _Requirements: 1.1~1.13, 2.3~2.9, 3.8, 4.2, 6.6, 8.3, 9.5, 13.5, 13.6, 15.1~15.3, 16.1~16.9_
 
-  - [ ] 14.7 Supabase 환경별 migration·CI·Elastic Beanstalk 배포 설정을 갱신한다
+  - [x] 14.7 Supabase 환경별 migration·CI·Elastic Beanstalk 배포 설정을 갱신한다
     - migration job은 `DIRECT_URL`만 사용하고 애플리케이션 runtime은 pooled `DATABASE_URL`만 사용하도록 Prisma 설정과 GitHub Actions 환경 변수 계약을 분리한다. 공개 URL/publishable key와 서버 비밀값의 누락·형식 오류를 배포 전 검증한다.
     - Supabase dashboard와 Google Cloud Console에 등록할 개발·배포 callback URL 및 allowed redirect URL 목록을 배포 설정 문서/검증 상수로 관리하고, production build와 `/api/health/ready`가 OAuth secret·DB URL을 응답이나 로그로 노출하지 않음을 확인한다.
     - _Requirements: 1.1, 1.6, 1.7, 1.12, 1.13, 10.1, 11.1, 16.6_
