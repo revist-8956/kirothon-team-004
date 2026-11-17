@@ -136,10 +136,6 @@ export const environmentSchema = z
   .object({
     NODE_ENV: nodeEnvironment,
     DATABASE_URL: postgresUrl,
-    AUTH_SECRET: z.string().min(32),
-    AUTH_GOOGLE_ID: z.string().min(1),
-    AUTH_GOOGLE_SECRET: z.string().min(1),
-    AUTH_URL: z.url().optional(),
     APP_BASE_URL: z.url(),
     SCHEDULER_ENABLED: booleanFromString,
     SCHEDULER_POLL_MS: integerFromString(30_000, 5_000, 300_000),
@@ -153,30 +149,13 @@ export const environmentSchema = z
       return;
     }
 
-    for (const [field, value] of [
-      ["AUTH_URL", environment.AUTH_URL],
-      ["APP_BASE_URL", environment.APP_BASE_URL],
-    ] as const) {
-      const result = httpsUrl.safeParse(value);
-      if (!result.success) {
-        context.addIssue({
-          code: "custom",
-          path: [field],
-          message: "must be an HTTPS URL in production",
-        });
-      }
-    }
-
-    if (environment.AUTH_URL) {
-      const authOrigin = new URL(environment.AUTH_URL).origin;
-      const appOrigin = new URL(environment.APP_BASE_URL).origin;
-      if (authOrigin !== appOrigin) {
-        context.addIssue({
-          code: "custom",
-          path: ["AUTH_URL"],
-          message: "must have the same origin as APP_BASE_URL",
-        });
-      }
+    // Google OAuth credentials live in Supabase Auth, not in this app (Task 14.5).
+    if (!httpsUrl.safeParse(environment.APP_BASE_URL).success) {
+      context.addIssue({
+        code: "custom",
+        path: ["APP_BASE_URL"],
+        message: "must be an HTTPS URL in production",
+      });
     }
   });
 

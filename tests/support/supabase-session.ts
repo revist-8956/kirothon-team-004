@@ -104,6 +104,8 @@ export interface SupabaseAuthApiStubOptions {
   validAuthorizationCode?: string;
   /** Makes `GET /auth/v1/user` reject the access token, like a revoked session. */
   rejectUser?: boolean;
+  /** Makes `GET /auth/v1/user` answer 503, like an Auth server outage. */
+  unavailableUser?: boolean;
 }
 
 /**
@@ -145,6 +147,9 @@ export function createSupabaseAuthApiStub(
     }
 
     if (url.pathname === "/auth/v1/user") {
+      if (options.unavailableUser) {
+        return Response.json({ message: "service unavailable" }, { status: 503 });
+      }
       if (options.rejectUser) {
         return authApiError(403, "session_not_found", "session not found");
       }

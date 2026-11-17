@@ -440,7 +440,7 @@
     - server-side logout으로 Supabase 세션을 종료하고 cookie를 제거하며, browser/session 갱신 경계가 보호 route와 Server Action에서 같은 인증 결과를 사용하게 한다.
     - _Requirements: 1.1, 1.5~1.8, 1.12, 1.13, 4.1, 4.2_
 
-  - [ ] 14.5 인증·인가 의존 코드를 Supabase 세션 주체로 재연결한다
+  - [x] 14.5 인증·인가 의존 코드를 Supabase 세션 주체로 재연결한다
     - `requireUser()`, protected layout, middleware, Server Action, query service와 health-safe auth error mapper에서 Auth.js session/API를 제거하고 검증된 Supabase 세션 사용자 ID와 앱 프로필을 사용하게 한다.
     - 닉네임 설정 전 보호 기능 제한, 그룹 현재 멤버십, 개인/그룹 알림·응답 현황·확인 권한이 Supabase 인증 식별자에서 시작하되 기존 도메인 권한 predicate를 계속 서버에서 재검증하게 한다.
     - _Requirements: 1.7~1.13, 3.8, 4.2, 5.1~5.4, 6.6, 8.3, 9.5, 13.5, 13.6, 15.3, 16.1~16.9_

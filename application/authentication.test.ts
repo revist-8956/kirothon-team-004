@@ -15,6 +15,7 @@ const testState = vi.hoisted(() => ({
   cookieStore: undefined as unknown,
   authApi: undefined as unknown,
   findUnique: vi.fn(),
+  loggerWarn: vi.fn(),
   redirect: vi.fn((destination: string): never => {
     throw new Error(`redirect:${destination}`);
   }),
@@ -40,6 +41,10 @@ vi.mock("@/infrastructure/db", () => ({
   prisma: { user: { findUnique: testState.findUnique } },
 }));
 vi.mock("next/navigation", () => ({ redirect: testState.redirect }));
+
+vi.mock("@/infrastructure/logger", () => ({
+  logger: { warn: testState.loggerWarn, error: vi.fn(), info: vi.fn() },
+}));
 
 import { getOptionalUser, requireUser } from "./authentication";
 
@@ -107,6 +112,21 @@ describe("application authentication boundary", () => {
 
     await expect(getOptionalUser()).resolves.toBeNull();
     expect(testState.findUnique).not.toHaveBeenCalled();
+  });
+
+  it("fails closed without a login redirect or data access when the Auth server is unavailable", async () => {
+    useSession(true, { unavailableUser: true });
+
+    await expect(requireUser("/groups")).rejects.toMatchObject({
+      name: "ApplicationError",
+      code: "INTERNAL_ERROR",
+    });
+    expect(testState.redirect).not.toHaveBeenCalled();
+    expect(testState.findUnique).not.toHaveBeenCalled();
+    expect(testState.loggerWarn).toHaveBeenCalledWith("auth.session.verify_unavailable", {
+      status: 503,
+    });
+    expect(JSON.stringify(testState.loggerWarn.mock.calls)).not.toContain("refresh-token");
   });
 
   it("does not expose application data for a session whose profile no longer exists", async () => {
