@@ -257,7 +257,7 @@
     - **Property 18: 회차 초기화와 스냅샷 독립성**
     - **Validates: Requirements 11.1, 11.2, 11.3, 11.4, 11.5**
 
-  - [ ] 8.5 production poller와 catch-up 진입점을 구현한다
+  - [x] 8.5 production poller와 catch-up 진입점을 구현한다
     - `instrumentation.ts`에서 production Node 런타임에만 폴러를 시작하고 전역 중복 시작 방지, 겹치는 tick 안전성, 종료 신호를 처리한다.
     - 35일 lookback, batch 상한, 슬롯별 오류 경계, 최대 3회 재시도와 `runSchedulerTick(clock)` 테스트 진입점을 구현한다.
     - _Requirements: 9.7, 9.8, 10.1, 10.14_

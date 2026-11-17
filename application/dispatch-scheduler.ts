@@ -8,6 +8,7 @@ import {
   type RecipientSnapshotDecision,
 } from "../domain/recipients";
 import { SCHEDULE_TIMEZONE, calculateDueSlots, type DueSlot } from "../domain/schedule";
+import { logger } from "../infrastructure/logger";
 
 const DAY_MILLISECONDS = 24 * 60 * 60 * 1000;
 
@@ -194,4 +195,128 @@ export async function processDueSlot(
     );
     return { kind: "SENT", dispatchId: dispatch.id, recipientCount: decision.recipients.length };
   });
+}
+
+export interface SchedulerTickOptions extends DueSlotSearchOptions {
+  /** Attempts per slot for deadlocks and serialization failures (design: 3). */
+  readonly maxAttempts?: number;
+  /** Waits before a retry; injectable so tests do not sleep. */
+  readonly sleep?: (milliseconds: number) => Promise<void>;
+}
+
+export interface SchedulerTickSummary {
+  readonly candidates: number;
+  readonly sent: number;
+  readonly skipped: number;
+  /** Slots another scheduler held or had already confirmed. */
+  readonly conflict: number;
+  readonly notDue: number;
+  readonly failed: number;
+  readonly durationMs: number;
+  /** Age of the oldest slot found in this tick; 0 when nothing was due. */
+  readonly oldestDueAgeSeconds: number;
+}
+
+const RETRYABLE_POSTGRES_CODES = new Set(["40001", "40P01"]);
+
+function errorCodes(error: unknown): { code?: string; postgresCode?: string } {
+  if (typeof error !== "object" || error === null) {
+    return {};
+  }
+  const code = "code" in error && typeof error.code === "string" ? error.code : undefined;
+  const meta = "meta" in error && typeof error.meta === "object" && error.meta !== null ? error.meta : undefined;
+  const postgresCode = meta && "code" in meta && typeof meta.code === "string" ? meta.code : undefined;
+  return { code, postgresCode };
+}
+
+/** Deadlock or serialization failure: the whole transaction can be retried. */
+function isRetryable(error: unknown): boolean {
+  const { code, postgresCode } = errorCodes(error);
+  return code === "P2034" || (postgresCode !== undefined && RETRYABLE_POSTGRES_CODES.has(postgresCode));
+}
+
+/** A unique-constraint race lost to another scheduler. */
+function isUniqueConflict(error: unknown): boolean {
+  const { code, postgresCode } = errorCodes(error);
+  return code === "P2002" || postgresCode === "23505";
+}
+
+const defaultSleep = (milliseconds: number) =>
+  new Promise<void>((resolve) => {
+    setTimeout(resolve, milliseconds);
+  });
+
+/**
+ * One scheduler pass (Task 8.5). The production poller and test harnesses
+ * call the same entry point; tests pass `clock` instead of using DB time.
+ *
+ * Each slot is its own transaction and error boundary: a failing slot is
+ * logged by notification ID and the rest of the batch continues. Deadlocks
+ * and serialization failures are retried with jitter up to `maxAttempts`.
+ */
+export async function runSchedulerTick(
+  repositories: RepositoryUnitOfWork,
+  options: SchedulerTickOptions,
+  clock?: Date,
+): Promise<SchedulerTickSummary> {
+  const startedAt = Date.now();
+  const maxAttempts = options.maxAttempts ?? 3;
+  const sleep = options.sleep ?? defaultSleep;
+  const candidates = await findDueSlots(repositories, options, clock);
+  const counts = { sent: 0, skipped: 0, conflict: 0, notDue: 0, failed: 0 };
+
+  for (const candidate of candidates) {
+    for (let attempt = 1; ; attempt += 1) {
+      try {
+        const outcome = await processDueSlot(repositories, candidate);
+        if (outcome.kind === "SENT") {
+          counts.sent += 1;
+          logger.info("scheduler.claim_sent", {
+            notificationId: candidate.notificationId,
+            dispatchId: outcome.dispatchId,
+            recipientCount: outcome.recipientCount,
+          });
+        } else if (outcome.kind === "SKIPPED") {
+          counts.skipped += 1;
+          logger.info("scheduler.claim_skipped", {
+            notificationId: candidate.notificationId,
+            reason: outcome.reason,
+          });
+        } else if (outcome.kind === "NOT_DUE") {
+          counts.notDue += 1;
+        } else {
+          counts.conflict += 1;
+        }
+        break;
+      } catch (error) {
+        if (isUniqueConflict(error)) {
+          counts.conflict += 1;
+          logger.info("scheduler.claim_conflict", { notificationId: candidate.notificationId });
+          break;
+        }
+        if (isRetryable(error) && attempt < maxAttempts) {
+          await sleep(50 * attempt + Math.floor(Math.random() * 50));
+          continue;
+        }
+        counts.failed += 1;
+        logger.error("scheduler.slot_failed", {
+          notificationId: candidate.notificationId,
+          effectiveDate: candidate.slot.effectiveDate,
+          attempts: attempt,
+          error,
+        });
+        break;
+      }
+    }
+  }
+
+  const referenceTime = clock?.getTime() ?? startedAt;
+  const oldestDue = candidates[0]?.slot.dueAtUtc.getTime();
+  return {
+    candidates: candidates.length,
+    ...counts,
+    durationMs: Date.now() - startedAt,
+    oldestDueAgeSeconds:
+      oldestDue === undefined ? 0 : Math.max(0, Math.floor((referenceTime - oldestDue) / 1000)),
+  };
 }

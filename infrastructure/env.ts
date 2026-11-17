@@ -132,15 +132,32 @@ export function parseMigrationDatabaseEnvironment(
   return result.data;
 }
 
+/** Dispatch scheduler settings, parsed on their own when the poller starts. */
+export const schedulerEnvironmentSchema = z.object({
+  SCHEDULER_ENABLED: booleanFromString,
+  SCHEDULER_POLL_MS: integerFromString(30_000, 5_000, 300_000),
+  SCHEDULER_BATCH_SIZE: integerFromString(50, 1, 500),
+  SCHEDULER_LOOKBACK_DAYS: integerFromString(35, 1, 365),
+});
+
+export type SchedulerEnvironment = z.infer<typeof schedulerEnvironmentSchema>;
+
+export function parseSchedulerEnvironment(
+  source: Readonly<Record<string, string | undefined>>,
+): SchedulerEnvironment {
+  const result = schedulerEnvironmentSchema.safeParse(source);
+  if (!result.success) {
+    throw new EnvironmentConfigurationError(result.error);
+  }
+  return result.data;
+}
+
 export const environmentSchema = z
   .object({
     NODE_ENV: nodeEnvironment,
     DATABASE_URL: postgresUrl,
     APP_BASE_URL: z.url(),
-    SCHEDULER_ENABLED: booleanFromString,
-    SCHEDULER_POLL_MS: integerFromString(30_000, 5_000, 300_000),
-    SCHEDULER_BATCH_SIZE: integerFromString(50, 1, 500),
-    SCHEDULER_LOOKBACK_DAYS: integerFromString(35, 1, 365),
+    ...schedulerEnvironmentSchema.shape,
     LOG_LEVEL: z.enum(["debug", "info", "warn", "error"]).default("info"),
     PORT: integerFromString(8080, 1, 65_535),
   })

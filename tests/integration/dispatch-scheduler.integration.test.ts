@@ -3,11 +3,12 @@ import { PrismaClient } from "@prisma/client";
 import { DateTime } from "luxon";
 import { afterEach, describe, expect, it } from "vitest";
 
-import { findDueSlots, processDueSlot } from "@/application/dispatch-scheduler";
+import { findDueSlots, processDueSlot, runSchedulerTick } from "@/application/dispatch-scheduler";
 import { addFriend } from "@/application/friends";
 import { acceptGroupInvite, createGroup, leaveGroup } from "@/application/group-memberships";
 import { createNotificationDraft } from "@/application/notification-drafts";
 import { scheduleNotification } from "@/application/notification-reservations";
+import type { RepositoryTransaction, RepositoryUnitOfWork } from "@/application/repositories";
 import { SCHEDULE_TIMEZONE } from "@/domain/schedule";
 import { PrismaRepositoryUnitOfWork } from "@/infrastructure/prisma-repositories";
 import { registerIsolatedPostgres } from "@/tests/database/postgres-test-database";
@@ -112,6 +113,34 @@ async function familyGroup(repositories: PrismaRepositoryUnitOfWork) {
   await acceptGroupInvite(repositories, { actorId: dad.id, groupId: group.id });
   await acceptGroupInvite(repositories, { actorId: daughter.id, groupId: group.id });
   return { mom, dad, daughter, group };
+}
+
+/**
+ * Wraps a unit of work so that writing recipients fails while `failures`
+ * returns an error, after the claim and dispatch rows were already written.
+ */
+function failingRecipients(
+  base: PrismaRepositoryUnitOfWork,
+  failures: () => unknown,
+): RepositoryUnitOfWork {
+  return {
+    transaction: (work) =>
+      base.transaction((transaction) => {
+        const dispatches = Object.create(transaction.dispatches) as RepositoryTransaction["dispatches"];
+        Object.assign(dispatches, {
+          createRecipients: async (...args: Parameters<RepositoryTransaction["dispatches"]["createRecipients"]>) => {
+            const error = failures();
+            if (error) {
+              throw error;
+            }
+            return transaction.dispatches.createRecipients(...args);
+          },
+        });
+        const wrapped = Object.create(transaction) as RepositoryTransaction;
+        Object.defineProperty(wrapped, "dispatches", { value: dispatches });
+        return work(wrapped);
+      }),
+  };
 }
 
 afterEach(async () => {
@@ -260,5 +289,43 @@ describe("dispatch scheduler against isolated PostgreSQL", () => {
     );
     expect(await claimRows(notificationId)).toHaveLength(1);
     expect(await dispatchRows(notificationId)).toHaveLength(1);
+  });
+
+  it("retries a deadlocked slot and rolls back a failed one completely", async () => {
+    const base = createRepositories();
+    const { mom, group } = await familyGroup(base);
+    const at = DateTime.now().plus({ hours: 2 }).startOf("minute").toUTC();
+    const notificationId = await reserve(base, mom.id, { groupId: group.id }, {
+      kind: "ONE_TIME",
+      at: at.toISO(),
+    });
+    const noSleep = async () => {};
+
+    let deadlocks = 1;
+    const retried = await runSchedulerTick(
+      failingRecipients(base, () => (deadlocks-- > 0 ? { code: "P2034" } : undefined)),
+      { ...options, sleep: noSleep },
+      at.toJSDate(),
+    );
+    expect(retried).toMatchObject({ candidates: 1, sent: 1, failed: 0 });
+    expect(await dispatchRows(notificationId)).toHaveLength(1);
+
+    const second = await reserve(base, mom.id, { groupId: group.id }, {
+      kind: "ONE_TIME",
+      at: at.plus({ minutes: 1 }).toISO(),
+    });
+    const failed = await runSchedulerTick(
+      failingRecipients(base, () => new Error("connection reset")),
+      { ...options, sleep: noSleep },
+      at.plus({ minutes: 1 }).toJSDate(),
+    );
+    expect(failed).toMatchObject({ candidates: 1, sent: 0, failed: 1 });
+    // The claim and dispatch written before the failure were rolled back with it.
+    expect(await claimRows(second)).toEqual([]);
+    expect(await dispatchRows(second)).toEqual([]);
+
+    const recovered = await runSchedulerTick(base, options, at.plus({ minutes: 2 }).toJSDate());
+    expect(recovered).toMatchObject({ candidates: 1, sent: 1 });
+    expect((await dispatchRows(second))[0]!.recipients).toHaveLength(2);
   });
 });
