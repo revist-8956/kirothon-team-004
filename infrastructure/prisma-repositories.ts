@@ -9,6 +9,7 @@ import type {
   CreateInviteInput,
   CreateMembershipInput,
   CreateNotificationInput,
+  DueCandidateQuery,
   DispatchesRepository,
   EnsureUserProfileInput,
   DispatchRecipientRecord,
@@ -34,6 +35,7 @@ import type {
   UserRecord,
   UsersRepository,
 } from "../application/repositories";
+import type { RecipientCandidate } from "../domain/recipients";
 import { prisma } from "./db";
 
 type PrismaDatabaseClient = PrismaClient | Prisma.TransactionClient;
@@ -249,6 +251,18 @@ export class PrismaMembershipsRepository implements MembershipsRepository {
     });
   }
 
+  async listCurrentMemberProfiles(groupId: string): Promise<readonly RecipientCandidate[]> {
+    const memberships = await this.database.membership.findMany({
+      where: { groupId, leftAt: null },
+      orderBy: { joinedAt: "asc" },
+      select: { userId: true, user: { select: { nickname: true } } },
+    });
+    return memberships.map((membership) => ({
+      userId: membership.userId,
+      nickname: membership.user.nickname,
+    }));
+  }
+
   create(input: CreateMembershipInput) {
     return this.database.membership.create({ data: input });
   }
@@ -329,6 +343,35 @@ export class PrismaNotificationsRepository implements NotificationsRepository {
     });
   }
 
+  listDueCandidates(input: DueCandidateQuery): Promise<readonly NotificationRecord[]> {
+    return this.database.notification.findMany({
+      where: {
+        OR: [
+          {
+            scheduleKind: "ONE_TIME",
+            oneTimeAt: { gt: input.fromExclusive, lte: input.throughInclusive },
+            scheduleClaims: { none: {} },
+          },
+          {
+            scheduleKind: "RECURRING",
+            startDate: { lte: input.throughKstDate },
+            OR: [{ state: "ACTIVE" }, { stoppedAt: { gt: input.fromExclusive } }],
+          },
+        ],
+      },
+      orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+    });
+  }
+
+  async listPersonalTargetProfiles(notificationId: string): Promise<readonly RecipientCandidate[]> {
+    const targets = await this.database.personalTarget.findMany({
+      where: { notificationId },
+      orderBy: [{ createdAt: "asc" }, { userId: "asc" }],
+      select: { userId: true, user: { select: { nickname: true } } },
+    });
+    return targets.map((target) => ({ userId: target.userId, nickname: target.user.nickname }));
+  }
+
   async stopRecurring(notificationId: string, senderId: string): Promise<NotificationRecord | null> {
     const rows = await this.database.$queryRaw<NotificationRecord[]>`
       UPDATE "notification"
@@ -385,6 +428,19 @@ export class PrismaScheduleClaimsRepository implements ScheduleClaimsRepository 
     });
   }
 
+  listClaimedDates(
+    notificationIds: readonly string[],
+    fromDate: Date,
+  ): Promise<ReadonlyArray<{ readonly notificationId: string; readonly effectiveDate: Date }>> {
+    if (notificationIds.length === 0) {
+      return Promise.resolve([]);
+    }
+    return this.database.scheduleClaim.findMany({
+      where: { notificationId: { in: [...notificationIds] }, effectiveDate: { gte: fromDate } },
+      select: { notificationId: true, effectiveDate: true },
+    });
+  }
+
   create(input: CreateClaimInput): Promise<ScheduleClaimRecord> {
     return this.database.scheduleClaim.create({ data: { ...input, sourceDates: [...input.sourceDates] } });
   }
@@ -399,6 +455,14 @@ export class PrismaDispatchesRepository implements DispatchesRepository {
 
   create(input: CreateDispatchInput): Promise<DispatchRecord> {
     return this.database.dispatch.create({ data: input });
+  }
+
+  async nextSequence(notificationId: string): Promise<number> {
+    const result = await this.database.dispatch.aggregate({
+      where: { notificationId },
+      _max: { sequence: true },
+    });
+    return (result._max.sequence ?? 0) + 1;
   }
 
   async createRecipients(
@@ -467,6 +531,14 @@ class PrismaRepositoryTransaction implements RepositoryTransaction {
       SELECT 1 AS "locked"
       FROM pg_advisory_xact_lock(hashtextextended(${groupId}::text, 0))
     `;
+  }
+
+  async tryLockNotification(notificationId: string): Promise<boolean> {
+    // A separate key namespace from lockGroup, so a notification and a group never share a lock.
+    const rows = await this.database.$queryRaw<Array<{ locked: boolean }>>`
+      SELECT pg_try_advisory_xact_lock(hashtextextended(${`notification:${notificationId}`}::text, 0)) AS "locked"
+    `;
+    return rows[0]?.locked === true;
   }
 
   now(): Promise<Date> {

@@ -9,6 +9,7 @@ import {
 import type {
   CreateNotificationInput,
   NotificationDraftRecord,
+  NotificationRecord,
   RepositoryTransaction,
   RepositoryUnitOfWork,
 } from "./repositories";
@@ -194,6 +195,36 @@ export function toNotificationScheduleFields(
     dayOfMonth: schedule.recurrence === "MONTHLY" ? (schedule.dayOfMonth ?? null) : null,
     localTime: new Date(`1970-01-01T${hour}:${minute}:${second}.000Z`),
     skipWeekend: schedule.skipWeekend,
+    timezone: SCHEDULE_TIMEZONE,
+  };
+}
+
+/** Rebuilds the schedule of a stored notification; the inverse of `toNotificationScheduleFields`. */
+export function toScheduleSpec(
+  notification: Pick<
+    NotificationRecord,
+    "scheduleKind" | "oneTimeAt" | "recurrence" | "startDate" | "weekday" | "dayOfMonth" | "localTime" | "skipWeekend"
+  >,
+): ScheduleSpec {
+  if (notification.scheduleKind === "ONE_TIME") {
+    if (!notification.oneTimeAt) {
+      throw new RangeError("A one-time notification has no oneTimeAt.");
+    }
+    return { kind: "ONE_TIME", at: notification.oneTimeAt.toISOString() };
+  }
+  if (!notification.recurrence || !notification.startDate || !notification.localTime) {
+    throw new RangeError("A recurring notification is missing its schedule fields.");
+  }
+  return {
+    kind: "RECURRING",
+    recurrence: notification.recurrence,
+    startDate: notification.startDate.toISOString().slice(0, 10),
+    localTime: notification.localTime.toISOString().slice(11, 19),
+    ...(notification.weekday !== null
+      ? { weekday: notification.weekday as 1 | 2 | 3 | 4 | 5 | 6 | 7 }
+      : {}),
+    ...(notification.dayOfMonth !== null ? { dayOfMonth: notification.dayOfMonth } : {}),
+    skipWeekend: notification.skipWeekend,
     timezone: SCHEDULE_TIMEZONE,
   };
 }

@@ -9,6 +9,8 @@ import type {
   SkipReason,
 } from "@prisma/client";
 
+import type { RecipientCandidate } from "../domain/recipients";
+
 /**
  * Typed persistence boundary used by application commands and queries.
  * Implementations own Prisma and SQL details; application code receives only
@@ -164,6 +166,13 @@ export interface EnsureUserProfileInput {
   readonly nicknameRequired: boolean;
 }
 
+export interface DueCandidateQuery {
+  readonly fromExclusive: Date;
+  readonly throughInclusive: Date;
+  /** KST calendar date of `throughInclusive`, carried as a UTC-midnight `@db.Date` value. */
+  readonly throughKstDate: Date;
+}
+
 export interface CreateGroupInput {
   readonly name: string;
   readonly createdById: string;
@@ -267,6 +276,8 @@ export interface GroupsRepository {
 export interface MembershipsRepository {
   findCurrent(groupId: string, userId: string): Promise<MembershipRecord | null>;
   listCurrentForGroup(groupId: string): Promise<readonly MembershipRecord[]>;
+  /** Current members with the nickname to snapshot into a dispatch. */
+  listCurrentMemberProfiles(groupId: string): Promise<readonly RecipientCandidate[]>;
   create(input: CreateMembershipInput): Promise<MembershipRecord>;
   /** Ends one active membership and returns it, or null when none is active. */
   leaveCurrent(groupId: string, userId: string): Promise<MembershipRecord | null>;
@@ -288,6 +299,14 @@ export interface NotificationsRepository {
   create(input: CreateNotificationInput): Promise<NotificationRecord>;
   createPersonalTargets(notificationId: string, userIds: readonly string[]): Promise<void>;
   stopRecurring(notificationId: string, senderId: string): Promise<NotificationRecord | null>;
+  /**
+   * Notifications that may own a slot due in (fromExclusive, throughInclusive]:
+   * unclaimed one-time notifications in that window, and recurring ones that
+   * started by `throughKstDate` and were not stopped before the window.
+   */
+  listDueCandidates(input: DueCandidateQuery): Promise<readonly NotificationRecord[]>;
+  /** Fixed personal targets with the nickname to snapshot into a dispatch. */
+  listPersonalTargetProfiles(notificationId: string): Promise<readonly RecipientCandidate[]>;
 }
 
 export interface NotificationDraftsRepository {
@@ -299,12 +318,19 @@ export interface NotificationDraftsRepository {
 
 export interface ScheduleClaimsRepository {
   find(notificationId: string, effectiveDate: Date): Promise<ScheduleClaimRecord | null>;
+  /** Claimed effective dates on or after `fromDate` for the given notifications. */
+  listClaimedDates(
+    notificationIds: readonly string[],
+    fromDate: Date,
+  ): Promise<ReadonlyArray<{ readonly notificationId: string; readonly effectiveDate: Date }>>;
   create(input: CreateClaimInput): Promise<ScheduleClaimRecord>;
 }
 
 export interface DispatchesRepository {
   findById(id: string): Promise<DispatchRecord | null>;
   create(input: CreateDispatchInput): Promise<DispatchRecord>;
+  /** The next 1-based dispatch sequence of a notification. */
+  nextSequence(notificationId: string): Promise<number>;
   createRecipients(
     dispatchId: string,
     recipients: readonly CreateDispatchRecipientInput[],
@@ -317,6 +343,11 @@ export interface DispatchesRepository {
 export interface RepositoryTransaction {
   /** Serializes group membership changes and group-recipient snapshots in this transaction. */
   lockGroup(groupId: string): Promise<void>;
+  /**
+   * Tries the transaction-scoped scheduler lock of one notification without
+   * waiting. Returns false when another transaction holds it.
+   */
+  tryLockNotification(notificationId: string): Promise<boolean>;
   /** PostgreSQL current time, evaluated by the database. */
   now(): Promise<Date>;
   /** PostgreSQL transaction timestamp, stable for the entire transaction. */

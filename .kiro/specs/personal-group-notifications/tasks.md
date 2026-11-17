@@ -237,12 +237,12 @@
     - _Requirements: 7.3~7.5, 8.2~8.4, 9.3, 9.5, 10.1~10.13_
 
 - [ ] 8. 다중 프로세스 안전 발송 스케줄러 구현
-  - [ ] 8.1 만기 슬롯 claim과 회차 생성 transaction을 구현한다
+  - [x] 8.1 만기 슬롯 claim과 회차 생성 transaction을 구현한다
     - DB 현재 시각으로 제한된 batch의 후보를 찾고 알림·effective date advisory lock 및 unique claim을 사용한다.
     - claim, `Dispatch`, sequence와 `DispatchRecipient` 전체를 한 transaction에서 확정하고 실패 시 모두 rollback한다.
     - _Requirements: 10.1, 10.11, 11.1, 11.2, 11.3_
 
-  - [ ] 8.2 개인·그룹 회차 수신자 snapshot 정책을 구현한다
+  - [x] 8.2 개인·그룹 회차 수신자 snapshot 정책을 구현한다
     - 개인 알림은 저장된 `PersonalTarget`, 그룹 알림은 발송 transaction 시점의 현재 구성원에서 발신자를 제외한 집합을 사용한다.
     - 그룹 발신자 탈퇴와 수신자 0명은 이유가 있는 `SKIPPED` claim으로 기록하고 회차는 만들지 않는다.
     - _Requirements: 8.2, 9.6~9.9, 11.1~11.5_
