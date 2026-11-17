@@ -175,6 +175,49 @@ export interface InboxPageRecord {
   readonly unconfirmedCount: number;
 }
 
+/** One dispatch round with snapshot-based counts. */
+export interface DispatchRoundRecord {
+  readonly dispatchId: string;
+  readonly sequence: number;
+  /** KST calendar date, YYYY-MM-DD. */
+  readonly effectiveDate: string;
+  readonly sentAt: Date;
+  readonly recipientCount: number;
+  readonly confirmedCount: number;
+}
+
+export interface DispatchResponseRecord {
+  readonly recipientId: string;
+  readonly nickname: string;
+  readonly confirmedAt: Date | null;
+}
+
+/** One sender-side notification card with its latest round visible to the sender. */
+export interface SentNotificationRecord {
+  readonly notificationId: string;
+  readonly sentence: string;
+  readonly mode: DeliveryMode;
+  readonly groupName: string | null;
+  readonly scheduleKind: ScheduleKind;
+  readonly oneTimeAt: Date | null;
+  readonly recurrence: Recurrence | null;
+  /** KST calendar date, YYYY-MM-DD. */
+  readonly startDate: string | null;
+  readonly weekday: number | null;
+  readonly dayOfMonth: number | null;
+  /** KST wall-clock time, HH:mm:ss. */
+  readonly localTime: string | null;
+  readonly skipWeekend: boolean;
+  readonly state: NotificationState;
+  readonly stoppedAt: Date | null;
+  readonly latestRound: {
+    readonly sequence: number;
+    readonly sentAt: Date;
+    readonly recipientCount: number;
+    readonly confirmedCount: number;
+  } | null;
+}
+
 /**
  * Initial application profile for one Supabase Auth principal. `id` is the
  * `auth.users.id` of that principal; profiles never receive another identifier.
@@ -328,6 +371,12 @@ export interface NotificationsRepository {
   listDueCandidates(input: DueCandidateQuery): Promise<readonly NotificationRecord[]>;
   /** Fixed personal targets with the nickname to snapshot into a dispatch. */
   listPersonalTargetProfiles(notificationId: string): Promise<readonly RecipientCandidate[]>;
+  /**
+   * The sender's notifications, newest first. Group notifications appear only
+   * while the sender is a current member, and their latest round is the
+   * newest one sent at or after the sender's latest membership began.
+   */
+  listSentBySender(senderId: string, limit: number): Promise<readonly SentNotificationRecord[]>;
 }
 
 export interface NotificationDraftsRepository {
@@ -363,6 +412,10 @@ export interface DispatchesRepository {
    * or before the dispatch was sent.
    */
   listInboxForRecipient(recipientId: string, limit: number): Promise<InboxPageRecord>;
+  /** Every round of a notification, oldest first. */
+  listRoundsForNotification(notificationId: string): Promise<readonly DispatchRoundRecord[]>;
+  /** Recipient snapshot rows of one round, ordered by nickname. */
+  listResponses(dispatchId: string): Promise<readonly DispatchResponseRecord[]>;
   /** Sets the first confirmation time only, returning null for an existing confirmation or no row. */
   confirmRecipient(dispatchId: string, recipientId: string): Promise<DispatchRecipientRecord | null>;
 }

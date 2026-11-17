@@ -1,0 +1,61 @@
+.list {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-1) 0 var(--space-5);
+}
+
+.card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.titleRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.sentence {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: var(--font-size-card-title);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-title);
+}
+
+.badge {
+  flex-shrink: 0;
+}
+
+.meta {
+  color: var(--color-text-sub);
+  font-size: var(--font-size-support);
+}
+
+.progress {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.actions > * {
+  flex: 1;
+  min-width: 0;
+}
+
+.error {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-control);
+  background: var(--color-neutral-button);
+  font-size: var(--font-size-support);
+}

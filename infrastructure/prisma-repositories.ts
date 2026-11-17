@@ -9,9 +9,12 @@ import type {
   CreateInviteInput,
   CreateMembershipInput,
   CreateNotificationInput,
+  DispatchResponseRecord,
+  DispatchRoundRecord,
   DueCandidateQuery,
   InboxCardRecord,
   InboxPageRecord,
+  SentNotificationRecord,
   DispatchesRepository,
   EnsureUserProfileInput,
   DispatchRecipientRecord,
@@ -374,6 +377,78 @@ export class PrismaNotificationsRepository implements NotificationsRepository {
     return targets.map((target) => ({ userId: target.userId, nickname: target.user.nickname }));
   }
 
+  async listSentBySender(senderId: string, limit: number): Promise<readonly SentNotificationRecord[]> {
+    const rows = await this.database.$queryRaw<
+      Array<
+        Omit<SentNotificationRecord, "latestRound"> & {
+          latestSequence: number | null;
+          latestSentAt: Date | null;
+          latestRecipientCount: bigint | null;
+          latestConfirmedCount: bigint | null;
+        }
+      >
+    >`
+      SELECT
+        n."id" AS "notificationId", n."sentence", n."mode", g."name" AS "groupName",
+        n."schedule_kind" AS "scheduleKind", n."one_time_at" AS "oneTimeAt", n."recurrence",
+        n."start_date"::text AS "startDate", n."weekday", n."day_of_month" AS "dayOfMonth",
+        n."local_time"::text AS "localTime", n."skip_weekend" AS "skipWeekend",
+        n."state", n."stopped_at" AS "stoppedAt",
+        latest."sequence" AS "latestSequence", latest."sent_at" AS "latestSentAt",
+        latest."recipient_count" AS "latestRecipientCount",
+        latest."confirmed_count" AS "latestConfirmedCount"
+      FROM "notification" n
+      LEFT JOIN "groups" g ON g."id" = n."group_id"
+      LEFT JOIN LATERAL (
+        SELECT m."joined_at"
+        FROM "memberships" m
+        WHERE m."group_id" = n."group_id" AND m."user_id" = n."sender_id" AND m."left_at" IS NULL
+        ORDER BY m."joined_at" DESC
+        LIMIT 1
+      ) membership ON TRUE
+      LEFT JOIN LATERAL (
+        SELECT
+          d."sequence", d."sent_at",
+          (SELECT COUNT(*) FROM "dispatch_recipient" r WHERE r."dispatch_id" = d."id") AS "recipient_count",
+          (SELECT COUNT(r."confirmed_at") FROM "dispatch_recipient" r WHERE r."dispatch_id" = d."id") AS "confirmed_count"
+        FROM "dispatch" d
+        WHERE d."notification_id" = n."id"
+          AND (n."mode" = 'PERSONAL'::"DeliveryMode" OR d."sent_at" >= membership."joined_at")
+        ORDER BY d."sequence" DESC
+        LIMIT 1
+      ) latest ON TRUE
+      WHERE n."sender_id" = ${senderId}::uuid
+        AND (n."mode" = 'PERSONAL'::"DeliveryMode" OR membership."joined_at" IS NOT NULL)
+      ORDER BY n."created_at" DESC, n."id" DESC
+      LIMIT ${limit}
+    `;
+    return rows.map((row) => ({
+      notificationId: row.notificationId,
+      sentence: row.sentence,
+      mode: row.mode,
+      groupName: row.groupName,
+      scheduleKind: row.scheduleKind,
+      oneTimeAt: row.oneTimeAt,
+      recurrence: row.recurrence,
+      startDate: row.startDate,
+      weekday: row.weekday,
+      dayOfMonth: row.dayOfMonth,
+      localTime: row.localTime,
+      skipWeekend: row.skipWeekend,
+      state: row.state,
+      stoppedAt: row.stoppedAt,
+      latestRound:
+        row.latestSequence !== null && row.latestSentAt !== null
+          ? {
+              sequence: row.latestSequence,
+              sentAt: row.latestSentAt,
+              recipientCount: Number(row.latestRecipientCount ?? 0),
+              confirmedCount: Number(row.latestConfirmedCount ?? 0),
+            }
+          : null,
+    }));
+  }
+
   async stopRecurring(notificationId: string, senderId: string): Promise<NotificationRecord | null> {
     const rows = await this.database.$queryRaw<NotificationRecord[]>`
       UPDATE "notification"
@@ -530,6 +605,48 @@ export class PrismaDispatchesRepository implements DispatchesRepository {
       })),
       unconfirmedCount: Number(rows[0]?.unconfirmedCount ?? 0),
     };
+  }
+
+  async listRoundsForNotification(notificationId: string): Promise<readonly DispatchRoundRecord[]> {
+    const rows = await this.database.$queryRaw<
+      Array<Omit<DispatchRoundRecord, "recipientCount" | "confirmedCount"> & {
+        recipientCount: bigint;
+        confirmedCount: bigint;
+      }>
+    >`
+      SELECT
+        d."id" AS "dispatchId", d."sequence", d."effective_date"::text AS "effectiveDate",
+        d."sent_at" AS "sentAt",
+        COUNT(r."id") AS "recipientCount",
+        COUNT(r."confirmed_at") AS "confirmedCount"
+      FROM "dispatch" d
+      LEFT JOIN "dispatch_recipient" r ON r."dispatch_id" = d."id"
+      WHERE d."notification_id" = ${notificationId}::uuid
+      GROUP BY d."id"
+      ORDER BY d."sequence" ASC
+    `;
+    return rows.map((row) => ({
+      dispatchId: row.dispatchId,
+      sequence: row.sequence,
+      effectiveDate: row.effectiveDate,
+      sentAt: row.sentAt,
+      recipientCount: Number(row.recipientCount),
+      confirmedCount: Number(row.confirmedCount),
+    }));
+  }
+
+  async listResponses(dispatchId: string): Promise<readonly DispatchResponseRecord[]> {
+    const rows = await this.database.dispatchRecipient.findMany({
+      where: { dispatchId },
+      // Rows of one snapshot share created_at, so order by the shown name for a stable list.
+      orderBy: [{ recipientNicknameSnapshot: "asc" }, { recipientId: "asc" }],
+      select: { recipientId: true, recipientNicknameSnapshot: true, confirmedAt: true },
+    });
+    return rows.map((row) => ({
+      recipientId: row.recipientId,
+      nickname: row.recipientNicknameSnapshot,
+      confirmedAt: row.confirmedAt,
+    }));
   }
 
   async confirmRecipient(

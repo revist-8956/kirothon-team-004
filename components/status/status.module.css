@@ -1,0 +1,127 @@
+.content {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-1) 0 var(--space-5);
+}
+
+.section {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: var(--font-size-section);
+  font-weight: var(--font-weight-bold);
+}
+
+.rounds {
+  display: flex;
+  gap: var(--space-3);
+  overflow-x: auto;
+  margin: 0;
+  padding: 0 0 var(--space-1);
+  list-style: none;
+}
+
+.round {
+  display: flex;
+  min-width: 88px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: 56px;
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-control);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-size: var(--font-size-support);
+  font-weight: var(--font-weight-bold);
+  text-align: center;
+  text-decoration: none;
+}
+
+.round[aria-current="true"] {
+  background: var(--color-accent);
+  color: var(--surface);
+}
+
+.round_unavailable {
+  color: var(--color-text-sub);
+  font-weight: var(--font-weight-regular);
+  cursor: not-allowed;
+}
+
+.roundDetail {
+  font-weight: var(--font-weight-regular);
+}
+
+.summaryRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.summaryCount {
+  color: var(--color-accent);
+}
+
+.summaryMeta,
+.hint {
+  color: var(--color-text-sub);
+  font-size: var(--font-size-support);
+}
+
+.hint {
+  margin: 0;
+}
+
+.recipients {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.recipient {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4) 0;
+  border-top: 1px solid var(--color-line);
+}
+
+.recipient:first-child {
+  border-top: 0;
+}
+
+.recipientIdentity {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.recipientText {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.recipientName {
+  overflow-wrap: anywhere;
+  font-weight: var(--font-weight-medium);
+}
+
+.recipientTime {
+  color: var(--color-text-sub);
+  font-size: var(--font-size-support);
+}
