@@ -10,9 +10,12 @@
 | 설계 | Kiro 채팅 + HTML 시안 | 화면 11개의 시안과 디자인 토큰, 공통 컴포넌트, 화면 이동, PRD와 달라진 점을 정리했어요. | `ui-design-with-screens/ui-design.md`, `ui-design-with-screens/screens/*.html` |
 | 구현 | Spec (tasks) | 설계를 13개 단계, 81개 하위 태스크로 나누고 각 태스크에 관련 요구사항 번호를 붙였어요. 태스크 사이의 의존 관계는 wave 단위 그래프로 정리했어요. | `.kiro/specs/personal-group-notifications/tasks.md` |
 | 구현 | Kiro 채팅 | 81개 태스크를 3명에게 나누고, 공통 선행 작업, 담당 디렉터리, 병합 순서, 스키마 변경 요청 절차를 정했어요. | `.kiro/specs/personal-group-notifications/work-split.md` |
-| 검증 | Hooks | 태스크를 마칠 때 lint, 타입 검사, 테스트를 실행하도록 검증 hook을 두었어요. | `.kiro/hooks/verify-task.json` |
+| 구현 | Spec (tasks) + Kiro 채팅 | 인증을 Supabase Auth로 바꾸기로 하면서 태스크 14(7개 하위 태스크)를 추가했어요. 이후 `tasks.md`의 wave 순서대로 태스크를 하나씩 실행하고, 끝날 때마다 체크박스와 커밋 메시지에 태스크 번호를 남겼어요. | `.kiro/specs/personal-group-notifications/tasks.md`, `git log` |
+| 검증 | Hooks | spec 태스크가 끝날 때(`PostTaskExec`) lint, 타입 검사, 단위 테스트를 실행하도록 검증 hook을 두었어요. | `.kiro/hooks/verify-task.json` |
+| 검증 | Spec (design의 Correctness Properties) + Kiro 채팅 | 설계의 속성(Property)마다 fast-check 속성 테스트를, 동시성·권한 규칙마다 Testcontainers로 띄운 PostgreSQL 통합 테스트를 작성했어요. 같은 회차를 두 연결이 동시에 처리해도 회차가 하나만 생기는지, 가입 전 회차가 보이지 않는지 등을 실제 DB에서 확인해요. | `domain/*.property.test.ts`, `application/*.property.test.ts`, `tests/integration/` |
 | 검증 | Steering + GitHub Actions | main에 push하면 lint, 타입 검사, 테스트, 빌드를 거친 뒤 Elastic Beanstalk에 배포해요. | `.github/workflows/deploy.yml` |
 | 기타 | Steering | 기술 스택, 아키텍처, TypeScript 규칙, API 응답 형식, 보안, 검증 순서를 팀 공통 규칙으로 정해서 Kiro가 항상 참고하게 했어요. | `.kiro/steering/tech.md` |
+| 기타 | Kiro 채팅 | 배포에 필요한 환경 변수, Supabase·Google Cloud Console에 등록할 리디렉션 URL을 문서로 정리하고, 문서와 코드 상수가 어긋나면 테스트가 실패하게 했어요. | `docs/deployment.md`, `tests/deployment/` |
 
 ## 개발 과정에서 바뀐 점
 
@@ -25,6 +28,9 @@
 | 별도 워커로 스케줄러 실행 | 웹 서버 프로세스 안에서 스케줄러를 시작하고 DB 잠금으로 중복 방지 | 배포 워크플로가 `next start` 하나만 실행해서, 서버를 추가하지 않고 동작하게 바꿨어요. |
 | Node.js 24 기준 (`tech.md`) | 배포는 Node.js 26 | Elastic Beanstalk 환경이 Node.js 26 플랫폼이라 배포 기준을 맞췄어요. |
 | 동아리 운영진 공지 서비스 | 친구, 연인, 가족, 동료가 서로 할 일을 확인하는 서비스 | 팀원의 실제 사례(데이트 약속 확인, 어머니 복약 확인)가 개인 사이의 일이었어요. |
+| Auth.js Google 로그인과 DB 세션 (`design.md`) | Supabase Auth가 Google OAuth와 세션을 맡고, 앱 프로필은 `auth.users`를 참조 | DB를 Supabase PostgreSQL로 쓰면서 인증도 Supabase에 맡기기로 했어요. 앱 테이블은 RLS로 브라우저 직접 접근을 막고, 권한 검사는 서버에서만 해요. (`tasks.md` 14절) |
+| 발송 슬롯마다 (알림, 날짜) 잠금 | 알림 단위 잠금 | 회차 번호를 "기존 최대값 + 1"로 정하기 때문에, 같은 알림의 다른 날짜가 동시에 처리되면 번호가 겹칠 수 있었어요. 알림 단위로 잠그면 재시도 로직 없이 번호가 겹치지 않아요. |
+| 반복 시작일 제한 없음 | 오늘 이전 시작일은 거부하고, 알림 등록 이전 시각의 회차는 보내지 않음 | 스케줄러가 최근 35일의 놓친 회차를 따라잡기 때문에, 과거 시작일을 허용하면 등록하자마자 지난 회차가 한꺼번에 발송될 수 있었어요. |
 
 ## 어려웠던 점과 해결 방법
 
@@ -35,6 +41,10 @@
 ### PRD와 UI 시안이 서로 다를 때
 - **문제:** PRD는 상세 화면에서 확인하라고 하고, 시안은 카드에서 바로 확인했어요. 이메일 공개 범위처럼 어느 쪽에도 없는 내용도 있었어요.
 - **해결:** UI 명세 5장의 변경 사항을 우선한다는 규칙을 requirements 서두에 적었어요. 정해지지 않은 내용은 "가정 및 미결 사항"에 모아 팀이 하나씩 결정했어요.
+
+### 중간 커밋이 검증을 통과하지 못한 채 올라간 문제
+- **문제:** 기능을 한꺼번에 커밋하다가 lint 오류 2개, 타입 오류 1개, 실패하는 테스트 2개가 그대로 `main`에 올라갔어요. 배포 워크플로가 검증부터 하기 때문에 배포가 막혔어요.
+- **해결:** 먼저 실패를 고친 커밋을 따로 만들고, 이후에는 태스크 하나를 끝낼 때마다 lint, 타입 검사, 전체 테스트, 빌드를 통과한 뒤에만 커밋했어요. 태스크 종료 hook도 같은 검사를 실행해요.
 
 ### BUILD REPORT 작성
 - **문제:** 개발 중에는 Kiro로 무엇을 했는지 따로 기록하지 않아서, 나중에 단계별로 정리하기 어려웠어요.

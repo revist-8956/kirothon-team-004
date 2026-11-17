@@ -1,0 +1,15 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "verify-after-spec-task",
+      "description": "spec 태스크를 마칠 때마다 lint, 타입 검사, 단위 테스트를 실행해요. PostgreSQL 통합 테스트는 Docker가 필요해서 npm test로 따로 실행해요.",
+      "trigger": "PostTaskExec",
+      "action": {
+        "type": "command",
+        "command": "npm run lint && npm run typecheck && npm run test:unit"
+      },
+      "timeout": 300
+    }
+  ]
+}
