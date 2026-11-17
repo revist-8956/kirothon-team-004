@@ -10,6 +10,8 @@ import type {
   CreateMembershipInput,
   CreateNotificationInput,
   DueCandidateQuery,
+  InboxCardRecord,
+  InboxPageRecord,
   DispatchesRepository,
   EnsureUserProfileInput,
   DispatchRecipientRecord,
@@ -482,6 +484,52 @@ export class PrismaDispatchesRepository implements DispatchesRepository {
     return this.database.dispatchRecipient.findUnique({
       where: { dispatchId_recipientId: { dispatchId, recipientId } },
     });
+  }
+
+  async listInboxForRecipient(recipientId: string, limit: number): Promise<InboxPageRecord> {
+    const rows = await this.database.$queryRaw<Array<InboxCardRecord & { unconfirmedCount: bigint }>>`
+      SELECT
+        r."dispatch_id" AS "dispatchId", n."id" AS "notificationId", n."sentence",
+        n."mode", g."name" AS "groupName", s."nickname" AS "senderNickname",
+        n."schedule_kind" AS "scheduleKind", n."recurrence", d."sequence",
+        d."sent_at" AS "sentAt", r."confirmed_at" AS "confirmedAt",
+        COUNT(*) FILTER (WHERE r."confirmed_at" IS NULL) OVER () AS "unconfirmedCount"
+      FROM "dispatch_recipient" r
+      JOIN "dispatch" d ON d."id" = r."dispatch_id"
+      JOIN "notification" n ON n."id" = d."notification_id"
+      JOIN "users" s ON s."id" = n."sender_id"
+      LEFT JOIN "groups" g ON g."id" = n."group_id"
+      WHERE r."recipient_id" = ${recipientId}::uuid
+        AND (
+          n."mode" = 'PERSONAL'::"DeliveryMode"
+          OR EXISTS (
+            SELECT 1
+            FROM "memberships" m
+            WHERE m."group_id" = n."group_id"
+              AND m."user_id" = r."recipient_id"
+              AND m."left_at" IS NULL
+              AND m."joined_at" <= d."sent_at"
+          )
+        )
+      ORDER BY d."sent_at" DESC, d."id" DESC
+      LIMIT ${limit}
+    `;
+    return {
+      cards: rows.map((row) => ({
+        dispatchId: row.dispatchId,
+        notificationId: row.notificationId,
+        sentence: row.sentence,
+        mode: row.mode,
+        groupName: row.groupName,
+        senderNickname: row.senderNickname,
+        scheduleKind: row.scheduleKind,
+        recurrence: row.recurrence,
+        sequence: row.sequence,
+        sentAt: row.sentAt,
+        confirmedAt: row.confirmedAt,
+      })),
+      unconfirmedCount: Number(rows[0]?.unconfirmedCount ?? 0),
+    };
   }
 
   async confirmRecipient(

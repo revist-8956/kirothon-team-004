@@ -154,6 +154,27 @@ export interface DispatchRecipientRecord {
   readonly createdAt: Date;
 }
 
+/** One received dispatch card, with only the viewer's own response. */
+export interface InboxCardRecord {
+  readonly dispatchId: string;
+  readonly notificationId: string;
+  readonly sentence: string;
+  readonly mode: DeliveryMode;
+  readonly groupName: string | null;
+  readonly senderNickname: string;
+  readonly scheduleKind: ScheduleKind;
+  readonly recurrence: Recurrence | null;
+  readonly sequence: number;
+  readonly sentAt: Date;
+  readonly confirmedAt: Date | null;
+}
+
+export interface InboxPageRecord {
+  readonly cards: readonly InboxCardRecord[];
+  /** Unconfirmed cards among all visible ones, not only the returned page. */
+  readonly unconfirmedCount: number;
+}
+
 /**
  * Initial application profile for one Supabase Auth principal. `id` is the
  * `auth.users.id` of that principal; profiles never receive another identifier.
@@ -336,6 +357,12 @@ export interface DispatchesRepository {
     recipients: readonly CreateDispatchRecipientInput[],
   ): Promise<void>;
   findRecipient(dispatchId: string, recipientId: string): Promise<DispatchRecipientRecord | null>;
+  /**
+   * Newest received dispatches of a user. A group dispatch is included only
+   * while the user is a current member whose latest membership started at
+   * or before the dispatch was sent.
+   */
+  listInboxForRecipient(recipientId: string, limit: number): Promise<InboxPageRecord>;
   /** Sets the first confirmation time only, returning null for an existing confirmation or no row. */
   confirmRecipient(dispatchId: string, recipientId: string): Promise<DispatchRecipientRecord | null>;
 }
