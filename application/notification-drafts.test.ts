@@ -102,7 +102,7 @@ describe("notification compose options and drafts", () => {
 
     await expect(getComposeOptions(repositories, actorId, "PERSONAL")).resolves.toEqual({
       mode: "PERSONAL",
-      recipients: [{ id: friendId, nickname: "친구", email: "friend@example.test" }],
+      recipients: [{ id: friendId, nickname: "친구 1", email: "friend-1@example.test" }],
     });
     await expect(getComposeOptions(repositories, actorId, "GROUP")).resolves.toEqual({
       mode: "GROUP",
@@ -308,6 +308,9 @@ describe("personal target selection and snapshot", () => {
       fc.asyncProperty(personalTargetScenarioArbitrary, async (scenario) => {
         const { repositories, actorId, friendIds, drafts } = createRepositoryFixture(scenario.friendIds);
         const options = await getComposeOptions(repositories, actorId, "PERSONAL");
+        if (options.mode !== "PERSONAL") {
+          throw new Error("expected personal compose options");
+        }
 
         expect(new Set(options.recipients.map((recipient) => recipient.id))).toEqual(
           new Set(scenario.friendIds),

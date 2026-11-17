@@ -88,10 +88,7 @@ describe("ComposeForm", () => {
 
   it("keeps input and selected recipients after server validation fails", async () => {
     const user = userEvent.setup();
-    const createDraftAction = vi.fn(async (
-      _previousState: CreateNotificationDraftState,
-      _formData: FormData,
-    ): Promise<CreateNotificationDraftState> => ({
+    const createDraftAction = vi.fn(async (): Promise<CreateNotificationDraftState> => ({
       ok: false,
       code: "VALIDATION_ERROR",
       message: "수신 대상을 한 명 이상 선택해 주세요.",
@@ -116,10 +113,9 @@ describe("ComposeForm", () => {
 
   it("moves to schedule with the server-issued draft key after a valid submission", async () => {
     const user = userEvent.setup();
-    const createDraftAction = vi.fn(async (
-      _previousState: CreateNotificationDraftState,
-      _formData: FormData,
-    ): Promise<CreateNotificationDraftState> => ({
+    const createDraftAction = vi.fn<
+      (previousState: CreateNotificationDraftState, formData: FormData) => Promise<CreateNotificationDraftState>
+    >(async () => ({
       ok: true,
       data: { draftId: "draft-123" },
     }));

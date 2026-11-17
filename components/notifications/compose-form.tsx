@@ -73,6 +73,14 @@ export function ComposeForm({
       : undefined
   ));
   const [state, formAction, pending] = useActionState(createDraftAction, null);
+  const [handledState, setHandledState] = useState(state);
+  // Remount the form once per failed submission (adjusted during render, not in an effect).
+  if (state !== handledState) {
+    setHandledState(state);
+    if (state?.ok === false) {
+      setFormVersion((current) => current + 1);
+    }
+  }
   const sentenceError = fieldError(state, "sentence");
   const recipientError = fieldError(state, "recipientIds");
   const groupError = fieldError(state, "groupId");
@@ -88,11 +96,6 @@ export function ComposeForm({
     }
   }, [router, state]);
 
-  useEffect(() => {
-    if (state?.ok === false) {
-      setFormVersion((current) => current + 1);
-    }
-  }, [state]);
 
   useEffect(() => {
     if (state?.ok === false) {

@@ -23,6 +23,14 @@ export function FriendsPage({ friends, addFriendAction = addFriend }: FriendsPag
   const inputRef = useRef<HTMLInputElement>(null);
   const [email, setEmail] = useState("");
   const [state, formAction, isPending] = useActionState(addFriendAction, null);
+  const [handledState, setHandledState] = useState(state);
+  // Clear the input once per successful submission (adjusted during render, not in an effect).
+  if (state !== handledState) {
+    setHandledState(state);
+    if (state?.ok) {
+      setEmail("");
+    }
+  }
   const emailError = state?.ok === false ? state.fieldErrors?.email?.[0] : undefined;
 
   useEffect(() => {
@@ -31,11 +39,6 @@ export function FriendsPage({ friends, addFriendAction = addFriend }: FriendsPag
     }
   }, [state]);
 
-  useEffect(() => {
-    if (state?.ok) {
-      setEmail("");
-    }
-  }, [state]);
 
   function focusEmailInput() {
     inputRef.current?.focus();

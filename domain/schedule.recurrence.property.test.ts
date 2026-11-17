@@ -168,5 +168,6 @@ describe("calculateDueSlots recurrence", () => {
       ),
       { numRuns: 200 },
     );
-  });
+    // About 3s alone; spans up to 1,100 days exceed the 5s default when files run in parallel.
+  }, 30_000);
 });
