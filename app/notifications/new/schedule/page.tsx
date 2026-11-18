@@ -1,4 +1,5 @@
 import { scheduleNotificationAction } from "@/app/actions/notifications";
+import { requireUser } from "@/application/authentication";
 import { ComposeHeader, appRoutes } from "@/components/navigation";
 import { ButtonLink, StatePanel } from "@/components/ui";
 import { ScheduleForm } from "./schedule-form";
@@ -14,6 +15,9 @@ type ScheduleRouteProps = {
 export default async function ScheduleRoute({ searchParams }: ScheduleRouteProps) {
   const { draftId: draftIdValue } = await searchParams;
   const draftId = typeof draftIdValue === "string" && draftIdValue ? draftIdValue : undefined;
+  await requireUser(
+    draftId ? `${appRoutes.schedule}?draftId=${encodeURIComponent(draftId)}` : appRoutes.schedule,
+  );
 
   return (
     <>

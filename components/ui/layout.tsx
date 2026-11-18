@@ -5,15 +5,18 @@ import styles from "./ui.module.css";
 export type PageHeaderProps = {
   title: ReactNode;
   eyebrow?: ReactNode;
+  /** Supporting line shown below the title, such as a count summary. */
+  description?: ReactNode;
   action?: ReactNode;
 };
 
-export function PageHeader({ title, eyebrow, action }: PageHeaderProps) {
+export function PageHeader({ title, eyebrow, description, action }: PageHeaderProps) {
   return (
     <header className={styles.pageHeader}>
       <div className={styles.pageHeaderText}>
         {eyebrow ? <p className={styles.eyebrow}>{eyebrow}</p> : null}
         <h1 className={styles.pageTitle}>{title}</h1>
+        {description ? <p className={styles.pageDescription}>{description}</p> : null}
       </div>
       {action ? <div className={styles.headerAction}>{action}</div> : null}
     </header>

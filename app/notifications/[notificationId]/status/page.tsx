@@ -13,13 +13,13 @@ type StatusPageProps = {
 export default async function NotificationStatusPage({ params, searchParams }: StatusPageProps) {
   const { notificationId } = await params;
   const { dispatchId } = await searchParams;
-  const user = await requireUser(notificationStatusRoute(notificationId));
-  const status = await getNotificationStatus(
-    repositories,
-    user.id,
-    notificationId,
-    typeof dispatchId === "string" ? dispatchId : undefined,
+  const selectedDispatchId = typeof dispatchId === "string" ? dispatchId : undefined;
+  const user = await requireUser(
+    selectedDispatchId
+      ? `${notificationStatusRoute(notificationId)}?dispatchId=${encodeURIComponent(selectedDispatchId)}`
+      : notificationStatusRoute(notificationId),
   );
+  const status = await getNotificationStatus(repositories, user.id, notificationId, selectedDispatchId);
 
   return (
     <>

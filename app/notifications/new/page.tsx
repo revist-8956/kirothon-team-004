@@ -18,9 +18,11 @@ export default async function ComposePage({ searchParams }: ComposePageProps) {
   const query = await searchParams;
   const initialMode = firstQueryValue(query.mode) === "group" ? "GROUP" : "PERSONAL";
   const requestedGroupId = firstQueryValue(query.groupId);
-  const user = await requireUser(
-    `/notifications/new?mode=${initialMode === "GROUP" ? "group" : "personal"}`,
-  );
+  const returnQuery = new URLSearchParams({ mode: initialMode === "GROUP" ? "group" : "personal" });
+  if (initialMode === "GROUP" && requestedGroupId) {
+    returnQuery.set("groupId", requestedGroupId);
+  }
+  const user = await requireUser(`/notifications/new?${returnQuery.toString()}`);
   const options = await getComposeOptions(repositories, user.id, initialMode);
 
   if (options.mode === "PERSONAL") {

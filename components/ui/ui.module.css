@@ -48,6 +48,12 @@
   line-height: var(--line-height-title);
 }
 
+.pageDescription {
+  margin: 2px 0 0;
+  color: var(--color-text-sub);
+  font-size: var(--font-size-header-description);
+}
+
 .headerAction {
   flex: 0 0 auto;
 }

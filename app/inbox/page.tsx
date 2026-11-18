@@ -17,7 +17,7 @@ export default async function InboxPage() {
       <main className="app-content app-content--with-tabs">
         <PageHeader
           title="받은 알림"
-          eyebrow={
+          description={
             inbox.cards.length > 0 ? (
               <>
                 아직 확인하지 않은 알림{" "}

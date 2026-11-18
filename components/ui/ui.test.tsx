@@ -29,6 +29,14 @@ import {
 } from ".";
 
 describe("common UI components", () => {
+  it("places the page header description below the title", () => {
+    render(<PageHeader title="받은 알림" description="아직 확인하지 않은 알림 2건" />);
+
+    const title = screen.getByRole("heading", { level: 1, name: "받은 알림" });
+    const description = screen.getByText("아직 확인하지 않은 알림 2건");
+    expect(title.compareDocumentPosition(description) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
   it("renders headers, cards, status indicators, and feedback with accessible names", async () => {
     const { container } = render(
       <main>

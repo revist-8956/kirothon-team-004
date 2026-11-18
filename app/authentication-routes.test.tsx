@@ -28,7 +28,6 @@ import GroupsLayout from "./groups/layout";
 import InboxLayout from "./inbox/layout";
 import InvitePage from "./invite/[token]/page";
 import LoginPage from "./login/page";
-import NotificationsLayout from "./notifications/layout";
 import SentLayout from "./sent/layout";
 
 const protectedLayouts = [
@@ -36,7 +35,6 @@ const protectedLayouts = [
   ["groups", GroupsLayout, "/groups"],
   ["inbox", InboxLayout, "/inbox"],
   ["sent", SentLayout, "/sent"],
-  ["notification compose", NotificationsLayout, "/notifications/new"],
 ] as const;
 
 describe("authentication routes", () => {
