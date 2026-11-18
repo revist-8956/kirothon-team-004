@@ -1,7 +1,7 @@
 # 했냥
 친구나 그룹에 알림을 보내고, 누가 '확인' 버튼을 눌렀는지 발송 회차별로 보여주는 알림 서비스예요.
 
-**Demo:** https://dviy4c2kvl7qw.cloudfront.net
+**Demo:** https://d277aj369o96rd.cloudfront.net
 
 ---
 

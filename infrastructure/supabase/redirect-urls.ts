@@ -8,7 +8,7 @@ import { AUTH_CALLBACK_PATH } from "../../application/google-sign-in";
  */
 export const APP_ORIGINS = {
   development: "http://localhost:3000",
-  production: "https://dviy4c2kvl7qw.cloudfront.net",
+  production: "https://d277aj369o96rd.cloudfront.net",
 } as const;
 
 /** Supabase → Authentication → URL Configuration → Redirect URLs. */

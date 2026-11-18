@@ -19,7 +19,7 @@ const validProduction = {
   NEXT_RUNTIME: "nodejs",
   NODE_ENV: "production",
   DATABASE_URL: "postgresql://postgres.ref:pw@pooler.example.com:6543/postgres?pgbouncer=true",
-  APP_BASE_URL: "https://dviy4c2kvl7qw.cloudfront.net",
+  APP_BASE_URL: "https://d277aj369o96rd.cloudfront.net",
   NEXT_PUBLIC_SUPABASE_URL: "https://ref.supabase.co",
   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "sb_publishable_example",
 };

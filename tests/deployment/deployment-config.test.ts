@@ -18,7 +18,7 @@ describe("deployment configuration", () => {
   it("documents every OAuth redirect URL derived from the app origins", () => {
     expect(supabaseRedirectAllowList()).toEqual([
       "http://localhost:3000/auth/callback",
-      "https://dviy4c2kvl7qw.cloudfront.net/auth/callback",
+      "https://d277aj369o96rd.cloudfront.net/auth/callback",
     ]);
     for (const url of supabaseRedirectAllowList()) {
       expect(deploymentDoc).toContain(url);

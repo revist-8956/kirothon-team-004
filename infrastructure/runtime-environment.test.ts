@@ -7,7 +7,7 @@ const pooledPassword = "pooled-password-value";
 const valid = {
   NODE_ENV: "production",
   DATABASE_URL: `postgresql://postgres.ref:${pooledPassword}@pooler.example.com:6543/postgres?pgbouncer=true`,
-  APP_BASE_URL: "https://dviy4c2kvl7qw.cloudfront.net",
+  APP_BASE_URL: "https://d277aj369o96rd.cloudfront.net",
   NEXT_PUBLIC_SUPABASE_URL: "https://ref.supabase.co",
   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "sb_publishable_example",
 };
@@ -30,7 +30,7 @@ describe("findRuntimeEnvironmentIssues", () => {
     const issues = findRuntimeEnvironmentIssues({
       ...valid,
       DATABASE_URL: `postgresql://postgres.ref:${pooledPassword}@pooler.example.com:6543/postgres`,
-      APP_BASE_URL: "http://dviy4c2kvl7qw.cloudfront.net",
+      APP_BASE_URL: "http://d277aj369o96rd.cloudfront.net",
       NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: secretKey,
       SCHEDULER_POLL_MS: "100",
     });

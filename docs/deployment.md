@@ -18,7 +18,7 @@ Beanstalk 콘솔 → 환경 → 구성 → 업데이트, 모니터링 및 로깅
 | 변수 | 필수 | 설명 |
 |---|---|---|
 | `DATABASE_URL` | 예 | 위 1절의 Transaction pooler 주소 |
-| `APP_BASE_URL` | 예 | `https://dviy4c2kvl7qw.cloudfront.net` (경로 없이 origin만, production은 HTTPS) |
+| `APP_BASE_URL` | 예 | `https://d277aj369o96rd.cloudfront.net` (경로 없이 origin만, production은 HTTPS) |
 | `NEXT_PUBLIC_SUPABASE_URL` | 예 | `https://<project-ref>.supabase.co` |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | 예 | `sb_publishable_…` 키. 예전 프로젝트는 대신 `NEXT_PUBLIC_SUPABASE_ANON_KEY` |
 | `SCHEDULER_ENABLED` | 아니오 | 기본 `true`. `false`면 발송 스케줄러를 끄는 긴급 스위치 |
@@ -47,17 +47,17 @@ Beanstalk 콘솔 → 환경 → 구성 → 업데이트, 모니터링 및 로깅
 
 **Supabase 대시보드** → Authentication → URL Configuration
 
-- Site URL: `https://dviy4c2kvl7qw.cloudfront.net`
+- Site URL: `https://d277aj369o96rd.cloudfront.net`
 - Redirect URLs:
   - `http://localhost:3000/auth/callback`
-  - `https://dviy4c2kvl7qw.cloudfront.net/auth/callback`
+  - `https://d277aj369o96rd.cloudfront.net/auth/callback`
 
 **Supabase 대시보드** → Authentication → Sign In / Providers → Google: Google OAuth Client ID와 Secret을 여기에 넣어요. 앱 환경 변수에는 넣지 않아요.
 
 **Google Cloud Console** → API 및 서비스 → 사용자 인증 정보 → OAuth 클라이언트
 
 - 승인된 리디렉션 URI: `https://<project-ref>.supabase.co/auth/v1/callback`
-- 승인된 JavaScript 원본: `http://localhost:3000`, `https://dviy4c2kvl7qw.cloudfront.net`
+- 승인된 JavaScript 원본: `http://localhost:3000`, `https://d277aj369o96rd.cloudfront.net`
 
 ## 5. 노출 금지 확인
 
