@@ -27,6 +27,8 @@ const validProduction = {
 describe("instrumentation register", () => {
   beforeEach(() => {
     vi.unstubAllEnvs();
+    testState.startDispatchScheduler.mockClear();
+    testState.loggerError.mockClear();
   });
 
   afterEach(() => {
@@ -47,12 +49,24 @@ describe("instrumentation register", () => {
     expect(testState.startDispatchScheduler).toHaveBeenCalledOnce();
   });
 
-  it("fails the start with variable names only when the environment is invalid", async () => {
+  it("keeps the server up but logs variable names only and skips the scheduler when the environment is invalid", async () => {
     stubEnvironment({ ...validProduction, NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "sb_secret_hidden" });
 
-    await expect(register()).rejects.toThrow("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY");
+    await expect(register()).resolves.toBeUndefined();
     expect(testState.startDispatchScheduler).not.toHaveBeenCalled();
+    expect(testState.loggerError).toHaveBeenCalledWith("startup.environment_invalid", {
+      issues: [expect.objectContaining({ path: "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY" })],
+    });
     expect(JSON.stringify(testState.loggerError.mock.calls)).not.toContain("sb_secret_hidden");
+  });
+
+  it("accepts an APP_BASE_URL with a repeated scheme", async () => {
+    stubEnvironment({ ...validProduction, APP_BASE_URL: "https://https://d277aj369o96rd.cloudfront.net" });
+
+    await register();
+
+    expect(testState.loggerError).not.toHaveBeenCalled();
+    expect(testState.startDispatchScheduler).toHaveBeenCalledOnce();
   });
 
   it("does nothing outside the production Node.js runtime", async () => {

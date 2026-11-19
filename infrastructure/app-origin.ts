@@ -8,10 +8,26 @@ import { EnvironmentConfigurationError } from "./environment-error";
  * request `Host`/`X-Forwarded-Host` headers, so a forged header cannot steer
  * the Supabase `redirect_to` or the callback redirect to another origin.
  */
+/**
+ * Trims the value and collapses a repeated scheme such as
+ * "https://https://host", a copy-paste mistake that is easy to make in the
+ * Elastic Beanstalk console and hard to undo there when config updates fail.
+ */
+export function normalizeAppBaseUrl(value: unknown): unknown {
+  if (typeof value !== "string") {
+    return value;
+  }
+  let normalized = value.trim();
+  while (/^https?:\/\/https?:\/\//i.test(normalized)) {
+    normalized = normalized.replace(/^https?:\/\//i, "");
+  }
+  return normalized;
+}
+
 export const appOriginEnvironmentSchema = z
   .object({
     NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
-    APP_BASE_URL: z.url(),
+    APP_BASE_URL: z.preprocess(normalizeAppBaseUrl, z.url()),
   })
   .superRefine((environment, context) => {
     const url = new URL(environment.APP_BASE_URL);

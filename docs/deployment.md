@@ -27,12 +27,13 @@ Beanstalk 콘솔 → 환경 → 구성 → 업데이트, 모니터링 및 로깅
 | `SCHEDULER_LOOKBACK_DAYS` | 아니오 | 기본 `35` (1~365) |
 | `LOG_LEVEL` | 아니오 | 기본 `info` |
 
-`sb_secret_…` 키나 `service_role` 키는 어디에도 넣지 않아요. 공개 키 자리에 넣으면 서버가 시작을 거부해요.
+`sb_secret_…` 키나 `service_role` 키는 어디에도 넣지 않아요. 공개 키 자리에 넣으면 서버가 오류 로그를 남기고 그 키로 로그인하지 않아요.
 
 검사는 두 번 해요.
 
 - **배포 전 (GitHub Actions):** 위 필수 변수의 이름이 Beanstalk 환경 속성에 있는지 확인해요. 값은 조회하지 않아요.
-- **서버 시작 시 (`instrumentation.ts`):** 형식까지 검사하고, 문제가 있으면 변수 이름만 로그에 남긴 뒤 시작을 멈춰요.
+- **서버 시작 시 (`instrumentation.ts`):** 형식까지 검사하고, 문제가 있으면 변수 이름만 `startup.environment_invalid` 로그로 남겨요. 서버는 켜 둬서 `/api/health/live`가 응답하고, Beanstalk 설정 변경으로 값을 고칠 수 있어요. 이때 발송 스케줄러는 시작하지 않아요.
+- `APP_BASE_URL` 앞뒤 공백과 `https://https://`처럼 겹친 scheme은 자동으로 정리해요. 그래도 콘솔에는 올바른 값을 넣는 게 좋아요.
 
 ## 3. GitHub Actions Secrets
 

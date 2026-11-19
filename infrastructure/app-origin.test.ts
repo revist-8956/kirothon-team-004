@@ -13,6 +13,15 @@ describe("parseAppOrigin", () => {
     );
   });
 
+  it("collapses a repeated scheme and surrounding spaces from a console copy-paste", () => {
+    expect(
+      parseAppOrigin({ NODE_ENV: "production", APP_BASE_URL: " https://https://notify.example.com " }),
+    ).toBe("https://notify.example.com");
+    expect(parseAppOrigin({ NODE_ENV: "production", APP_BASE_URL: "https://https://https://notify.example.com/" })).toBe(
+      "https://notify.example.com",
+    );
+  });
+
   it.each([
     ["production", "http://notify.example.com"],
     ["production", "https://notify.example.com/app"],

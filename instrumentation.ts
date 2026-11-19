@@ -3,9 +3,11 @@
  * does not run in `next dev`, tests, or the Edge runtime. Imports are
  * dynamic so Prisma never enters a non-Node bundle.
  *
- * 1. Fails the start when a runtime setting is missing or malformed, logging
- *    only variable names, so a misconfigured instance never serves traffic.
- * 2. Starts the dispatch scheduler.
+ * 1. Checks every runtime setting and logs problems by variable name only.
+ *    The server keeps running so `/api/health/live` still answers and the
+ *    environment can be fixed with a normal Beanstalk configuration update;
+ *    features that need a broken setting fail on their own request.
+ * 2. Starts the dispatch scheduler only when the settings are valid.
  */
 export async function register(): Promise<void> {
   if (process.env.NEXT_RUNTIME !== "nodejs" || process.env.NODE_ENV !== "production") {
@@ -17,9 +19,7 @@ export async function register(): Promise<void> {
   if (issues.length > 0) {
     const { logger } = await import("./infrastructure/logger");
     logger.error("startup.environment_invalid", { issues });
-    throw new Error(
-      `Invalid runtime environment: ${issues.map((issue) => issue.path).join(", ")}`,
-    );
+    return;
   }
 
   const { startDispatchScheduler } = await import("./infrastructure/scheduler/start");
