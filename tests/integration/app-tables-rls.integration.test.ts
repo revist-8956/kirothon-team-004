@@ -10,6 +10,7 @@ import {
   applySqlMigrations,
   createIsolatedPostgresDatabase,
   createPostgresTestServer,
+  ignoreTerminatedIdleConnections,
   type PostgresTestServer,
 } from "../database/postgres-test-database";
 import {
@@ -98,9 +99,9 @@ async function createSupabaseShapedDatabase(server: PostgresTestServer): Promise
   await serverPool.query(
     `CREATE ROLE ${quoteIdentifier(ownerRole)} LOGIN NOSUPERUSER NOBYPASSRLS NOCREATEDB NOCREATEROLE PASSWORD '${password}'`,
   );
-  const admin = new Pool({ connectionString: urlFor(server.adminUrl, name), max: 2 });
+  const admin = ignoreTerminatedIdleConnections(new Pool({ connectionString: urlFor(server.adminUrl, name), max: 2 }));
   const ownerUrl = urlFor(server.adminUrl, name, { user: ownerRole, password });
-  const owner = new Pool({ connectionString: ownerUrl, max: 2 });
+  const owner = ignoreTerminatedIdleConnections(new Pool({ connectionString: ownerUrl, max: 2 }));
   const dispose = async () => {
     await Promise.allSettled([admin.end(), owner.end()]);
     await serverPool.query(

@@ -291,6 +291,35 @@ describe("dispatch scheduler against isolated PostgreSQL", () => {
     expect(await dispatchRows(notificationId)).toHaveLength(1);
   });
 
+  it("serializes a dispatch racing with a member leaving: the snapshot follows whichever commits first", async () => {
+    const repositories = createRepositories();
+    const otherConnection = createRepositories();
+    const { mom, dad, daughter, group } = await familyGroup(repositories);
+    const at = DateTime.now().plus({ hours: 2 }).startOf("minute").toUTC();
+    const notificationId = await reserve(repositories, mom.id, { groupId: group.id }, {
+      kind: "ONE_TIME",
+      at: at.toISO(),
+    });
+    const [candidate] = await findDueSlots(repositories, options, at.toJSDate());
+
+    const [dispatch, leaving] = await Promise.allSettled([
+      processDueSlot(repositories, candidate!),
+      leaveGroup(otherConnection, { actorId: dad.id, groupId: group.id, confirmation: true }),
+    ]);
+
+    expect(dispatch).toMatchObject({ status: "fulfilled", value: { kind: "SENT" } });
+    expect(leaving.status).toBe("fulfilled");
+    const [row] = await dispatchRows(notificationId);
+    const recipients = row!.recipients.map((recipient) => recipient.recipient_id);
+    // Daughter is always included; dad is included only if the dispatch committed before he left.
+    expect(recipients).toContain(daughter.id);
+    expect(recipients.filter((id) => id !== daughter.id)).toEqual(
+      expect.arrayContaining(recipients.includes(dad.id) ? [dad.id] : []),
+    );
+    expect(recipients).not.toContain(mom.id);
+    expect(new Set(recipients).size).toBe(recipients.length);
+  });
+
   it("retries a deadlocked slot and rolls back a failed one completely", async () => {
     const base = createRepositories();
     const { mom, group } = await familyGroup(base);

@@ -135,6 +135,20 @@ export async function applySqlMigrations(
   }
 }
 
+/**
+ * Dropping a test database terminates its idle pooled connections with
+ * 57P01 ("terminating connection due to administrator command"). pg emits
+ * that on the pool, and an unhandled pool error fails the whole test run.
+ */
+export function ignoreTerminatedIdleConnections(pool: Pool): Pool {
+  pool.on("error", (error: Error & { code?: string }) => {
+    if (error.code !== "57P01") {
+      throw error;
+    }
+  });
+  return pool;
+}
+
 export async function createPostgresTestServer(): Promise<PostgresTestServer> {
   const externalAdminUrl = process.env.TEST_DATABASE_URL;
 
@@ -152,6 +166,8 @@ export async function createPostgresTestServer(): Promise<PostgresTestServer> {
     .withUsername("postgres")
     .withPassword("postgres")
     .withEnvironment({ TZ: "UTC" })
+    // Several test files start containers at once; the 30s default is too tight.
+    .withStartupTimeout(120_000)
     .start();
 
   return {
@@ -176,7 +192,7 @@ export async function createIsolatedPostgresDatabase(
   }
 
   const url = databaseUrl(server.adminUrl, name);
-  const pool = new Pool({ connectionString: url, max: 4 });
+  const pool = ignoreTerminatedIdleConnections(new Pool({ connectionString: url, max: 4 }));
 
   try {
     if (options.supabaseAuthSchema ?? true) {
