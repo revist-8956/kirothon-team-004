@@ -30,17 +30,29 @@ export async function createNotificationDraftAction(
   const requestId = requestIdFromHeaders(await headers());
   const mode = formData.get("mode");
   const sentence = formData.get("sentence");
+  const recipientIds = formData
+    .getAll("recipientIds")
+    .filter((value): value is string => typeof value === "string");
   const groupIds = formData.getAll("groupId");
 
+  // Forward only the target fields the form actually submitted. The command
+  // rejects unknown keys, so an empty `groupId` on a personal draft (or empty
+  // `recipientIds` on a group draft) would otherwise fail every submission.
+  // A personal request without recipients still sends `recipientIds: []` so
+  // the command can answer with "choose at least one recipient".
+  const input: Record<string, unknown> = {
+    sentence: typeof sentence === "string" ? sentence : "",
+    mode,
+  };
+  if (recipientIds.length > 0 || mode === "PERSONAL") {
+    input.recipientIds = recipientIds;
+  }
+  if (groupIds.length > 0 || mode === "GROUP") {
+    input.groupId = groupIds.length === 1 ? groupIds[0] : groupIds;
+  }
+
   try {
-    const draft = await createNotificationDraft(repositories, user.id, {
-      sentence: typeof sentence === "string" ? sentence : "",
-      mode,
-      recipientIds: formData.getAll("recipientIds").filter(
-        (value): value is string => typeof value === "string",
-      ),
-      groupId: groupIds.length === 1 ? groupIds[0] : groupIds,
-    });
+    const draft = await createNotificationDraft(repositories, user.id, input);
 
     return actionSuccess({ draftId: draft.id });
   } catch (error) {

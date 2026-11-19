@@ -15,6 +15,7 @@ export const NON_FRIEND_RECIPIENT_ERROR_MESSAGE = "친구가 아닌 사용자는
 export const GROUP_ACCESS_ERROR_MESSAGE = "선택한 그룹에 알림을 보낼 권한이 없어요.";
 const GROUP_SELECTION_ERROR_MESSAGE = "유효한 그룹을 선택해 주세요.";
 const MULTIPLE_GROUPS_ERROR_MESSAGE = "그룹은 하나만 지정할 수 있어요.";
+const MIXED_TARGET_ERROR_MESSAGE = "개인 수신자와 그룹을 함께 지정할 수 없어요.";
 
 /**
  * A group notification has one scalar group target. The array check protects
@@ -106,6 +107,15 @@ export async function createNotificationDraft(
 ): Promise<NotificationDraftRecord> {
   const parsed = createNotificationDraftSchema.safeParse(input);
   if (!parsed.success) {
+    // Requirement 7.4: a personal target with a group (or the reverse) is rejected with its own message.
+    const mixedTarget = parsed.error.issues.some(
+      (issue) =>
+        issue.code === "unrecognized_keys" &&
+        issue.keys.some((key) => key === "groupId" || key === "recipientIds"),
+    );
+    if (mixedTarget) {
+      throw new ApplicationError("VALIDATION_ERROR", { message: MIXED_TARGET_ERROR_MESSAGE });
+    }
     const fieldErrors = parsed.error.flatten().fieldErrors;
     const groupTargetError =
       "groupId" in fieldErrors
