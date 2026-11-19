@@ -1,5 +1,9 @@
 generator client {
   provider = "prisma-client-js"
+  // "native" serves local development and CI. Elastic Beanstalk runs Amazon
+  // Linux 2023 (OpenSSL 3), and the deployment bundle ships the generated
+  // client built in CI, so that engine must be generated as well.
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
 }
 
 datasource db {
