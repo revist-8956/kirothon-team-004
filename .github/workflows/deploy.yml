@@ -167,4 +167,5 @@ jobs:
           create-s3-bucket-if-not-exists: 'false'
           wait-for-deployment: 'true'
           wait-for-environment-recovery: 'true'
-          deployment-timeout: '900'
+          # 인스턴스 명령 제한 시간(.ebextensions/01-command-timeout.config, 1800초)보다 길게 기다립니다.
+          deployment-timeout: '2100'
