@@ -5,8 +5,9 @@
   --text: #17202b;
   --text-sub: #5b6675;
   --text-mid: #46505e;
-  --accent: #1f5fe0;
-  --accent-soft: #e6ecf5;
+  /* Brand purple taken from the purple-background logo (public/brand/). */
+  --accent: #692498;
+  --accent-soft: #f3e8ff;
   --line: #e9ecf0;
   --neutral-btn: #e1e5ea;
   --toggle-off: #8a93a0;

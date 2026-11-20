@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { getOptionalUser } from "@/application/authentication";
+import { BrandIdentity } from "@/components/BrandIdentity";
 import { sanitizeReturnTo } from "@/domain/return-to";
 
 import { signInWithGoogle } from "./actions";
@@ -32,12 +33,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   return (
     <main className={styles.loginPage}>
       <section className={styles.introduction} aria-labelledby="login-heading">
-        <div className={styles.appIcon} aria-hidden="true">
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
-            <path d="M6 16h12l-1.5-2v-4a4.5 4.5 0 0 0-9 0v4L6 16z" />
-            <path d="M10 19.5h4" />
-          </svg>
-        </div>
+        <BrandIdentity size="login" priority />
         <div className={styles.copy}>
           <h1 id="login-heading">알림을 보내고<br />누가 확인했는지<br />한눈에 보세요</h1>
           <p>개인이나 그룹에 보내고, 회차별로 확인 현황을 볼 수 있어요.</p>
